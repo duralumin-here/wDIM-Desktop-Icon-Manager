@@ -39,6 +39,7 @@
             label5 = new Label();
             label6 = new Label();
             button5 = new Button();
+            button6 = new Button();
             SuspendLayout();
             // 
             // button1
@@ -94,9 +95,9 @@
             label3.AutoSize = true;
             label3.Location = new Point(26, 239);
             label3.Name = "label3";
-            label3.Size = new Size(746, 20);
+            label3.Size = new Size(709, 20);
             label3.TabIndex = 5;
-            label3.Text = "Saves your desktop shortcuts into a backup folder. (Does NOT save their icons, or their location on the desktop!)";
+            label3.Text = "Saves your desktop shortcuts and the current icon set into a backup folder. (Does NOT save their location!)";
             // 
             // label4
             // 
@@ -144,11 +145,22 @@
             button5.Text = "Apply Icon Set";
             button5.UseVisualStyleBackColor = true;
             // 
+            // button6
+            // 
+            button6.Location = new Point(596, 367);
+            button6.Name = "button6";
+            button6.Size = new Size(212, 29);
+            button6.TabIndex = 11;
+            button6.Text = "Refresh Desktop";
+            button6.UseVisualStyleBackColor = true;
+            button6.Click += button6_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(895, 423);
+            Controls.Add(button6);
             Controls.Add(label6);
             Controls.Add(button5);
             Controls.Add(label5);
@@ -179,5 +191,6 @@
         private Label label5;
         private Label label6;
         private Button button5;
+        private Button button6;
     }
 }

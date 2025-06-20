@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System;
 using Shell32;
 using System.ComponentModel;
@@ -13,6 +13,8 @@ using MS.WindowsAPICodePack.Internal;
 using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Threading.Channels;
+using System.Xml.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DesktopIconGUIapp
 { // https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.messagebox?view=windowsdesktop-9.0
@@ -37,8 +39,20 @@ namespace DesktopIconGUIapp
         {
             ShortcutTools.SetShortcutPaths();
         }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+            ShortcutTools.SetShortcutPaths();
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            ShortcutTools.RefreshDesktop();
+        }
     }
 }
+
+// TODO: Implement an option to remove public desktop icons and replace with user desktop icons if they don't have admin access 
 
 public class ShortcutTools
 {
@@ -56,7 +70,7 @@ public class ShortcutTools
         string documentPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         Directory.CreateDirectory(Path.Combine(documentPath, "DesktopIconManager", "Saved-Backups"));
         // Create dated directory for current backup
-        string newPath = Path.Combine(documentPath, "DesktopIconManager", "Saved-Backups", DateTime.Now.ToString("yyyy-MM-dd--HH-mm-ss"));
+        string newPath = Path.Combine(documentPath, "DesktopIconManager", "Saved-Backups", DateTime.Now.ToString("MMMM_d_yyyy_h-mm-sstt"));
         Directory.CreateDirectory(newPath);
         // Back up public desktop
         string newPublicPath = Path.Combine(newPath, "PublicDesktop");
@@ -66,12 +80,15 @@ public class ShortcutTools
         string newPrivatePath = Path.Combine(newPath, "PrivateDesktop");
         Directory.CreateDirectory(newPrivatePath);
         CopyDirectory(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), newPrivatePath);
+        // Copy Current Icons
+        string currentIcons = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager", "Current-Icons");
+        Directory.CreateDirectory(currentIcons);
+        string newIconPath = Path.Combine(newPath, "CurrentIcons");
+        CopyDirectory(currentIcons, newIconPath);
         // Notify user if triggered manually; other activations pass along "false" to do this silently
         if (printOutput)
         {
-            string publicPathMessage = "Saved public desktop shortcuts to: \n\"" + newPublicPath + "\"";
-            string privatePathMessage = "Saved private desktop shortcuts to: \n\"" + newPrivatePath + "\"";
-            string message = publicPathMessage + "\n\n" + privatePathMessage + ".";
+            string message = "Saved backups to \"" + newPath + "\".";
             string caption = "Task Completed";
             System.Windows.Forms.MessageBox.Show(message, caption);
         }
@@ -103,8 +120,7 @@ public class ShortcutTools
         // Iterate through desktop; for each non-shortcut, add files to array and increment count
         foreach (string fileName in allEntries)
         {
-            int numCheck = fileName.IndexOf(".lnk");
-            if ((numCheck == -1) && (fileName.IndexOf("desktop.ini") == -1))
+            if (!fileName.Contains(".lnk") && !fileName.Contains("desktop.ini"))
             {
                 notShortcuts[numNonShortcuts] = fileName;
                 ++numNonShortcuts;
@@ -171,7 +187,7 @@ public class ShortcutTools
                 string extraMoveAll = "(Select \"No\" to go through them one by one, and select \"Cancel\" to abort this operation and leave the helper instead.)";
                 string messageMoveAll = promptMoveAll + " " + extraMoveAll;
                 string captionMoveAll = "Desktop Icon Manager";
-                var resultMoveAll = System.Windows.Forms.MessageBox.Show(messageMoveAll, captionMoveAll, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                var resultMoveAll = System.Windows.Forms.MessageBox.Show(messageMoveAll, captionMoveAll, MessageBoxButtons.YesNoCancel);
                 // If user exits the helper
                 if (resultMoveAll == DialogResult.Cancel)
                 {
@@ -262,9 +278,11 @@ public class ShortcutTools
         do
         {
             // Display dialogue
-            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
-            dialog.InitialDirectory = "C:\\Users";
-            dialog.IsFolderPicker = true;
+            CommonOpenFileDialog dialog = new()
+            {
+                InitialDirectory = "C:\\Users",
+                IsFolderPicker = true
+            };
             dialog.ShowDialog();
             try
             {
@@ -312,7 +330,7 @@ public class ShortcutTools
         if (resultShcut == DialogResult.Yes)
         {
             object shDesktop = (object)"Desktop";
-            WshShell shell = new WshShell();
+            WshShell shell = new();
             string shortcutAddress = (string)shell.SpecialFolders.Item(ref shDesktop) + @"\" + shortcutName + ".lnk";
             IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
             shortcut.TargetPath = newPath;
@@ -346,16 +364,18 @@ public class ShortcutTools
     // Returns whether it was successful
     static int CreateShortcutAll(string[] allItems, int invalidFileNum)
     {
-        // Start at zero so if it end up unchanged it wil just skip
+        // Start at zero to show the default behavior should skipping and trying again instead of aborting or looping
         int result = 0;
         bool loopFolder = true;
         string newFolder = "";
         do
         {
             // Have user select a file
-            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
-            dialog.InitialDirectory = "C:\\Users";
-            dialog.IsFolderPicker = true;
+            CommonOpenFileDialog dialog = new()
+            {
+                InitialDirectory = "C:\\Users",
+                IsFolderPicker = true
+            };
             dialog.ShowDialog();
             try
             {
@@ -404,18 +424,16 @@ public class ShortcutTools
 
     // WIP
     // Changes the shortcut icon paths to point to a new custom file based on the executable/file name being pointed to
+    // References https://bytescout.com/blog/create-shortcuts-in-c-and-vbnet.html
     public static void SetShortcutPaths()
     {
-        MessageBoxButtons buttonsCheck = MessageBoxButtons.OKCancel;
-        var resultContinue = System.Windows.Forms.MessageBox.Show("This will back up current desktop icons to a folder before reassigning the desktop shortcuts to custom paths for use with this program. Select OK to proceed.", "Confirmation", buttonsCheck, MessageBoxIcon.Warning);
-        if (resultContinue == DialogResult.Cancel)
-        {
-            return;
-        }
+        // Silently back up current desktop icons
         CreateDesktopBackups(false);
+        // Gather current desktop entries
         string[] allEntries = CreateDesktopArray();
         int invalidFileNum = CountNonShortcuts(allEntries);
         Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager", "Current-Icons"));
+        // Warn user if non-shortcuts are present but allow to proceed anyway
         if (invalidFileNum != 0)
         {
             var result = System.Windows.Forms.MessageBox.Show("Your desktop contains non-shortcuts. These will not be given a custom icon path. Press OK to proceed anyway, or press Cancel and run the Validate Desktop tool for more options.", "Non-Shortcuts Detected", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
@@ -425,12 +443,126 @@ public class ShortcutTools
             }
         }
 
-        foreach (string Shortcut in allEntries)
+        string targetPath, targetFile, targetName;
+
+        bool error = false;
+        foreach (string shortcut in allEntries)
         {
             string startFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager", "Current-Icons");
-            // Change icon path of each one to a custom one; name it after the actual executable NOT the shortcut name
-            // https://devblogs.microsoft.com/scripting/how-can-i-change-the-icon-for-an-existing-shortcut/
+            try
+            {
+                targetPath = GetShortcutTarget(shortcut);
+            }
+            catch
+            {
+                targetPath = "";
+                error = true;
+            }
+            try
+            {
+                targetFile = Path.GetFileName(targetPath);
+            }
+            catch
+            {
+                targetFile = "";
+                error = true;
+            }
+            try
+            {
+                targetName = targetFile.Substring(0, targetFile.IndexOf("."));
+            }
+            catch
+            {
+                targetName = "";
+                error = true;
+            }
+            try
+            {
+                WshShell shell = new();
+                IWshShortcut shortcut2 = (IWshShortcut)shell.CreateShortcut(shortcut);
+                // shortcut2.Description = "Title text here";
+                // shortcut2.Hotkey = "Ctrl+Shift+N";
+                shortcut2.IconLocation = Path.Combine(startFolder, targetName) + ".ico";
+                shortcut2.TargetPath = targetPath;
+                shortcut2.Save();
+            }
+            catch
+            {
+                error = true;
+            }
+            // Refresh desktop to update icons
+            // FIXME: add a way to disable this since it flashes the screen
         }
+        SHChangeNotify(0x8000000, 0x1000, IntPtr.Zero, IntPtr.Zero);
+        if (error)
+        {
+            System.Windows.Forms.MessageBox.Show("Hopefully the paths have been set now. If some programs have had their icons cleared and others haven't, try running this program in Admin mode and trying again. If the recycle bin didn't change, you can change it [link to instructions]. There are other reasons this could have happened, stay tuned for more insight.", "Desktop Icon Manager");
+        }
+    }
+
+    // Returns the target than an .lnk file points to
+    // Lifted directly from https://blez.wordpress.com/2013/02/18/get-file-shortcuts-target-with-c/
+    static private string GetShortcutTarget(string file)
+    {
+        try
+        {
+            if (System.IO.Path.GetExtension(file).ToLower() != ".lnk")
+            {
+                throw new Exception("Supplied file must be a .LNK file");
+            }
+
+            FileStream fileStream = File.Open(file, FileMode.Open, FileAccess.Read);
+            using (System.IO.BinaryReader fileReader = new BinaryReader(fileStream))
+            {
+                fileStream.Seek(0x14, SeekOrigin.Begin);     // Seek to flags
+                uint flags = fileReader.ReadUInt32();        // Read flags
+                if ((flags & 1) == 1)
+                {                      // Bit 1 set means we have to
+                                       // skip the shell item ID list
+                    fileStream.Seek(0x4c, SeekOrigin.Begin); // Seek to the end of the header
+                    uint offset = fileReader.ReadUInt16();   // Read the length of the Shell item ID list
+                    fileStream.Seek(offset, SeekOrigin.Current); // Seek past it (to the file locator info)
+                }
+
+                long fileInfoStartsAt = fileStream.Position; // Store the offset where the file info
+                                                             // structure begins
+                uint totalStructLength = fileReader.ReadUInt32(); // read the length of the whole struct
+                fileStream.Seek(0xc, SeekOrigin.Current); // seek to offset to base pathname
+                uint fileOffset = fileReader.ReadUInt32(); // read offset to base pathname
+                                                           // the offset is from the beginning of the file info struct (fileInfoStartsAt)
+                fileStream.Seek((fileInfoStartsAt + fileOffset), SeekOrigin.Begin); // Seek to beginning of
+                                                                                    // base pathname (target)
+                long pathLength = (totalStructLength + fileInfoStartsAt) - fileStream.Position - 2; // read
+                                                                                                    // the base pathname. I don't need the 2 terminating nulls.
+                char[] linkTarget = fileReader.ReadChars((int)pathLength); // should be unicode safe
+                var link = new string(linkTarget);
+
+                int begin = link.IndexOf("\0\0");
+                if (begin > -1)
+                {
+                    int end = link.IndexOf("\\\\", begin + 2) + 2;
+                    end = link.IndexOf('\0', end) + 1;
+
+                    string firstPart = link.Substring(0, begin);
+                    string secondPart = link.Substring(end);
+
+                    return firstPart + secondPart;
+                }
+                else
+                {
+                    return link;
+                }
+            }
+        }
+        catch
+        {
+            return "";
+        }
+    }
+
+    public static void RefreshDesktop()
+    {
+        SHChangeNotify(0x8000000, 0x1000, IntPtr.Zero, IntPtr.Zero);
     }
 }
 
