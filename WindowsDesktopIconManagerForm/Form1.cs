@@ -15,6 +15,10 @@ using System.Windows.Forms;
 using System.Threading.Channels;
 using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.Win32;
+
+// TODO: Rework file system to be internal to the project instead of using documents folder
+// This way I can include some default icons and have it set up nicely
 
 namespace DesktopIconGUIapp
 { // https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.messagebox?view=windowsdesktop-9.0
@@ -23,6 +27,10 @@ namespace DesktopIconGUIapp
         public Form1()
         {
             InitializeComponent();
+            string appPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager");
+            Directory.CreateDirectory(Path.Combine(appPath, "Saved-Backups"));
+            Directory.CreateDirectory(Path.Combine(appPath, "Current-Icons"));
+            Directory.CreateDirectory(Path.Combine(appPath, "Shortcut-Arrows"));
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -48,6 +56,11 @@ namespace DesktopIconGUIapp
         private void button6_Click(object sender, EventArgs e)
         {
             ShortcutTools.RefreshDesktop();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            ShortcutTools.ChangeArrows();
         }
     }
 }
@@ -81,7 +94,7 @@ public class ShortcutTools
         Directory.CreateDirectory(newPrivatePath);
         CopyDirectory(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), newPrivatePath);
         // Copy Current Icons
-        string currentIcons = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager", "Current-Icons");
+        string currentIcons = Path.Combine(documentPath, "DesktopIconManager", "Current-Icons");
         Directory.CreateDirectory(currentIcons);
         string newIconPath = Path.Combine(newPath, "CurrentIcons");
         CopyDirectory(currentIcons, newIconPath);
@@ -482,7 +495,8 @@ public class ShortcutTools
                 IWshShortcut shortcut2 = (IWshShortcut)shell.CreateShortcut(shortcut);
                 // shortcut2.Description = "Title text here";
                 // shortcut2.Hotkey = "Ctrl+Shift+N";
-                shortcut2.IconLocation = Path.Combine(startFolder, targetName) + ".ico";
+                // shortcut2.IconLocation = Path.Combine(startFolder, targetName) + ".ico";
+                shortcut2.IconLocation = Path.Combine(startFolder, "Baba") + ".ico";
                 shortcut2.TargetPath = targetPath;
                 shortcut2.Save();
             }
@@ -502,67 +516,79 @@ public class ShortcutTools
 
     // Returns the target than an .lnk file points to
     // Lifted directly from https://blez.wordpress.com/2013/02/18/get-file-shortcuts-target-with-c/
-    static private string GetShortcutTarget(string file)
+    // Returns the target than an .lnk file points to
+    // Primary way from https://forums.overclockers.co.uk/threads/c-accessing-the-target-path-of-a-shortcut-lnk.17966879/post-13328225
+    // Back-up way from https://learn.microsoft.com/en-us/dotnet/api/system.io.filesysteminfo.linktarget
+
+    static private string GetShortcutTarget(string shortcutPath)
     {
-        try
+        string target = "";
+        try // Primary method
         {
-            if (System.IO.Path.GetExtension(file).ToLower() != ".lnk")
+            WshShell shell = new WshShell();
+            IWshShortcut linkAlt = (IWshShortcut)shell.CreateShortcut(shortcutPath);
+
+            target = linkAlt.TargetPath;
+            if (target == "")
             {
-                throw new Exception("Supplied file must be a .LNK file");
-            }
-
-            FileStream fileStream = File.Open(file, FileMode.Open, FileAccess.Read);
-            using (System.IO.BinaryReader fileReader = new BinaryReader(fileStream))
-            {
-                fileStream.Seek(0x14, SeekOrigin.Begin);     // Seek to flags
-                uint flags = fileReader.ReadUInt32();        // Read flags
-                if ((flags & 1) == 1)
-                {                      // Bit 1 set means we have to
-                                       // skip the shell item ID list
-                    fileStream.Seek(0x4c, SeekOrigin.Begin); // Seek to the end of the header
-                    uint offset = fileReader.ReadUInt16();   // Read the length of the Shell item ID list
-                    fileStream.Seek(offset, SeekOrigin.Current); // Seek past it (to the file locator info)
-                }
-
-                long fileInfoStartsAt = fileStream.Position; // Store the offset where the file info
-                                                             // structure begins
-                uint totalStructLength = fileReader.ReadUInt32(); // read the length of the whole struct
-                fileStream.Seek(0xc, SeekOrigin.Current); // seek to offset to base pathname
-                uint fileOffset = fileReader.ReadUInt32(); // read offset to base pathname
-                                                           // the offset is from the beginning of the file info struct (fileInfoStartsAt)
-                fileStream.Seek((fileInfoStartsAt + fileOffset), SeekOrigin.Begin); // Seek to beginning of
-                                                                                    // base pathname (target)
-                long pathLength = (totalStructLength + fileInfoStartsAt) - fileStream.Position - 2; // read
-                                                                                                    // the base pathname. I don't need the 2 terminating nulls.
-                char[] linkTarget = fileReader.ReadChars((int)pathLength); // should be unicode safe
-                var link = new string(linkTarget);
-
-                int begin = link.IndexOf("\0\0");
-                if (begin > -1)
-                {
-                    int end = link.IndexOf("\\\\", begin + 2) + 2;
-                    end = link.IndexOf('\0', end) + 1;
-
-                    string firstPart = link.Substring(0, begin);
-                    string secondPart = link.Substring(end);
-
-                    return firstPart + secondPart;
-                }
-                else
-                {
-                    return link;
-                }
+                throw new Exception("Null target");
             }
         }
         catch
         {
-            return "";
+            try // Secondary method
+            {
+                FileInfo fileInfo = new FileInfo(shortcutPath);
+                target = fileInfo.LinkTarget;
+                if (target == "" || target == null)
+                {
+                    throw new Exception("Null target");
+                }
+            }
+            catch
+            {
+                target = "";
+            }
         }
+        return target;
     }
 
     public static void RefreshDesktop()
     {
         SHChangeNotify(0x8000000, 0x1000, IntPtr.Zero, IntPtr.Zero);
+    }
+
+    // Changes the shortcut arrow icon used in Windows.
+    // General implementation https://stackoverflow.com/a/24031611
+    // Specific help with shortcut arrows https://www.elevenforum.com/t/remove-shortcut-arrow-icon-in-windows-11.3814/
+    public static void ChangeArrows()
+    {
+        // Strongly worded message box telling user that registry edits can be dangerous
+        // Do you wanna set custom or restore
+        // If custom,
+        string registryPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons";
+        using (RegistryKey key = Registry.LocalMachine.CreateSubKey(registryPath))
+        {
+            try
+            {
+                if (key != null)
+                {
+                    key.SetValue("29", @"C:\Users\User\Documents\DesktopIconManager\Current-Icons\UNDERTALE.ico", RegistryValueKind.String);
+                }
+                else
+                {
+                    throw new Exception("Registry key failed.");
+                }
+            }
+            catch
+            {
+                // Message box being like it didn't work, boo, this is why, rerun in admin
+            }
+        }
+        // If restore,
+        // Applicable code here
+
+        // Alright now we gotta restart explorer it might be scary but it's ok. Or you can reset the computer later, might have to do that anyway actually
     }
 }
 

@@ -86,18 +86,18 @@
             label2.AutoSize = true;
             label2.Location = new Point(26, 166);
             label2.Name = "label2";
-            label2.Size = new Size(592, 20);
+            label2.Size = new Size(766, 20);
             label2.TabIndex = 4;
-            label2.Text = "Checks all saved icon sets and shows any sets that are missing icons for current shortcuts.";
+            label2.Text = "Checks all saved icon sets and shows any sets that are missing icons for current shortcuts. (May need admin access.)";
             // 
             // label3
             // 
             label3.AutoSize = true;
             label3.Location = new Point(26, 239);
             label3.Name = "label3";
-            label3.Size = new Size(709, 20);
+            label3.Size = new Size(766, 20);
             label3.TabIndex = 5;
-            label3.Text = "Saves your desktop shortcuts and the current icon set into a backup folder. (Does NOT save their location!)";
+            label3.Text = "Saves your desktop shortcuts and the current icon set into a backup folder. (Does NOT save their physical location!)";
             // 
             // label4
             // 
@@ -117,6 +117,7 @@
             button4.TabIndex = 7;
             button4.Text = "Change/Remove Arrows";
             button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
             // 
             // label5
             // 

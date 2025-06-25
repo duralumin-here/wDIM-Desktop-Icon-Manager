@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "WindowsDesktopIconManagerForm": {
+      "commandName": "Project",
+      "hotReloadEnabled": false
+    }
+  }
+}
