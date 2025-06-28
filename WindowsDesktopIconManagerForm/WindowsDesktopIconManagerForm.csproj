@@ -36,4 +36,10 @@
     <PackageReference Include="System.Windows.Extensions" Version="9.0.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="resources\empty.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
