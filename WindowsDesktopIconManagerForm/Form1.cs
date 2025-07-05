@@ -3,7 +3,10 @@ using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
+using System.Windows.Documents;
+using System.Windows.Forms;
 using File = System.IO.File;
 
 namespace DesktopIconGUIapp
@@ -13,10 +16,7 @@ namespace DesktopIconGUIapp
         public Form1()
         {
             InitializeComponent();
-            string appPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager");
-            Directory.CreateDirectory(Path.Combine(appPath, "Saved-Backups"));
-            Directory.CreateDirectory(Path.Combine(appPath, "Current-Icons"));
-            Directory.CreateDirectory(Path.Combine(appPath, "Shortcut-Arrows"));
+            Utilities.CreateStartingDirectories();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -31,41 +31,49 @@ namespace DesktopIconGUIapp
 
         private void button2_Click(object sender, EventArgs e)
         {
-            ShortcutTools.SetShortcutPaths();
+            DesktopPrep.SetShortcutPaths();
         }
 
         private void label2_Click(object sender, EventArgs e)
         {
-            ShortcutTools.SetShortcutPaths();
+            DesktopPrep.SetShortcutPaths();
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
-            ShortcutTools.RefreshDesktop();
+            Utilities.RefreshDesktop();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            ShortcutTools.ChangeArrows();
+            ArrowChange.ChangeArrows();
         }
 
         private void button7_Click(object sender, EventArgs e)
         {
-            ShortcutTools.RestartExplorer();
+            Utilities.RestartExplorer();
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            ArrowChange.Restore();
         }
     }
 }
 
+// To do:
 // FIXME: Have the desktop backups only back up .lnk files
+// TODO: Actually improve code readability
+// TODO: Method to restore a selected backup through the app GUI
+// TODO: Figure out the workflow for a user to actually set up icon sets
+// TODO: Saving and loading icon sets
+    // Can just have a menu to copy icons from a set to current icons, or from current icons to a set
+    // May need a workflow for people to upload specific icons for apps so they can be renamed accordingly
+// May need to actually make other Windows forms so this doesn't become the most unwieldy one-paged menu ever
+// Ideally a way for me to simply have some default arrow types (and maybe hearts, etc) saved and have the user just select a color with a color picker and/or html code, creating a new file for it
 
 public class ShortcutTools
 {
-    // Allows me to refresh desktop to clear old icons
-    // Tweaked from https://stackoverflow.com/a/647286
-    [DllImport("Shell32.dll")]
-    private static extern int SHChangeNotify(int eventId, int flags, IntPtr item1, IntPtr item2);
-    private const uint SHCNE_ALLEVENTS = 0x80000000;
-    private const uint SHCNF_FLUSH = 0x1000;
 
     // Backs up the shortcuts on the desktop
     public static void CreateDesktopBackups(bool printOutput)
@@ -79,16 +87,16 @@ public class ShortcutTools
         // Back up public desktop
         string newPublicPath = Path.Combine(newPath, "PublicDesktop");
         Directory.CreateDirectory(newPublicPath);
-        CopyDirectory(@"C:\Users\Public\Desktop", newPublicPath);
+        Utilities.CopyDirectory(@"C:\Users\Public\Desktop", newPublicPath);
         // Back up user desktop
         string newPrivatePath = Path.Combine(newPath, "PrivateDesktop");
         Directory.CreateDirectory(newPrivatePath);
-        CopyDirectory(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), newPrivatePath);
+        Utilities.CopyDirectory(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), newPrivatePath);
         // Copy Current Icons
         string currentIcons = Path.Combine(documentPath, "DesktopIconManager", "Current-Icons");
         Directory.CreateDirectory(currentIcons);
         string newIconPath = Path.Combine(newPath, "CurrentIcons");
-        CopyDirectory(currentIcons, newIconPath);
+        Utilities.CopyDirectory(currentIcons, newIconPath);
         // Notify user if triggered manually; other activations pass along "false" to do this silently
         if (printOutput)
         {
@@ -98,25 +106,10 @@ public class ShortcutTools
         }
     }
 
-    // Copies files from one directory to another
-    // Based on https://learn.microsoft.com/en-us/dotnet/standard/io/how-to-copy-directories
-    public static void CopyDirectory(string sourceDir, string destinationDir)
-    {
-        // Create the destination directory
-        var directory = new DirectoryInfo(sourceDir);
-        Directory.CreateDirectory(destinationDir);
-        // Get the files in the source directory and copy to the destination directory
-        foreach (FileInfo file in directory.GetFiles())
-        {
-            string targetFilePath = Path.Combine(destinationDir, file.Name);
-            file.CopyTo(targetFilePath);
-        }
-    }
-
     // Counts how many files on desktop are not shortcuts and adds them to the array passed along
     // Referenced https://www.csharp.com/article/directories-in-c-sharp/ for basic file operations
     // TODO: Try to redo this all using a List instead of counting an imperfect array
-    static int CountNonShortcuts(string[] notShortcuts)
+    public static int CountNonShortcuts(string[] notShortcuts)
     {
         // Create array and number to count entries
         int numNonShortcuts = 0;
@@ -134,7 +127,7 @@ public class ShortcutTools
     }
 
     // Creates and returns a perfect array of all the files on the desktop
-    static string[] CreateDesktopArray()
+    public static string[] CreateDesktopArray()
     {
         // Find desktop locations
         string publicDesk = @"C:\Users\Public\Desktop";
@@ -317,7 +310,7 @@ public class ShortcutTools
         while (result != 1) ;
         // Refresh desktop to remove old icon from screen
         // FIXME: add a way to disable this since it flashes the screen
-        SHChangeNotify(0x8000000, 0x1000, IntPtr.Zero, IntPtr.Zero);
+        Utilities.RefreshDesktop();
         // Ask user if they want a desktop shortcut for the moved file; skip if not
         string messageShcut = "Would you like to create a desktop shortcut for this item?";
         string captionShcut = "Windows Desktop Icon Manager";
@@ -414,94 +407,68 @@ public class ShortcutTools
                 }
             }
         }
-        // Refresh desktop to remove old icon from screen
-        // FIXME: add a way to disable this since it flashes the screen
-        SHChangeNotify(0x8000000, 0x1000, IntPtr.Zero, IntPtr.Zero);
-        // Return 1 to indicate success
-        result = 1;
+        Utilities.RefreshDesktop(); // to remove icon from screen
+        result = 1; // indicate success
         return result;
     }
+}
 
-    // WIP
+public class DesktopPrep
+{
+    // ==================== Methods directly accessed through buttons ====================
+
     // Changes the shortcut icon paths to point to a new custom file based on the executable/file name being pointed to
     // References https://bytescout.com/blog/create-shortcuts-in-c-and-vbnet.html
     public static void SetShortcutPaths()
     {
-        // Silently back up current desktop icons
-        CreateDesktopBackups(false);
-        // Gather current desktop entries
-        string[] allEntries = CreateDesktopArray();
-        int invalidFileNum = CountNonShortcuts(allEntries);
-        Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager", "Current-Icons"));
-        // Warn user if non-shortcuts are present but allow to proceed anyway
-        if (invalidFileNum != 0)
+        Prepare(); // back up desktop and create directory
+        string[] allEntries = ShortcutTools.CreateDesktopArray(); // get list of all files on the desktop
+        if (AreThereInvalidFiles(allEntries) == true)
         {
-            var result = System.Windows.Forms.MessageBox.Show("Your desktop contains non-shortcuts. These will not be given a custom icon path. Press OK to proceed anyway, or press Cancel and run the Validate Desktop tool for more options.", "Non-Shortcuts Detected", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-            if (result == DialogResult.Cancel)
+            if (ConfirmContinue() == false) // ask user to confirm continuing if invalid files are detected
             {
                 return;
             }
         }
-
-        string targetPath, targetFile, targetName;
-
-        bool error = false;
+        string targetPath = "", targetFile = "", targetName = "";
+        bool success = true;
         foreach (string shortcut in allEntries)
         {
             string startFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager", "Current-Icons");
             try
             {
                 targetPath = GetShortcutTarget(shortcut);
-            }
-            catch
-            {
-                targetPath = "";
-                error = true;
-            }
-            try
-            {
                 targetFile = Path.GetFileName(targetPath);
-            }
-            catch
-            {
-                targetFile = "";
-                error = true;
-            }
-            try
-            {
                 targetName = targetFile.Substring(0, targetFile.IndexOf("."));
+                ChangeIcon(shortcut, startFolder, targetName, targetPath);
             }
             catch
             {
-                targetName = "";
-                error = true;
+                success = false;
             }
-            try
-            {
-                WshShell shell = new();
-                IWshShortcut shortcut2 = (IWshShortcut)shell.CreateShortcut(shortcut);
-                // shortcut2.Description = "Title text here";
-                // shortcut2.Hotkey = "Ctrl+Shift+N";
-                // shortcut2.IconLocation = Path.Combine(startFolder, targetName) + ".ico";
-                shortcut2.IconLocation = Path.Combine(startFolder, "Baba") + ".ico";
-                shortcut2.TargetPath = targetPath;
-                shortcut2.Save();
-            }
-            catch
-            {
-                error = true;
-            }
-            // Refresh desktop to update icons
-            // FIXME: add a way to disable this since it flashes the screen
+
+            // I don't currently feel the need to do anything if an attempt fails,
+            // but I can use the "success" variable for that if I change my mind.
         }
-        SHChangeNotify(0x8000000, 0x1000, IntPtr.Zero, IntPtr.Zero);
-        if (error)
-        {
-            System.Windows.Forms.MessageBox.Show("Hopefully the paths have been set now. If some programs have had their icons cleared and others haven't, try running this program in Admin mode and trying again. If the recycle bin didn't change, you can change it [link to instructions]. There are other reasons this could have happened, stay tuned for more insight.", "Desktop Icon Manager");
-        }
+        Utilities.RefreshDesktop(); // refresh icons
+        System.Windows.Forms.MessageBox.Show("Icon paths should be set. If some shortcuts didn't work, try re-running this program in Admin mode.", "Desktop Icon Manager");
     }
 
-    // Returns the target than an .lnk file points to
+    // ==================== Methods used within these methods ====================
+
+    // Technically creates a replacement shortcut with a new icon path, but effectively works as "changing the icon"
+    public static void ChangeIcon(string shortcut, string startFolder, string targetName, string targetPath)
+    {
+        WshShell shell = new();
+        IWshShortcut shortcut2 = (IWshShortcut)shell.CreateShortcut(shortcut);
+        // shortcut2.Description = "Title text here";
+        // shortcut2.Hotkey = "Ctrl+Shift+N";
+        // shortcut2.IconLocation = Path.Combine(startFolder, targetName) + ".ico";
+        shortcut2.IconLocation = Path.Combine(startFolder, "Baba") + ".ico";
+        shortcut2.TargetPath = targetPath;
+        shortcut2.Save();
+    }
+
     // Returns the target than an .lnk file points to
     // Primary way from https://forums.overclockers.co.uk/threads/c-accessing-the-target-path-of-a-shortcut-lnk.17966879/post-13328225
     // Back-up way from https://learn.microsoft.com/en-us/dotnet/api/system.io.filesysteminfo.linktarget
@@ -510,13 +477,13 @@ public class ShortcutTools
         string target = "";
         try // Primary method
         {
-            WshShell shell = new WshShell();
+            WshShell shell = new();
             IWshShortcut linkAlt = (IWshShortcut)shell.CreateShortcut(shortcutPath);
 
             target = linkAlt.TargetPath;
             if (target == "")
             {
-                throw new Exception("Null target");
+                throw new Exception("Empty target");
             }
         }
         catch
@@ -527,7 +494,7 @@ public class ShortcutTools
                 target = fileInfo.LinkTarget;
                 if (target == "" || target == null)
                 {
-                    throw new Exception("Null target");
+                    throw new Exception("Empty target");
                 }
             }
             catch
@@ -538,34 +505,117 @@ public class ShortcutTools
         return target;
     }
 
-    public static void RefreshDesktop()
+    public static void Prepare()
     {
-        SHChangeNotify(0x8000000, 0x1000, IntPtr.Zero, IntPtr.Zero);
+        ShortcutTools.CreateDesktopBackups(false); // Silent backup
+        Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager", "Current-Icons")); // Create folder
     }
 
-    // Changes the shortcut arrow icon used on the Windows desktop.
+    public static bool AreThereInvalidFiles(string[] entries)
+    {
+        int invalidFileNum = ShortcutTools.CountNonShortcuts(entries);
+        if (invalidFileNum != 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public static bool ConfirmContinue()
+    {
+        var result = System.Windows.Forms.MessageBox.Show("Your desktop contains non-shortcuts. These will not be given a custom icon path. Press OK to proceed anyway, or press Cancel and run the Validate Desktop tool for more options.", "Non-Shortcuts Detected", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                if (result == DialogResult.Cancel)
+                {
+                    return false;
+                }
+        return true;
+    }
+}
+
+public class ArrowChange
+{
+    // ==================== Methods directly accessed through buttons ====================
+    // Allows user to select a custom shortcut arrow icon and change shortcut arrows to it
     // General implementation https://stackoverflow.com/a/24031611
     // Specific help with shortcut arrows https://www.elevenforum.com/t/remove-shortcut-arrow-icon-in-windows-11.3814/
+
     public static void ChangeArrows()
     {
-        string regEditWarning = "This feature uses an edit to the Windows registry in order to change or remove arrows from shortcut links on the desktop.";
-        string disclaimer1 = "To the best of my knowledge, as of the time I created this app, this method works and is safe. However, it may not work on every computer and could break or stop working at any time.";
-        string shortcutConfusion = "Additionally, shortcuts on the desktop link to other files, links, etc. Removing shortcut arrows may cause confusion as to whether something on the desktop is a shortcut or the file's direct location.";
-        string disclaimer2 = "You assume all responsibility for any data loss or damage that may result from using this functionality.";
-
-        var resultWarning = System.Windows.Forms.MessageBox.Show(regEditWarning + " " + disclaimer1 + " " + shortcutConfusion + "\n\n" + disclaimer2, "Warning!", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-        if (resultWarning == DialogResult.Cancel)
+        if (ConfirmChange() == false)
         {
             return;
         }
+        string iconPath = ChooseArrow();
+        if (iconPath.Equals(""))
+        {
+            return;
+        }
+        SaveNewArrow(iconPath);     // Copies to Current-Icons, but arrow path will not point there
+                                    // Updating the arrow in the same location doesn't update the arrow icon on the desktop
+                                    // even after restarting explorer, so the arrow path just points directly to the original file
+        if (SetArrowPath(iconPath)) // Will return true if the operation succeeds
+        {
+            SuccessMessage();
+        }
+        // If it fails, it'll send the failure message within the method
+    }
 
+    // Allows user to restore original shortcut arrows
+    public static void Restore()
+    {
+        if (ConfirmRestore() == false)
+        {
+            return;
+        }
+        if (RestoreArrows())
+        {
+            SuccessMessage();
+        }
+        // If it fails, it'll send the failure message within the method
+    }
 
-        // Do you want to set custom or restore
-        // If custom,
+    // ==================== Methods used within these methods ====================
 
-        // Copy resource arrows to container at some point
-        // open folder of icons, ideally in icon view and alphabetical order
-        // Copy to current arrow
+    // Warns user and asks if they want to proceed with arrow change
+    public static bool ConfirmChange()
+    {
+        string regEditWarning = "This feature uses an edit to the Windows registry in order to change or remove arrows from shortcut links on the desktop.";
+        string disclaimer1 = "To the best of my knowledge, as of the time I created this app, this method works and is safe. However, it may not work on every computer and could break or stop working at any time.";
+        string context = "Additionally, shortcuts on the desktop link to other files, links, etc. Removing shortcut arrows may cause confusion as to whether something on the desktop is a shortcut or the file's direct location.";
+        string disclaimer2 = "You assume all responsibility for any data loss or damage that may result from using this functionality.";
+
+        var resultWarning = System.Windows.Forms.MessageBox.Show(regEditWarning + " " + disclaimer1 + " " + context + "\n\n" + disclaimer2, "Warning!", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+        if (resultWarning == DialogResult.Cancel)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    // Warns user and asks if they want to proceed with arrow restore
+    public static bool ConfirmRestore()
+    {
+        string regEditWarning = "This feature uses an edit to the Windows registry in order to restore arrows to shortcut links on the desktop.";
+        string disclaimer1 = "To the best of my knowledge, as of the time I created this app, this method works and is safe. However, it may not work on every computer and could break or stop working at any time.";
+        string context = "If you've never made any changes to the Windows shortcut arrows, there's no need to use this feature.";
+        string disclaimer2 = "You assume all responsibility for any data loss or damage that may result from using this functionality.";
+        var resultWarning = System.Windows.Forms.MessageBox.Show(regEditWarning + " " + disclaimer1 + " " + context + "\n\n" + disclaimer2, "Warning!", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+        if (resultWarning == DialogResult.Cancel)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    // Gets user to select an arrow icon
+    public static string ChooseArrow()
+    {
         string iconPath = "";
         string arrowDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager", "Shortcut-Arrows");
         bool loopFolder = true;
@@ -575,7 +625,8 @@ public class ShortcutTools
             {
                 InitialDirectory = arrowDir
             };
-            dialog.Title = "Select an icon to use as the shortcut arrow.";
+            dialog.Title = "Select an icon to use as the shortcut arrow. (Only .ico files can be used.)";
+            dialog.Filters.Add(new CommonFileDialogFilter("Icon Files", "*.ico"));
             dialog.ShowDialog();
             try
             {
@@ -584,42 +635,117 @@ public class ShortcutTools
             }
             catch (Exception e)
             {
-                var resultNonshr = System.Windows.Forms.MessageBox.Show("Error: " + e.Message + "\n\nTry again?", "Error", MessageBoxButtons.YesNo);
+                var resultNonshr = System.Windows.Forms.MessageBox.Show("Error: " + e.Message + "\n\nWould you like to try again?", "Error", MessageBoxButtons.YesNo);
                 if (resultNonshr == DialogResult.No)
                 {
-                    return;
+                    return "";
                 }
             }
         }
         while (loopFolder);
+        return iconPath;
+    }
 
-        string targetFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager", "Current-Icons", "current-arrow.ico");
-        File.Copy(iconPath, targetFilePath, overwrite: true);
-
+    // Sets a registry key to set shortcut arrow path to whatever is provided
+    public static bool SetArrowPath(string iconPath)
+    {
         string registryPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons";
         try
         {
             using (RegistryKey key = Registry.LocalMachine.CreateSubKey(registryPath))
             {
                 if (key != null)
-                    {
-                        key.SetValue("29", iconPath, RegistryValueKind.String); // This part points directly to the icon because it seems like just swapping out the files doesn't work when just resetting explorer. Icon is still copied into current icons in case I find a fix, and for the sake of the user knowing what arrow goes with what set.
-                    }
+                {
+                    // This part points directly to the icon because it seems like
+                    // just swapping out the files doesn't work when just resetting explorer.
+                    // Icon is still copied into current icons in case I find a fix,
+                    // and for the sake of the user knowing what arrow goes with what set.
+                    key.SetValue("29", iconPath, RegistryValueKind.String);
+                }
                 else
-                    {
-                        throw new Exception("Null registry key.");
-                    }
+                {
+                    throw new Exception("Null registry key.");
                 }
             }
+        }
         catch (Exception e)
         {
             System.Windows.Forms.MessageBox.Show("An error occurred:" + e.Message + "\n\nTry re-running the application in Admin mode and see if that fixes the issue.", "Error");
-            return;
+            return false;
         }
-        
-        // If restore,
-        // Applicable code here
-        System.Windows.Forms.MessageBox.Show("Shortcut arrows have been applied. To see the change, you'll have to restart the Windows Explorer shell or restart your computer.", "Shortcut Arrows Updated");
+        return true;
+    }
+
+    // Restores shortcut arrows to defaults by removing registry edit
+    public static bool RestoreArrows()
+    {
+        string registryPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Icons";
+        try
+        {
+            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(registryPath, writable: true))
+            {
+                if (key != null)
+                {
+                    // Delete the registry value with the name "29"
+                    key.DeleteValue("29", throwOnMissingValue: false);
+                }
+                else
+                {
+                    throw new Exception("Null registry key.");
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            System.Windows.Forms.MessageBox.Show("An error occurred: " + e.Message + "\n\nTry re-running the application in Admin mode and see if that fixes the issue.", "Error");
+            return false;
+        }
+        return true;
+    }
+
+    // Notifies user that the arrow change was successful
+    public static void SuccessMessage()
+    {
+        System.Windows.Forms.MessageBox.Show("Shortcut arrow changes have been applied. To see the change, you'll have to restart the Windows Explorer shell or restart your computer.", "Shortcut Arrows Updated");
+    }
+
+    // Attempts to save the new shortcut arrow to the current icon folder
+    public static void SaveNewArrow(string iconPath)
+    {
+        try
+        {
+            string targetFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager", "Current-Icons", "current-arrow.ico");
+            File.Copy(iconPath, targetFilePath, overwrite: true);
+        }
+        catch
+        {
+            System.Windows.Forms.MessageBox.Show("Note: Could not copy arrow to current icon folder for back-up. Functionality shouldn't be affected as long as the registry edit succeeds.", "Notice");
+
+        }
+    }
+}
+
+public class Utilities
+{
+    // Allows me to refresh desktop to clear old icons
+    // Tweaked from https://stackoverflow.com/a/647286
+    [DllImport("Shell32.dll")]
+    private static extern int SHChangeNotify(int eventId, int flags, IntPtr item1, IntPtr item2);
+    private const uint SHCNE_ALLEVENTS = 0x80000000;
+    private const uint SHCNF_FLUSH = 0x1000;
+    public static void RefreshDesktop()
+    {
+        SHChangeNotify(0x8000000, 0x1000, IntPtr.Zero, IntPtr.Zero);
+    }
+    
+    // Creates the folders this app expects to see
+    public static void CreateStartingDirectories()
+    {
+        string appPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager");
+        Directory.CreateDirectory(Path.Combine(appPath, "Saved-Backups"));
+        Directory.CreateDirectory(Path.Combine(appPath, "Current-Icons"));
+        Directory.CreateDirectory(Path.Combine(appPath, "Shortcut-Arrows"));
+        Directory.CreateDirectory(Path.Combine(appPath, "Icon-Sets"));
     }
 
     // Restarts Windows Explorer
@@ -627,10 +753,20 @@ public class ShortcutTools
     public static void RestartExplorer()
     {
         Process.Start("taskkill", "/F /IM sihost.exe");
-        // Process.Start(@"C:\Windows\explorer.exe");
+    }
+
+    // Copies files from one directory to another
+    // Based on https://learn.microsoft.com/en-us/dotnet/standard/io/how-to-copy-directories
+    public static void CopyDirectory(string sourceDir, string destinationDir)
+    {
+        // Create the destination directory
+        var directory = new DirectoryInfo(sourceDir);
+        Directory.CreateDirectory(destinationDir);
+        // Get the files in the source directory and copy to the destination directory
+        foreach (FileInfo file in directory.GetFiles())
+        {
+            string targetFilePath = Path.Combine(destinationDir, file.Name);
+            file.CopyTo(targetFilePath);
+        }
     }
 }
-
-
-
-

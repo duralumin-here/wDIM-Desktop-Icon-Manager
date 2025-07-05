@@ -41,6 +41,7 @@
             button5 = new Button();
             button6 = new Button();
             button7 = new Button();
+            button8 = new Button();
             SuspendLayout();
             // 
             // button1
@@ -167,11 +168,22 @@
             button7.UseVisualStyleBackColor = true;
             button7.Click += button7_Click;
             // 
+            // button8
+            // 
+            button8.Location = new Point(596, 437);
+            button8.Name = "button8";
+            button8.Size = new Size(212, 29);
+            button8.TabIndex = 13;
+            button8.Text = "Restore Shortcut Arrows";
+            button8.UseVisualStyleBackColor = true;
+            button8.Click += button8_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(895, 461);
+            ClientSize = new Size(895, 489);
+            Controls.Add(button8);
             Controls.Add(button7);
             Controls.Add(button6);
             Controls.Add(label6);
@@ -206,5 +218,6 @@
         private Button button5;
         private Button button6;
         private Button button7;
+        private Button button8;
     }
 }
