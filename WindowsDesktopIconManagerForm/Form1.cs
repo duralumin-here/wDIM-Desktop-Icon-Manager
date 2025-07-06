@@ -26,7 +26,7 @@ namespace DesktopIconGUIapp
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Utilities.CreateDesktopBackups(true); // true to output result message
+            Utilities.CreateLnkBackups(true); // true to output result message
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -62,8 +62,6 @@ namespace DesktopIconGUIapp
 }
 
 // To do:
-// FIXME: Have the desktop backups only back up .lnk files
-// TODO: Actually improve code readability
 // TODO: Method to restore a selected backup through the app GUI
 // TODO: Figure out the workflow for a user to actually set up icon sets
 // TODO: Saving and loading icon sets
@@ -475,7 +473,7 @@ public class DesktopPrep
     // Housekeeping before actually changing the icon paths
     public static void Prepare()
     {
-        Utilities.CreateDesktopBackups(false); // Silent backup
+        Utilities.CreateLnkBackups(false); // Silent backup
         Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager", "Current-Icons")); // Create folder
     }
 
@@ -656,7 +654,6 @@ public class ArrowChange
             {
                 if (key != null)
                 {
-                    // Delete the registry value with the name "29"
                     key.DeleteValue("29", throwOnMissingValue: false);
                 }
                 else
@@ -762,32 +759,84 @@ public class Utilities
         }
     }
 
-    // Backs up the shortcuts on the desktop
+    // Backs up the files on the desktop
     public static void CreateDesktopBackups(bool printOutput)
     {
         // Create backup directory if it does not exist
         string documentPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         Directory.CreateDirectory(Path.Combine(documentPath, "DesktopIconManager", "Saved-Backups"));
+
         // Create dated directory for current backup
         string newPath = Path.Combine(documentPath, "DesktopIconManager", "Saved-Backups", DateTime.Now.ToString("MMMM_d_yyyy_h-mm-sstt"));
         Directory.CreateDirectory(newPath);
+
         // Back up public desktop
         string newPublicPath = Path.Combine(newPath, "PublicDesktop");
         Directory.CreateDirectory(newPublicPath);
         Utilities.CopyDirectory(@"C:\Users\Public\Desktop", newPublicPath);
+
         // Back up user desktop
         string newPrivatePath = Path.Combine(newPath, "PrivateDesktop");
         Directory.CreateDirectory(newPrivatePath);
         Utilities.CopyDirectory(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), newPrivatePath);
+
         // Copy Current Icons
         string currentIcons = Path.Combine(documentPath, "DesktopIconManager", "Current-Icons");
         Directory.CreateDirectory(currentIcons);
         string newIconPath = Path.Combine(newPath, "CurrentIcons");
         Utilities.CopyDirectory(currentIcons, newIconPath);
-        // Notify user if triggered manually; other activations pass along "false" to do this silently
-        if (printOutput)
+  
+        if (printOutput) // Notify user if triggered manually; other activations pass along "false" to do this silently
         {
-            string message = "Saved backups to \"" + newPath + "\".";
+            string message = "Saved complete desktop backups to \"" + newPath + "\".";
+            string caption = "Task Completed";
+            System.Windows.Forms.MessageBox.Show(message, caption);
+        }
+    }
+
+    // Only backs up lnk files on the desktop
+    public static void CreateLnkBackups(bool printOutput)
+    {
+        // Create backup directory if it does not exist
+        string documentPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        Directory.CreateDirectory(Path.Combine(documentPath, "DesktopIconManager", "Saved-Backups"));
+
+        // Create dated directory for current backup
+        string newPath = Path.Combine(documentPath, "DesktopIconManager", "Saved-Backups", DateTime.Now.ToString("yyyy_MM_d__h-mm-sstt"));
+        Directory.CreateDirectory(newPath);
+
+        // Back up public desktop
+        string newPublicPath = Path.Combine(newPath, "PublicDesktop");
+        Directory.CreateDirectory(newPublicPath);
+        string[] lnkFilesPublic = Directory.GetFiles(@"C:\Users\Public\Desktop", "*.lnk");
+        foreach (string file in lnkFilesPublic)
+        {
+            string fileName = Path.GetFileName(file);
+            string destination = Path.Combine(newPublicPath, fileName);
+            File.Copy(file, destination);
+        }
+
+        // Back up user desktop
+        string newPrivatePath = Path.Combine(newPath, "PrivateDesktop");
+        Directory.CreateDirectory(newPrivatePath);
+        string privateDesktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        string[] lnkFilesPrivate = Directory.GetFiles(privateDesktop, "*.lnk");
+        foreach (string file in lnkFilesPrivate)
+        {
+            string fileName = Path.GetFileName(file);
+            string destination = Path.Combine(newPrivatePath, fileName);
+            File.Copy(file, destination);
+        }
+
+        // Copy Current Icons
+        string currentIcons = Path.Combine(documentPath, "DesktopIconManager", "Current-Icons");
+        Directory.CreateDirectory(currentIcons);
+        string newIconPath = Path.Combine(newPath, "CurrentIcons");
+        Utilities.CopyDirectory(currentIcons, newIconPath);
+
+        if (printOutput) // Notify user if triggered manually; other activations pass along "false" to do this silently
+        {
+            string message = "Saved complete desktop backups to \"" + newPath + "\".";
             string caption = "Task Completed";
             System.Windows.Forms.MessageBox.Show(message, caption);
         }
