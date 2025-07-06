@@ -21,12 +21,12 @@ namespace DesktopIconGUIapp
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ShortcutTools.HandleNonShortcuts();
+            HandleNonShortcutsClass.HandleNonShortcuts();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            ShortcutTools.CreateDesktopBackups(true);
+            Utilities.CreateDesktopBackups(true); // true to output result message
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -74,38 +74,6 @@ namespace DesktopIconGUIapp
 
 public class ShortcutTools
 {
-
-    // Backs up the shortcuts on the desktop
-    public static void CreateDesktopBackups(bool printOutput)
-    {
-        // Create backup directory if it does not exist
-        string documentPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        Directory.CreateDirectory(Path.Combine(documentPath, "DesktopIconManager", "Saved-Backups"));
-        // Create dated directory for current backup
-        string newPath = Path.Combine(documentPath, "DesktopIconManager", "Saved-Backups", DateTime.Now.ToString("MMMM_d_yyyy_h-mm-sstt"));
-        Directory.CreateDirectory(newPath);
-        // Back up public desktop
-        string newPublicPath = Path.Combine(newPath, "PublicDesktop");
-        Directory.CreateDirectory(newPublicPath);
-        Utilities.CopyDirectory(@"C:\Users\Public\Desktop", newPublicPath);
-        // Back up user desktop
-        string newPrivatePath = Path.Combine(newPath, "PrivateDesktop");
-        Directory.CreateDirectory(newPrivatePath);
-        Utilities.CopyDirectory(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), newPrivatePath);
-        // Copy Current Icons
-        string currentIcons = Path.Combine(documentPath, "DesktopIconManager", "Current-Icons");
-        Directory.CreateDirectory(currentIcons);
-        string newIconPath = Path.Combine(newPath, "CurrentIcons");
-        Utilities.CopyDirectory(currentIcons, newIconPath);
-        // Notify user if triggered manually; other activations pass along "false" to do this silently
-        if (printOutput)
-        {
-            string message = "Saved backups to \"" + newPath + "\".";
-            string caption = "Task Completed";
-            System.Windows.Forms.MessageBox.Show(message, caption);
-        }
-    }
-
     // Counts how many files on desktop are not shortcuts and adds them to the array passed along
     // Referenced https://www.csharp.com/article/directories-in-c-sharp/ for basic file operations
     // TODO: Try to redo this all using a List instead of counting an imperfect array
@@ -113,7 +81,7 @@ public class ShortcutTools
     {
         // Create array and number to count entries
         int numNonShortcuts = 0;
-        string[] allEntries = CreateDesktopArray();
+        string[] allEntries = Utilities.CreateDesktopArray();
         // Iterate through desktop; for each non-shortcut, add files to array and increment count
         foreach (string fileName in allEntries)
         {
@@ -125,131 +93,135 @@ public class ShortcutTools
         }
         return numNonShortcuts;
     }
+}
 
-    // Creates and returns a perfect array of all the files on the desktop
-    public static string[] CreateDesktopArray()
-    {
-        // Find desktop locations
-        string publicDesk = @"C:\Users\Public\Desktop";
-        string userDesk = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        // Create lists of files in each desktop
-        string[] publicEntries = Directory.GetFiles(publicDesk);
-        string[] userEntries = Directory.GetFiles(userDesk);
-        // Combine both desktops into one array
-        string[] allEntries = new string[publicEntries.Length + userEntries.Length];
-        for (int i = 0; i < publicEntries.Length; ++i)
-        {
-            allEntries[i] = publicEntries[i];
-        }
-        for (int i = 0; i < userEntries.Length; ++i)
-        {
-            allEntries[publicEntries.Length + i] = userEntries[i];
-        }
-        return allEntries;
-    }
+public class HandleNonShortcutsClass
+{
+    // ==================== Methods directly accessed through buttons ====================
 
     // Calls the method to check for non-shortcuts and asks the user what to do about them
     // TODO: Try to implement List here so I can use it in the other method too
     public static void HandleNonShortcuts()
     {
-        // String array to hold non-shortcuts
         string[] notShortcuts = new string[500];
-        // Add invalid entries to the notShortcuts array and return the count
-        int invalidFileNum = CountNonShortcuts(notShortcuts);
-        // If invalid files exist, output message, prompt to fix, and run fixer
-        if (invalidFileNum != 0)
+        int invalidFileNum = ShortcutTools.CountNonShortcuts(notShortcuts);
+        if (invalidFileNum != 0) // If invalid files exist, output message, prompt to fix, and run fixer
         {
-            // TODO: Create method that makes the message box and returns the result instead of doing it here
-
-            // Create string of non-items to show user
-            string invalidItems = "";
-            for (int i = 0; i < invalidFileNum; ++i)
-            {
-                string ogName = notShortcuts[i].Substring((notShortcuts[i].LastIndexOf("\\") + 1));
-                invalidItems = invalidItems + ogName + "\n";
-            }
-            // Create and display message box
-            string errorNonshr = "The following files on your desktop are not shortcuts:";
-            string promptNonshr = "Would you like this app to help you move these files?";
-            string extraNonshr = "(If you want to handle the files manually yourself, you should select No, move these files, and run this checker again when you're done.)";
-            string messageNonshr = errorNonshr + "\n\n" + invalidItems + "\n" + promptNonshr + " " + extraNonshr;
-            string captionNonshr = "Invalid Entries Detected";
-            var resultNonshr = System.Windows.Forms.MessageBox.Show(messageNonshr, captionNonshr, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             bool showWarning = false;
-            // Proceed to helper if desired
-            if (resultNonshr == DialogResult.Yes)
+            string invalidItems = FormatInvalidItems(notShortcuts, invalidFileNum);
+            var resultNonshr = NonShortcutsContinue(invalidItems);
+            if (resultNonshr == DialogResult.Yes) // Proceed to helper if desired
             {
-                // Ask user if they'd like to move all non-shortcuts on the desktop to one folder
-                string promptMoveAll = "Would you like to select one folder to move all of the non-shortcut files to?";
-                string extraMoveAll = "(Select \"No\" to go through them one by one, and select \"Cancel\" to abort this operation and leave the helper instead.)";
-                string messageMoveAll = promptMoveAll + " " + extraMoveAll;
-                string captionMoveAll = "Desktop Icon Manager";
-                var resultMoveAll = System.Windows.Forms.MessageBox.Show(messageMoveAll, captionMoveAll, MessageBoxButtons.YesNoCancel);
-                // If user exits the helper
-                if (resultMoveAll == DialogResult.Cancel)
+                var resultMoveAll = PromptMoveAll();
+                if (resultMoveAll == DialogResult.Yes) // If user decides to move them all at once
                 {
-                    showWarning = true;
+                    int iconResult = CreateShortcutAll(notShortcuts, invalidFileNum);
+                    if (iconResult == -1) // If it fails, show warning
+                    {
+                        showWarning = true;
+                    }
                 }
-                // If user does not want to move them all at once
-                else if (resultMoveAll == DialogResult.No)
+                else if (resultMoveAll == DialogResult.No) // If user wants to move them individually
                 {
                     for (int i = 0; i < invalidFileNum; ++i)
                     {
-                        // Attempt to create shortcut for each file
-                        int iconResult = CreateShortcutOneByOne(notShortcuts[i]);
-                        // If a move fails
-                        if (iconResult != 1)
+                        int iconResult = CreateShortcutOneByOne(notShortcuts[i]); // Attempt to create shortcut for each file
+                        if (iconResult != 1) // If a move fails (returns other than 1)
                         {
                             showWarning = true;
-                            // If it fails and user asks to exit, then escape loop
-                            if (iconResult == -1)
+                            if (iconResult == -1) // If it fails and user asks to exit (-1), then escape loop
                             {
                                 break;
                             }
                         }
                     }
                 }
-                // If user decides to move them all at once
-                else
+                else // If user exits the helper
                 {
-                    int iconResult = CreateShortcutAll(notShortcuts, invalidFileNum);
-                    // If it fails, show warning (no need to break since not in loop)
-                    if (iconResult == -1)
-                    {
-                        showWarning = true;
-                    }
+                    showWarning = true;
                 }
             }
-            // Warn user if there's non-shortcuts and they skip the helper
-            else
+            else // Warn user if there's non-shortcuts and they skip the helper
             {
                 showWarning = true;
             }
-            // Display success message or warning message
+
+            // Display appropriate message after running helper
             if (showWarning)
             {
-                string promptWarning = "This tool only changes shortcut icons, but your desktop still contains non-shortcuts.";
-                string extraWarning = "These will remain unaffected by custom icon sets unless you move them off of the desktop and replace them with shortcuts to their file location(s).";
-                string messageWarning = promptWarning + " " + extraWarning;
-                string captionWarning = "Non-Shortcuts Present";
-                System.Windows.Forms.MessageBox.Show(messageWarning, captionWarning, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                WarningMessage();
             }
             else
             {
-                string promptSuccess = "The helper is complete.";
-                string extraSuccess = "If you created shortcuts, you may have to move them on your desktop back to where you expect them to be.";
-                string messageSuccess = promptSuccess + " " + extraSuccess;
-                string captionSuccess = "Helper Complete";
-                System.Windows.Forms.MessageBox.Show(messageSuccess, captionSuccess, MessageBoxButtons.OK);
+                HelperCompleteMessage();
             }
         }
         // If all files are valid, output success message
         else
         {
-            string promptValid = "All desktop files are shortcuts.";
-            string captionValid = "Desktop Validated";
-            System.Windows.Forms.MessageBox.Show(promptValid, captionValid);
+            ValidatedMessage();
         }
+    }
+
+    // ==================== Methods used within these methods ====================
+
+    public static DialogResult NonShortcutsContinue(string invalidItems)
+    {
+        // Create and display message box
+        string errorNonshr = "The following files on your desktop are not shortcuts:";
+        string promptNonshr = "Would you like this app to help you move these files?";
+        string extraNonshr = "(If you want to handle the files manually yourself, you should select No, move these files, and run this checker again when you're done.)";
+        string messageNonshr = errorNonshr + "\n\n" + invalidItems + "\n" + promptNonshr + " " + extraNonshr;
+        string captionNonshr = "Invalid Entries Detected";
+        var result = System.Windows.Forms.MessageBox.Show(messageNonshr, captionNonshr, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+        return result;
+    }
+
+    public static DialogResult PromptMoveAll()
+    {
+        // Ask user if they'd like to move all non-shortcuts on the desktop to one folder
+        string promptMoveAll = "Would you like to select one folder to move all of the non-shortcut files to?";
+        string extraMoveAll = "(Select \"No\" to go through them one by one, and select \"Cancel\" to abort this operation and leave the helper instead.)";
+        string messageMoveAll = promptMoveAll + " " + extraMoveAll;
+        string captionMoveAll = "Desktop Icon Manager";
+        var result = System.Windows.Forms.MessageBox.Show(messageMoveAll, captionMoveAll, MessageBoxButtons.YesNoCancel);
+        return result;
+    }
+
+    public static string FormatInvalidItems(string[] notShortcuts, int invalidFileNum)
+    {
+        string invalidItems = "";
+        for (int i = 0; i < invalidFileNum; ++i)
+        {
+            string ogName = notShortcuts[i].Substring((notShortcuts[i].LastIndexOf("\\") + 1));
+            invalidItems = invalidItems + ogName + "\n";
+        }
+
+        return invalidItems;
+    }
+    public static void WarningMessage()
+    {
+        string promptWarning = "This tool only changes shortcut icons, but your desktop still contains non-shortcuts.";
+        string extraWarning = "These will remain unaffected by custom icon sets unless you move them off of the desktop and replace them with shortcuts to their file location(s).";
+        string messageWarning = promptWarning + " " + extraWarning;
+        string captionWarning = "Non-Shortcuts Present";
+        System.Windows.Forms.MessageBox.Show(messageWarning, captionWarning, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+    }
+
+    public static void HelperCompleteMessage()
+    {
+        string promptSuccess = "The helper is complete.";
+        string extraSuccess = "If you created shortcuts, you may have to move them on your desktop back to where you expect them to be.";
+        string messageSuccess = promptSuccess + " " + extraSuccess;
+        string captionSuccess = "Helper Complete";
+        System.Windows.Forms.MessageBox.Show(messageSuccess, captionSuccess, MessageBoxButtons.OK);
+    }
+
+    public static void ValidatedMessage()
+    {
+        string promptValid = "All desktop files are shortcuts.";
+        string captionValid = "Desktop Validated";
+        System.Windows.Forms.MessageBox.Show(promptValid, captionValid);
     }
 
     // Creates a shortcut on the desktop for a file given its location.
@@ -357,8 +329,7 @@ public class ShortcutTools
     // Returns whether it was successful
     static int CreateShortcutAll(string[] allItems, int invalidFileNum)
     {
-        // Start at zero to show the default behavior should skipping and trying again instead of aborting or looping
-        int result = 0;
+        int result = 0; // Start at zero to show the default behavior should skipping and trying again instead of aborting or looping
         bool loopFolder = true;
         string newFolder = "";
         do
@@ -377,8 +348,7 @@ public class ShortcutTools
             }
             catch (Exception e)
             {
-                // Prompt for retry and proceed accordingly (0 and -1 will skip, but 1 is ignored)
-                result = AskToContinue(e);
+                result = AskToContinue(e); // Prompt for retry and proceed accordingly (0 and -1 will skip, but 1 is ignored)
                 if (result < 1)
                 {
                     return result;
@@ -399,8 +369,7 @@ public class ShortcutTools
             }
             catch (Exception e)
             {
-                // Prompt for retry and proceed accordingly (0 and -1 will skip, but 1 is ignored)
-                result = AskToContinue(e);
+                result = AskToContinue(e); // Prompt for retry and proceed accordingly (0 and -1 will skip, but 1 is ignored)
                 if (result < 1)
                 {
                     return result;
@@ -408,8 +377,7 @@ public class ShortcutTools
             }
         }
         Utilities.RefreshDesktop(); // to remove icon from screen
-        result = 1; // indicate success
-        return result;
+        return 1; // indicate success
     }
 }
 
@@ -422,7 +390,7 @@ public class DesktopPrep
     public static void SetShortcutPaths()
     {
         Prepare(); // back up desktop and create directory
-        string[] allEntries = ShortcutTools.CreateDesktopArray(); // get list of all files on the desktop
+        string[] allEntries = Utilities.CreateDesktopArray(); // get list of all files on the desktop
         if (AreThereInvalidFiles(allEntries) == true)
         {
             if (ConfirmContinue() == false) // ask user to confirm continuing if invalid files are detected
@@ -446,7 +414,6 @@ public class DesktopPrep
             {
                 success = false;
             }
-
             // I don't currently feel the need to do anything if an attempt fails,
             // but I can use the "success" variable for that if I change my mind.
         }
@@ -505,12 +472,14 @@ public class DesktopPrep
         return target;
     }
 
+    // Housekeeping before actually changing the icon paths
     public static void Prepare()
     {
-        ShortcutTools.CreateDesktopBackups(false); // Silent backup
+        Utilities.CreateDesktopBackups(false); // Silent backup
         Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager", "Current-Icons")); // Create folder
     }
 
+    // Checks for invalid (non-lnk) files
     public static bool AreThereInvalidFiles(string[] entries)
     {
         int invalidFileNum = ShortcutTools.CountNonShortcuts(entries);
@@ -521,6 +490,7 @@ public class DesktopPrep
         return false;
     }
 
+    // If non-shortcuts are detected, have user decide whether or not to proceed anyway
     public static bool ConfirmContinue()
     {
         var result = System.Windows.Forms.MessageBox.Show("Your desktop contains non-shortcuts. These will not be given a custom icon path. Press OK to proceed anyway, or press Cancel and run the Validate Desktop tool for more options.", "Non-Shortcuts Detected", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
@@ -727,6 +697,28 @@ public class ArrowChange
 
 public class Utilities
 {
+    // Creates and returns a perfect array of all the files on the desktop
+    public static string[] CreateDesktopArray()
+    {
+        // Find desktop locations
+        string publicDesk = @"C:\Users\Public\Desktop";
+        string userDesk = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        // Create lists of files in each desktop
+        string[] publicEntries = Directory.GetFiles(publicDesk);
+        string[] userEntries = Directory.GetFiles(userDesk);
+        // Combine both desktops into one array
+        string[] allEntries = new string[publicEntries.Length + userEntries.Length];
+        for (int i = 0; i < publicEntries.Length; ++i)
+        {
+            allEntries[i] = publicEntries[i];
+        }
+        for (int i = 0; i < userEntries.Length; ++i)
+        {
+            allEntries[publicEntries.Length + i] = userEntries[i];
+        }
+        return allEntries;
+    }
+
     // Allows me to refresh desktop to clear old icons
     // Tweaked from https://stackoverflow.com/a/647286
     [DllImport("Shell32.dll")]
@@ -767,6 +759,37 @@ public class Utilities
         {
             string targetFilePath = Path.Combine(destinationDir, file.Name);
             file.CopyTo(targetFilePath);
+        }
+    }
+
+    // Backs up the shortcuts on the desktop
+    public static void CreateDesktopBackups(bool printOutput)
+    {
+        // Create backup directory if it does not exist
+        string documentPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        Directory.CreateDirectory(Path.Combine(documentPath, "DesktopIconManager", "Saved-Backups"));
+        // Create dated directory for current backup
+        string newPath = Path.Combine(documentPath, "DesktopIconManager", "Saved-Backups", DateTime.Now.ToString("MMMM_d_yyyy_h-mm-sstt"));
+        Directory.CreateDirectory(newPath);
+        // Back up public desktop
+        string newPublicPath = Path.Combine(newPath, "PublicDesktop");
+        Directory.CreateDirectory(newPublicPath);
+        Utilities.CopyDirectory(@"C:\Users\Public\Desktop", newPublicPath);
+        // Back up user desktop
+        string newPrivatePath = Path.Combine(newPath, "PrivateDesktop");
+        Directory.CreateDirectory(newPrivatePath);
+        Utilities.CopyDirectory(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), newPrivatePath);
+        // Copy Current Icons
+        string currentIcons = Path.Combine(documentPath, "DesktopIconManager", "Current-Icons");
+        Directory.CreateDirectory(currentIcons);
+        string newIconPath = Path.Combine(newPath, "CurrentIcons");
+        Utilities.CopyDirectory(currentIcons, newIconPath);
+        // Notify user if triggered manually; other activations pass along "false" to do this silently
+        if (printOutput)
+        {
+            string message = "Saved backups to \"" + newPath + "\".";
+            string caption = "Task Completed";
+            System.Windows.Forms.MessageBox.Show(message, caption);
         }
     }
 }
