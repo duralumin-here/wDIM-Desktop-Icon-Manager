@@ -1,4 +1,4 @@
-namespace DesktopIconGUIapp
+namespace WindowsDesktopIconManagerForm
 {
     internal static class Program
     {

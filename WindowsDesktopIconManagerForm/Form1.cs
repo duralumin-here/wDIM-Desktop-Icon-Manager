@@ -7,9 +7,22 @@ using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using System.Windows.Documents;
 using System.Windows.Forms;
+using static System.Windows.Forms.DataFormats;
 using File = System.IO.File;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Drawing;
+using System.Windows.Media;
+using System;
+using System.Net;
+using System.Drawing;
+using System.IO.Enumeration;
+using SystemMath = System.Math;
+using static Utilities;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
-namespace DesktopIconGUIapp
+namespace WindowsDesktopIconManagerForm
 { // https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.messagebox?view=windowsdesktop-9.0
     public partial class Form1 : Form
     {
@@ -24,14 +37,14 @@ namespace DesktopIconGUIapp
             HandleNonShortcutsClass.HandleNonShortcuts();
         }
 
-        private void button3_Click(object sender, EventArgs e)
-        {
-            Utilities.CreateLnkBackups(true); // true to output result message
-        }
-
         private void button2_Click(object sender, EventArgs e)
         {
             DesktopPrep.SetShortcutPaths();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Utilities.CreateLnkBackups(true); // true to output result message
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -39,14 +52,13 @@ namespace DesktopIconGUIapp
             DesktopPrep.SetShortcutPaths();
         }
 
-        private void button6_Click(object sender, EventArgs e)
-        {
-            Utilities.RefreshDesktop();
-        }
-
         private void button4_Click(object sender, EventArgs e)
         {
             ArrowChange.ChangeArrows();
+        }
+        private void button6_Click(object sender, EventArgs e)
+        {
+            Utilities.RefreshDesktop();
         }
 
         private void button7_Click(object sender, EventArgs e)
@@ -58,17 +70,76 @@ namespace DesktopIconGUIapp
         {
             ArrowChange.Restore();
         }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button7_Click_1(object sender, EventArgs e)
+        {
+            Utilities.RestartExplorer();
+        }
+
+        private void button8_Click_1(object sender, EventArgs e)
+        {
+            ArrowChange.Restore();
+        }
+
+        private void button4_Click_1(object sender, EventArgs e)
+        {
+            ArrowChange.ChangeArrows();
+        }
+
+        private void button10_Click_1(object sender, EventArgs e)
+        {
+            Bitmap image = new Bitmap(pictureBox1.BackgroundImage); ;
+            pictureBox1.BackgroundImage = Coloration.HueShift(image, 1);
+        }
+
+        private void trackBar1_ValueChanged(object sender, EventArgs e)
+        {
+            Bitmap image = new Bitmap(pictureBox1.BackgroundImage);
+            pictureBox1.BackgroundImage = Coloration.HueShift(image, trackBar1.Value);
+        }
+
+        private void trackBar2_ValueChanged(object sender, EventArgs e)
+        {
+            Bitmap image = new Bitmap(pictureBox1.BackgroundImage);
+            double sat = (double)trackBar2.Value / 100;
+            pictureBox1.BackgroundImage = Coloration.SatShift(image, sat);
+        }
+
+        private void trackBar3_ValueChanged(object sender, EventArgs e)
+        {
+            Bitmap image = new Bitmap(pictureBox1.BackgroundImage);
+            float bright = (float) trackBar3.Value / 100;
+            pictureBox1.BackgroundImage = Coloration.BrightShift(image, bright);
+        }
     }
 }
 
 // To do:
-// TODO: Method to restore a selected backup through the app GUI
-// TODO: Figure out the workflow for a user to actually set up icon sets
-// TODO: Saving and loading icon sets
-    // Can just have a menu to copy icons from a set to current icons, or from current icons to a set
-    // May need a workflow for people to upload specific icons for apps so they can be renamed accordingly
-// May need to actually make other Windows forms so this doesn't become the most unwieldy one-paged menu ever
-// Ideally a way for me to simply have some default arrow types (and maybe hearts, etc) saved and have the user just select a color with a color picker and/or html code, creating a new file for it
+// **I think it might be smart to consolidate all the preparation steps into a new Windows form menu, and put most of these other things elsewhere
+    // Desktop shortcut backups accessed through preparation UI
+    // Icon sets managed through another
+        // TODO: Method to restore a selected backup through the app GUI
+        // TODO: Figure out the workflow for a user to actually set up icon sets
+        // TODO: Saving and loading icon sets
+            // Can just have a menu to copy icons from a set to current icons, or from current icons to a set
+        // May need a workflow for people to upload specific icons for apps so they can be renamed accordingly
+    // A way for me to simply have some default arrow types (and maybe hearts, etc) saved and have the user just select a color with a color picker and/or html code, creating a new file for it
+    // A way to change the names of shortcuts with fancy text, append symbols/emojis, or change the names to blank altogether
 
 public class ShortcutTools
 {
@@ -428,7 +499,7 @@ public class DesktopPrep
         IWshShortcut shortcut2 = (IWshShortcut)shell.CreateShortcut(shortcut);
         // shortcut2.Description = "Title text here";
         // shortcut2.Hotkey = "Ctrl+Shift+N";
-        // shortcut2.IconLocation = Path.Combine(startFolder, targetName) + ".ico";
+        // shortcut2.IconLocation = Path.Combine(startFolder, targetName) + ".ico"; // Named after target path so names can be later changed if desired
         shortcut2.IconLocation = Path.Combine(startFolder, "Baba") + ".ico";
         shortcut2.TargetPath = targetPath;
         shortcut2.Save();
@@ -839,6 +910,99 @@ public class Utilities
             string message = "Saved complete desktop backups to \"" + newPath + "\".";
             string caption = "Task Completed";
             System.Windows.Forms.MessageBox.Show(message, caption);
+        }
+    }
+
+    public class Coloration
+    {
+        // Shifts hue of image
+        // Multiple answers helped me figure this out: https://stackoverflow.com/a/3837523, https://stackoverflow.com/questions/10332363/, https://learn.microsoft.com/en-us/dotnet/api/system.drawing.color
+        // From what I've read this isn't too efficient, but that hopefully won't matter for our purposes
+        public static Bitmap HueShift(Bitmap bm, int hueChange)
+        {
+            for (int x = 0; x < bm.Width; x++)
+            {
+                for (int y = 0; y < bm.Height; y++)
+                {
+                    float oldHue = bm.GetPixel(x, y).GetHue();
+                    float newHue = oldHue + hueChange;
+                    System.Drawing.Color newColor = HsLtoRgb(hueChange, bm.GetPixel(x, y).GetSaturation(), bm.GetPixel(x, y).GetBrightness(), bm.GetPixel(x, y).A);
+                    bm.SetPixel(x, y, newColor);
+                }
+            }
+            return bm;
+        }
+
+        // Shifts saturation
+        public static Bitmap SatShift(Bitmap bm, double satChange)
+        {
+            for (int x = 0; x < bm.Width; x++)
+            {
+                for (int y = 0; y < bm.Height; y++)
+                {
+                    System.Drawing.Color newColor = HsLtoRgb(bm.GetPixel(x, y).GetHue(), satChange, bm.GetPixel(x, y).GetBrightness(), bm.GetPixel(x, y).A);
+                    bm.SetPixel(x, y, newColor);
+                }
+            }
+            return bm;
+        }
+
+        public static Bitmap BrightShift(Bitmap bm, double brightChange)
+        {
+            for (int x = 0; x < bm.Width; x++)
+            {
+                for (int y = 0; y < bm.Height; y++)
+                {
+                    System.Drawing.Color newColor = HsLtoRgb(bm.GetPixel(x, y).GetHue(), bm.GetPixel(x, y).GetSaturation(), brightChange, bm.GetPixel(x, y).A);
+                    bm.SetPixel(x, y, newColor);
+                }
+            }
+
+            return bm;
+        }
+
+        // Produces a Color from HSL values
+        // Taken from https://stackoverflow.com/a/55135336
+        public static System.Drawing.Color HsLtoRgb(double h, double s, double l, int a = 255)
+        {
+            h = SystemMath.Max(0D, SystemMath.Min(360D, h));
+            s = SystemMath.Max(0D, SystemMath.Min(1D, s));
+            l = SystemMath.Max(0D, SystemMath.Min(1D, l));
+            a = SystemMath.Max(0, SystemMath.Min(255, a));
+
+            double q = l < .5D
+                    ? l * (1D + s)
+                    : (l + s) - (l * s);
+            double p = (2D * l) - q;
+
+            double hk = h / 360D;
+            double[] T = new double[3];
+            T[0] = hk + (1D / 3D); // Tr
+            T[1] = hk; // Tb
+            T[2] = hk - (1D / 3D); // Tg
+
+            for (int i = 0; i < 3; i++)
+            {
+                if (T[i] < 0D)
+                    T[i] += 1D;
+                if (T[i] > 1D)
+                    T[i] -= 1D;
+
+                if ((T[i] * 6D) < 1D)
+                    T[i] = p + ((q - p) * 6D * T[i]);
+                else if ((T[i] * 2D) < 1)
+                    T[i] = q;
+                else if ((T[i] * 3D) < 2)
+                    T[i] = p + ((q - p) * ((2D / 3D) - T[i]) * 6D);
+                else
+                    T[i] = p;
+            }
+
+            return System.Drawing.Color.FromArgb(
+                    a,
+                    SystemMath.Max(0, SystemMath.Min(255, Convert.ToInt32(double.Parse($"{T[0] * 255D:0.00}")))),
+                    SystemMath.Max(0, SystemMath.Min(255, Convert.ToInt32(double.Parse($"{T[1] * 255D:0.00}")))),
+                    SystemMath.Max(0, SystemMath.Min(255, Convert.ToInt32(double.Parse($"{T[2] * 255D:0.00}")))));
         }
     }
 }
