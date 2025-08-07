@@ -7,25 +7,37 @@ namespace WindowsDesktopIconManagerForm
     public class Utilities
     {
         // Creates and returns a perfect array of all the files on the desktop
-        public static string[] CreateDesktopArray()
+        public static List<string> CreateDesktopArray()
         {
-            // Find desktop locations
-            string publicDesk = @"C:\Users\Public\Desktop";
-            string userDesk = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            // Create lists of files in each desktop
-            string[] publicEntries = Directory.GetFiles(publicDesk);
-            string[] userEntries = Directory.GetFiles(userDesk);
-            // Combine both desktops into one array
-            string[] allEntries = new string[publicEntries.Length + userEntries.Length];
-            for (int i = 0; i < publicEntries.Length; ++i)
-            {
-                allEntries[i] = publicEntries[i];
-            }
-            for (int i = 0; i < userEntries.Length; ++i)
-            {
-                allEntries[publicEntries.Length + i] = userEntries[i];
-            }
+            List<string> allEntries = [];
+            allEntries.AddRange(GetPublicDesktop());
+            allEntries.AddRange(GetPrivateDesktop());
             return allEntries;
+        }
+
+        // Same as above, but only returns lnk files
+        public static List<string> CreateLinkArray()
+        {
+            List<string> allEntries = [];
+            string publicDesk = @"C:\Users\Public\Desktop";
+            allEntries.AddRange(Directory.GetFiles(publicDesk, "*.lnk"));
+            string userDesk = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            allEntries.AddRange(Directory.GetFiles(userDesk, "*.lnk"));
+            return allEntries;
+        }
+
+        public static List<string> GetPublicDesktop()
+        {
+            string publicDesk = @"C:\Users\Public\Desktop";
+            List<string> publicEntries = new(Directory.GetFiles(publicDesk));
+            return publicEntries;
+        }
+
+        public static List<string> GetPrivateDesktop()
+        {
+            string userDesk = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            List<string> userEntries = new(Directory.GetFiles(userDesk));
+            return userEntries;
         }
 
         // Allows me to refresh desktop to clear old icons
@@ -51,7 +63,9 @@ namespace WindowsDesktopIconManagerForm
         }
 
         // Restarts Windows Explorer
-        // https://superuser.com/a/1278476
+        // SLOW. MIGHT NOT INCLUDE.
+        // However this application is meant for people who may not be comfortable opening
+        // Task Manager and this is the most reliable method to restart explorer with C# I've tried yet.
         public static void RestartExplorer()
         {
             Process.Start("taskkill", "/F /IM sihost.exe");

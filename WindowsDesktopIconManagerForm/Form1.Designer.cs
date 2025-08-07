@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             tabPage5 = new TabPage();
             arrowApplyButton = new Button();
             resetColorButton = new Button();
@@ -42,13 +43,13 @@
             label5 = new Label();
             hueSlide = new TrackBar();
             restoreArrowButton = new Button();
-            explorerButton = new Button();
             arrowSaveButton = new Button();
             label7 = new Label();
             arrowShowBox = new PictureBox();
             tabPage4 = new TabPage();
+            alphabetLabel = new Label();
             label11 = new Label();
-            button2 = new Button();
+            labelButton = new Button();
             label10 = new Label();
             endCharBox = new TextBox();
             startCharBox = new TextBox();
@@ -68,6 +69,7 @@
             tabPage3 = new TabPage();
             tabPage2 = new TabPage();
             tabPage1 = new TabPage();
+            explorerButton = new Button();
             label4 = new Label();
             refreshButton = new Button();
             label6 = new Label();
@@ -105,32 +107,31 @@
             tabPage5.Controls.Add(label5);
             tabPage5.Controls.Add(hueSlide);
             tabPage5.Controls.Add(restoreArrowButton);
-            tabPage5.Controls.Add(explorerButton);
             tabPage5.Controls.Add(arrowSaveButton);
             tabPage5.Controls.Add(label7);
             tabPage5.Controls.Add(arrowShowBox);
             tabPage5.Location = new Point(4, 29);
             tabPage5.Name = "tabPage5";
             tabPage5.Padding = new Padding(3);
-            tabPage5.Size = new Size(772, 476);
+            tabPage5.Size = new Size(770, 346);
             tabPage5.TabIndex = 5;
             tabPage5.Text = "Shortcut Arrows";
             // 
             // arrowApplyButton
             // 
-            arrowApplyButton.Location = new Point(469, 353);
+            arrowApplyButton.Location = new Point(27, 300);
             arrowApplyButton.Name = "arrowApplyButton";
-            arrowApplyButton.Size = new Size(263, 29);
-            arrowApplyButton.TabIndex = 10;
-            arrowApplyButton.Text = "Change Desktop Arrow";
+            arrowApplyButton.Size = new Size(152, 29);
+            arrowApplyButton.TabIndex = 9;
+            arrowApplyButton.Text = "Apply Arrows";
             arrowApplyButton.UseVisualStyleBackColor = true;
             arrowApplyButton.Click += arrowApplyButton_Click;
             // 
             // resetColorButton
             // 
-            resetColorButton.Location = new Point(424, 287);
+            resetColorButton.Location = new Point(628, 90);
             resetColorButton.Name = "resetColorButton";
-            resetColorButton.Size = new Size(151, 29);
+            resetColorButton.Size = new Size(126, 29);
             resetColorButton.TabIndex = 7;
             resetColorButton.Text = "Reset Editor";
             resetColorButton.UseVisualStyleBackColor = true;
@@ -138,32 +139,32 @@
             // 
             // lightBox
             // 
-            lightBox.Location = new Point(634, 234);
+            lightBox.Location = new Point(541, 228);
             lightBox.Name = "lightBox";
-            lightBox.Size = new Size(97, 27);
+            lightBox.Size = new Size(64, 27);
             lightBox.TabIndex = 6;
             lightBox.TextChanged += lightBox_TextChanged;
             // 
             // satBox
             // 
-            satBox.Location = new Point(634, 146);
+            satBox.Location = new Point(541, 140);
             satBox.Name = "satBox";
-            satBox.Size = new Size(97, 27);
+            satBox.Size = new Size(64, 27);
             satBox.TabIndex = 4;
             satBox.TextChanged += satBox_TextChanged;
             // 
             // hueBox
             // 
-            hueBox.Location = new Point(634, 60);
+            hueBox.Location = new Point(541, 54);
             hueBox.Name = "hueBox";
-            hueBox.Size = new Size(97, 27);
+            hueBox.Size = new Size(64, 27);
             hueBox.TabIndex = 2;
             hueBox.TextChanged += hueBox_TextChanged;
             // 
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(29, 260);
+            label9.Location = new Point(29, 216);
             label9.Name = "label9";
             label9.Size = new Size(148, 20);
             label9.TabIndex = 41;
@@ -173,21 +174,21 @@
             // 
             comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBox1.FormattingEnabled = true;
-            comboBox1.Items.AddRange(new object[] { "Blank/No Arrow", "Transparent (Curved)", "Transparent (Straight)", "Filled Black (Curved)", "Filled Black (Straight)", "Filled White (Curved)", "Filled White (Straight)", "Custom..." });
-            comboBox1.Location = new Point(29, 286);
+            comboBox1.Items.AddRange(new object[] { "Blank/No Arrow", "Curved (Transparent)", "Curved (Black)", "Curved (White)", "Straight (Transparent)", "Straight (Black)", "Straight (White)" });
+            comboBox1.Location = new Point(27, 239);
             comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(244, 28);
+            comboBox1.Size = new Size(190, 28);
             comboBox1.TabIndex = 0;
             comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 
             // lightSlide
             // 
             lightSlide.LargeChange = 10;
-            lightSlide.Location = new Point(302, 225);
+            lightSlide.Location = new Point(248, 219);
             lightSlide.Maximum = 98;
             lightSlide.Minimum = 2;
             lightSlide.Name = "lightSlide";
-            lightSlide.Size = new Size(319, 56);
+            lightSlide.Size = new Size(276, 56);
             lightSlide.TabIndex = 5;
             lightSlide.TickFrequency = 0;
             lightSlide.TickStyle = TickStyle.Both;
@@ -197,7 +198,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(302, 202);
+            label8.Location = new Point(248, 196);
             label8.Name = "label8";
             label8.Size = new Size(70, 20);
             label8.TabIndex = 38;
@@ -206,11 +207,11 @@
             // satSlide
             // 
             satSlide.LargeChange = 10;
-            satSlide.Location = new Point(302, 138);
+            satSlide.Location = new Point(248, 132);
             satSlide.Maximum = 100;
             satSlide.Minimum = 1;
             satSlide.Name = "satSlide";
-            satSlide.Size = new Size(319, 56);
+            satSlide.Size = new Size(276, 56);
             satSlide.TabIndex = 3;
             satSlide.TickFrequency = 0;
             satSlide.TickStyle = TickStyle.Both;
@@ -220,7 +221,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(302, 116);
+            label5.Location = new Point(248, 110);
             label5.Name = "label5";
             label5.Size = new Size(77, 20);
             label5.TabIndex = 36;
@@ -230,10 +231,10 @@
             // 
             hueSlide.BackColor = SystemColors.Control;
             hueSlide.LargeChange = 10;
-            hueSlide.Location = new Point(302, 51);
+            hueSlide.Location = new Point(248, 45);
             hueSlide.Maximum = 360;
             hueSlide.Name = "hueSlide";
-            hueSlide.Size = new Size(319, 56);
+            hueSlide.Size = new Size(276, 56);
             hueSlide.TabIndex = 1;
             hueSlide.TickFrequency = 0;
             hueSlide.TickStyle = TickStyle.Both;
@@ -241,30 +242,20 @@
             // 
             // restoreArrowButton
             // 
-            restoreArrowButton.Location = new Point(469, 388);
+            restoreArrowButton.Location = new Point(185, 300);
             restoreArrowButton.Name = "restoreArrowButton";
-            restoreArrowButton.Size = new Size(263, 29);
-            restoreArrowButton.TabIndex = 11;
-            restoreArrowButton.Text = "Restore Shortcut Arrows";
+            restoreArrowButton.Size = new Size(152, 29);
+            restoreArrowButton.TabIndex = 10;
+            restoreArrowButton.Text = "Restore Defaults";
             restoreArrowButton.UseVisualStyleBackColor = true;
             restoreArrowButton.Click += restoreArrowButton_Click;
-            // 
-            // explorerButton
-            // 
-            explorerButton.Location = new Point(29, 388);
-            explorerButton.Name = "explorerButton";
-            explorerButton.Size = new Size(157, 29);
-            explorerButton.TabIndex = 9;
-            explorerButton.Text = "Restart Explorer";
-            explorerButton.UseVisualStyleBackColor = true;
-            explorerButton.Click += explorerButton_Click;
             // 
             // arrowSaveButton
             // 
             arrowSaveButton.Enabled = false;
-            arrowSaveButton.Location = new Point(581, 286);
+            arrowSaveButton.Location = new Point(628, 54);
             arrowSaveButton.Name = "arrowSaveButton";
-            arrowSaveButton.Size = new Size(151, 29);
+            arrowSaveButton.Size = new Size(126, 29);
             arrowSaveButton.TabIndex = 8;
             arrowSaveButton.Text = "Save Arrow";
             arrowSaveButton.UseVisualStyleBackColor = true;
@@ -273,7 +264,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(302, 32);
+            label7.Location = new Point(248, 26);
             label7.Name = "label7";
             label7.Size = new Size(36, 20);
             label7.TabIndex = 31;
@@ -284,17 +275,18 @@
             arrowShowBox.BackColor = Color.LightGray;
             arrowShowBox.BackgroundImageLayout = ImageLayout.Stretch;
             arrowShowBox.BorderStyle = BorderStyle.Fixed3D;
-            arrowShowBox.Location = new Point(53, 41);
+            arrowShowBox.Location = new Point(29, 35);
             arrowShowBox.Name = "arrowShowBox";
-            arrowShowBox.Size = new Size(194, 194);
+            arrowShowBox.Size = new Size(150, 150);
             arrowShowBox.TabIndex = 30;
             arrowShowBox.TabStop = false;
             // 
             // tabPage4
             // 
             tabPage4.BackColor = SystemColors.Control;
+            tabPage4.Controls.Add(alphabetLabel);
             tabPage4.Controls.Add(label11);
-            tabPage4.Controls.Add(button2);
+            tabPage4.Controls.Add(labelButton);
             tabPage4.Controls.Add(label10);
             tabPage4.Controls.Add(endCharBox);
             tabPage4.Controls.Add(startCharBox);
@@ -314,9 +306,18 @@
             tabPage4.Location = new Point(4, 29);
             tabPage4.Name = "tabPage4";
             tabPage4.Padding = new Padding(3);
-            tabPage4.Size = new Size(772, 476);
+            tabPage4.Size = new Size(770, 346);
             tabPage4.TabIndex = 4;
             tabPage4.Text = "Customize Labels";
+            // 
+            // alphabetLabel
+            // 
+            alphabetLabel.AutoSize = true;
+            alphabetLabel.Location = new Point(13, 189);
+            alphabetLabel.Name = "alphabetLabel";
+            alphabetLabel.Size = new Size(628, 20);
+            alphabetLabel.TabIndex = 19;
+            alphabetLabel.Text = "𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏𝒜𝐵𝒞𝒟𝐸𝐹𝒢𝐻𝐼𝒥𝒦𝐿𝑀𝒩𝒪𝒫𝒬𝑅𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿";
             // 
             // label11
             // 
@@ -327,14 +328,15 @@
             label11.TabIndex = 18;
             label11.Text = "All changes will apply to the shortcut set currently in use.";
             // 
-            // button2
+            // labelButton
             // 
-            button2.Location = new Point(590, 436);
-            button2.Name = "button2";
-            button2.Size = new Size(163, 29);
-            button2.TabIndex = 15;
-            button2.Text = "Convert Labels";
-            button2.UseVisualStyleBackColor = true;
+            labelButton.Location = new Point(588, 301);
+            labelButton.Name = "labelButton";
+            labelButton.Size = new Size(163, 29);
+            labelButton.TabIndex = 15;
+            labelButton.Text = "Convert Labels";
+            labelButton.UseVisualStyleBackColor = true;
+            labelButton.Click += labelButton_Click;
             // 
             // label10
             // 
@@ -342,20 +344,20 @@
             label10.Font = new Font("Segoe UI Semibold", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label10.Location = new Point(11, 12);
             label10.Name = "label10";
-            label10.Size = new Size(321, 31);
+            label10.Size = new Size(240, 31);
             label10.TabIndex = 15;
-            label10.Text = "Stylize current shortcut labels";
+            label10.Text = "Stylize shortcut labels";
             // 
             // endCharBox
             // 
-            endCharBox.Location = new Point(409, 434);
+            endCharBox.Location = new Point(590, 146);
             endCharBox.Name = "endCharBox";
             endCharBox.Size = new Size(130, 27);
             endCharBox.TabIndex = 14;
             // 
             // startCharBox
             // 
-            startCharBox.Location = new Point(409, 401);
+            startCharBox.Location = new Point(228, 147);
             startCharBox.Name = "startCharBox";
             startCharBox.Size = new Size(130, 27);
             startCharBox.TabIndex = 12;
@@ -363,7 +365,7 @@
             // checkBox2
             // 
             checkBox2.AutoSize = true;
-            checkBox2.Location = new Point(198, 437);
+            checkBox2.Location = new Point(379, 149);
             checkBox2.Name = "checkBox2";
             checkBox2.Size = new Size(205, 24);
             checkBox2.TabIndex = 13;
@@ -373,7 +375,7 @@
             // checkBox1
             // 
             checkBox1.AutoSize = true;
-            checkBox1.Location = new Point(198, 403);
+            checkBox1.Location = new Point(17, 149);
             checkBox1.Name = "checkBox1";
             checkBox1.Size = new Size(209, 24);
             checkBox1.TabIndex = 11;
@@ -383,114 +385,125 @@
             // defaultFontRadio
             // 
             defaultFontRadio.AutoSize = true;
-            defaultFontRadio.Location = new Point(17, 400);
+            defaultFontRadio.Location = new Point(632, 80);
             defaultFontRadio.Name = "defaultFontRadio";
-            defaultFontRadio.Size = new Size(136, 24);
+            defaultFontRadio.Size = new Size(79, 24);
             defaultFontRadio.TabIndex = 10;
-            defaultFontRadio.Text = "Use default font";
+            defaultFontRadio.Text = "Default";
             defaultFontRadio.UseVisualStyleBackColor = true;
+            defaultFontRadio.CheckedChanged += defaultFontRadio_CheckedChanged;
             // 
             // serifLightRadio
             // 
             serifLightRadio.AutoSize = true;
-            serifLightRadio.Location = new Point(17, 233);
+            serifLightRadio.Location = new Point(265, 80);
             serifLightRadio.Name = "serifLightRadio";
-            serifLightRadio.Size = new Size(588, 24);
-            serifLightRadio.TabIndex = 5;
-            serifLightRadio.Text = "𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿";
+            serifLightRadio.Size = new Size(60, 24);
+            serifLightRadio.TabIndex = 4;
+            serifLightRadio.Text = "Serif";
             serifLightRadio.UseVisualStyleBackColor = true;
+            serifLightRadio.CheckedChanged += serifLightRadio_CheckedChanged;
             // 
             // italicBoldRadio
             // 
             italicBoldRadio.AutoSize = true;
-            italicBoldRadio.Location = new Point(17, 143);
+            italicBoldRadio.Location = new Point(144, 110);
             italicBoldRadio.Name = "italicBoldRadio";
-            italicBoldRadio.Size = new Size(597, 24);
-            italicBoldRadio.TabIndex = 2;
-            italicBoldRadio.Text = "𝙖𝙗𝙘𝙙𝙚𝙛𝙜𝙝𝙞𝙟𝙠𝙡𝙢𝙣𝙤𝙥𝙦𝙧𝙨𝙩𝙪𝙫𝙬𝙭𝙮𝙯𝘼𝘽𝘾𝘿𝙀𝙁𝙂𝙃𝙄𝙅𝙆𝙇𝙈𝙉𝙊𝙋𝙌𝙍𝙎𝙏𝙐𝙑𝙒𝙓𝙔𝙕𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗";
+            italicBoldRadio.Size = new Size(113, 24);
+            italicBoldRadio.TabIndex = 3;
+            italicBoldRadio.Text = "Italics (bold)";
             italicBoldRadio.UseVisualStyleBackColor = true;
+            italicBoldRadio.CheckedChanged += italicBoldRadio_CheckedChanged;
             // 
             // italicLightRadio
             // 
             italicLightRadio.AutoSize = true;
-            italicLightRadio.Location = new Point(17, 173);
+            italicLightRadio.Location = new Point(144, 80);
             italicLightRadio.Name = "italicLightRadio";
-            italicLightRadio.Size = new Size(553, 24);
-            italicLightRadio.TabIndex = 3;
-            italicLightRadio.Text = "𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿";
+            italicLightRadio.Size = new Size(68, 24);
+            italicLightRadio.TabIndex = 2;
+            italicLightRadio.Text = "Italics";
             italicLightRadio.UseVisualStyleBackColor = true;
+            italicLightRadio.CheckedChanged += italicLightRadio_CheckedChanged;
             // 
             // serifBoldVideo
             // 
             serifBoldVideo.AutoSize = true;
-            serifBoldVideo.Location = new Point(17, 203);
+            serifBoldVideo.Location = new Point(265, 110);
             serifBoldVideo.Name = "serifBoldVideo";
-            serifBoldVideo.Size = new Size(580, 24);
-            serifBoldVideo.TabIndex = 4;
-            serifBoldVideo.Text = "𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗";
+            serifBoldVideo.Size = new Size(105, 24);
+            serifBoldVideo.TabIndex = 5;
+            serifBoldVideo.Text = "Serif (bold)";
             serifBoldVideo.UseVisualStyleBackColor = true;
+            serifBoldVideo.CheckedChanged += serifBoldVideo_CheckedChanged;
             // 
             // circleTextRadio
             // 
             circleTextRadio.AutoSize = true;
-            circleTextRadio.Location = new Point(17, 353);
+            circleTextRadio.Location = new Point(511, 110);
             circleTextRadio.Name = "circleTextRadio";
-            circleTextRadio.Size = new Size(706, 44);
+            circleTextRadio.Size = new Size(73, 24);
             circleTextRadio.TabIndex = 9;
-            circleTextRadio.Text = "ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ\r\n⓪①②③④⑤⑥⑦⑧⑨";
+            circleTextRadio.Text = "Circles";
             circleTextRadio.UseVisualStyleBackColor = true;
+            circleTextRadio.CheckedChanged += circleTextRadio_CheckedChanged;
             // 
             // medievalTextRadio
             // 
             medievalTextRadio.AutoSize = true;
-            medievalTextRadio.Location = new Point(17, 323);
+            medievalTextRadio.Location = new Point(511, 80);
             medievalTextRadio.Name = "medievalTextRadio";
-            medievalTextRadio.Size = new Size(619, 24);
+            medievalTextRadio.Size = new Size(91, 24);
             medievalTextRadio.TabIndex = 8;
-            medievalTextRadio.Text = "𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗";
+            medievalTextRadio.Text = "Medieval";
             medievalTextRadio.UseVisualStyleBackColor = true;
+            medievalTextRadio.CheckedChanged += medievalTextRadio_CheckedChanged;
             // 
             // thinTextRadio
             // 
             thinTextRadio.AutoSize = true;
-            thinTextRadio.Location = new Point(17, 293);
+            thinTextRadio.Location = new Point(379, 110);
             thinTextRadio.Name = "thinTextRadio";
-            thinTextRadio.Size = new Size(620, 24);
+            thinTextRadio.Size = new Size(58, 24);
             thinTextRadio.TabIndex = 7;
-            thinTextRadio.Text = "ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ０１２３４５６７８９";
+            thinTextRadio.Text = "Thin";
             thinTextRadio.UseVisualStyleBackColor = true;
+            thinTextRadio.CheckedChanged += thinTextRadio_CheckedChanged;
             // 
             // linedTextRadio
             // 
             linedTextRadio.AutoSize = true;
-            linedTextRadio.Location = new Point(17, 263);
+            linedTextRadio.Location = new Point(379, 80);
             linedTextRadio.Name = "linedTextRadio";
-            linedTextRadio.Size = new Size(613, 24);
+            linedTextRadio.Size = new Size(116, 24);
             linedTextRadio.TabIndex = 6;
-            linedTextRadio.Text = "𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡";
+            linedTextRadio.Text = "Double lined";
             linedTextRadio.UseVisualStyleBackColor = true;
+            linedTextRadio.CheckedChanged += linedTextRadio_CheckedChanged;
             // 
             // cursiveLightRadio
             // 
             cursiveLightRadio.AutoSize = true;
-            cursiveLightRadio.Location = new Point(17, 114);
+            cursiveLightRadio.Checked = true;
+            cursiveLightRadio.Location = new Point(17, 80);
             cursiveLightRadio.Name = "cursiveLightRadio";
-            cursiveLightRadio.Size = new Size(649, 24);
-            cursiveLightRadio.TabIndex = 1;
-            cursiveLightRadio.Text = "𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏𝒜𝐵𝒞𝒟𝐸𝐹𝒢𝐻𝐼𝒥𝒦𝐿𝑀𝒩𝒪𝒫𝒬𝑅𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿";
+            cursiveLightRadio.Size = new Size(77, 24);
+            cursiveLightRadio.TabIndex = 0;
+            cursiveLightRadio.TabStop = true;
+            cursiveLightRadio.Text = "Cursive";
             cursiveLightRadio.UseVisualStyleBackColor = true;
+            cursiveLightRadio.CheckedChanged += cursiveLightRadio_CheckedChanged;
             // 
             // cursiveBoldRadio
             // 
             cursiveBoldRadio.AutoSize = true;
-            cursiveBoldRadio.Checked = true;
-            cursiveBoldRadio.Location = new Point(17, 84);
+            cursiveBoldRadio.Location = new Point(17, 110);
             cursiveBoldRadio.Name = "cursiveBoldRadio";
-            cursiveBoldRadio.Size = new Size(693, 24);
-            cursiveBoldRadio.TabIndex = 0;
-            cursiveBoldRadio.TabStop = true;
-            cursiveBoldRadio.Text = "𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗";
+            cursiveBoldRadio.Size = new Size(122, 24);
+            cursiveBoldRadio.TabIndex = 1;
+            cursiveBoldRadio.Text = "Cursive (bold)";
             cursiveBoldRadio.UseVisualStyleBackColor = true;
+            cursiveBoldRadio.CheckedChanged += cursiveBoldRadio_CheckedChanged;
             // 
             // tabPage3
             // 
@@ -498,7 +511,7 @@
             tabPage3.Location = new Point(4, 29);
             tabPage3.Name = "tabPage3";
             tabPage3.Padding = new Padding(3);
-            tabPage3.Size = new Size(772, 476);
+            tabPage3.Size = new Size(770, 346);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "Icon Sets";
             // 
@@ -508,13 +521,14 @@
             tabPage2.Location = new Point(4, 29);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(772, 476);
+            tabPage2.Size = new Size(770, 346);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Desktop Management";
             // 
             // tabPage1
             // 
             tabPage1.BackColor = SystemColors.Control;
+            tabPage1.Controls.Add(explorerButton);
             tabPage1.Controls.Add(label4);
             tabPage1.Controls.Add(refreshButton);
             tabPage1.Controls.Add(label6);
@@ -528,9 +542,18 @@
             tabPage1.Location = new Point(4, 29);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(772, 476);
+            tabPage1.Size = new Size(770, 346);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Quick Settings";
+            // 
+            // explorerButton
+            // 
+            explorerButton.Location = new Point(552, 305);
+            explorerButton.Name = "explorerButton";
+            explorerButton.Size = new Size(212, 29);
+            explorerButton.TabIndex = 12;
+            explorerButton.Text = "Restart Explorer";
+            explorerButton.UseVisualStyleBackColor = true;
             // 
             // label4
             // 
@@ -545,7 +568,7 @@
             // refreshButton
             // 
             refreshButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            refreshButton.Location = new Point(532, 346);
+            refreshButton.Location = new Point(552, 270);
             refreshButton.Name = "refreshButton";
             refreshButton.Size = new Size(212, 29);
             refreshButton.TabIndex = 11;
@@ -639,7 +662,7 @@
             tabControl1.Location = new Point(12, 12);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(780, 509);
+            tabControl1.Size = new Size(778, 379);
             tabControl1.TabIndex = 14;
             // 
             // Form1
@@ -647,9 +670,17 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ControlLight;
-            ClientSize = new Size(804, 533);
+            ClientSize = new Size(802, 403);
             Controls.Add(tabControl1);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            HelpButton = true;
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
+            MaximumSize = new Size(820, 450);
+            MinimizeBox = false;
+            MinimumSize = new Size(820, 450);
             Name = "Form1";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Desktop Icon Manager";
             tabPage5.ResumeLayout(false);
             tabPage5.PerformLayout();
@@ -681,13 +712,12 @@
         private Label label5;
         private TrackBar hueSlide;
         private Button restoreArrowButton;
-        private Button explorerButton;
         private Button arrowSaveButton;
         private Label label7;
         private PictureBox arrowShowBox;
         private TabPage tabPage4;
         private Label label11;
-        private Button button2;
+        private Button labelButton;
         private Label label10;
         private TextBox endCharBox;
         private TextBox startCharBox;
@@ -718,5 +748,7 @@
         private Label label2;
         private Label label3;
         private TabControl tabControl1;
+        private Label alphabetLabel;
+        private Button explorerButton;
     }
 }

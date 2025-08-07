@@ -9,11 +9,11 @@ namespace WindowsDesktopIconManagerForm
 
         // Changes the shortcut icon paths to point to a new custom file based on the executable/file name being pointed to
         // References https://bytescout.com/blog/create-shortcuts-in-c-and-vbnet.html
-        public static void SetShortcutPaths()
+        public static void SetIconPaths()
         {
             Prepare(); // back up desktop and create directory
-            string[] allEntries = Utilities.CreateDesktopArray(); // get list of all files on the desktop
-            if (AreThereInvalidFiles(allEntries) == true)
+            List<string> allEntries = Utilities.CreateDesktopArray(); // get list of all files on the desktop
+            if (AreThereInvalidFiles())
             {
                 if (ConfirmContinue() == false) // ask user to confirm continuing if invalid files are detected
                 {
@@ -52,16 +52,26 @@ namespace WindowsDesktopIconManagerForm
             IWshShortcut shortcut2 = (IWshShortcut)shell.CreateShortcut(shortcut);
             // shortcut2.Description = "Title text here";
             // shortcut2.Hotkey = "Ctrl+Shift+N";
-            // shortcut2.IconLocation = Path.Combine(startFolder, targetName) + ".ico"; // Named after target path so names can be later changed if desired
-            shortcut2.IconLocation = Path.Combine(startFolder, "Baba") + ".ico";
+            // TODO: Functionality to save an app's name somewhere along with any name changes
+            // TODO: Support for different icons even if target is the same (ie: chrome web apps)
+            shortcut2.IconLocation = GetIconLocation();
             shortcut2.TargetPath = targetPath;
             shortcut2.Save();
+        }
+
+        public static string GetIconLocation(/*string startFolder*/)
+        {
+            string iconLocation;
+            string startFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager", "Current-Icons");
+            // iconLocation = Path.Combine(startFolder, targetName) + ".ico"; // Named after target path so names can be later changed if desired
+            iconLocation = Path.Combine(startFolder, "Baba") + ".ico";
+            return iconLocation;
         }
 
         // Returns the target than an .lnk file points to
         // Primary way from https://forums.overclockers.co.uk/threads/c-accessing-the-target-path-of-a-shortcut-lnk.17966879/post-13328225
         // Back-up way from https://learn.microsoft.com/en-us/dotnet/api/system.io.filesysteminfo.linktarget
-        static private string GetShortcutTarget(string shortcutPath)
+        public static string GetShortcutTarget(string shortcutPath)
         {
             string target = "";
             try // Primary method
@@ -102,9 +112,9 @@ namespace WindowsDesktopIconManagerForm
         }
 
         // Checks for invalid (non-lnk) files
-        public static bool AreThereInvalidFiles(string[] entries)
+        public static bool AreThereInvalidFiles()
         {
-            int invalidFileNum = ForNonShortcuts.CountNonShortcuts(entries);
+            int invalidFileNum = ForNonShortcuts.CountNonShortcuts().Count;
             if (invalidFileNum != 0)
             {
                 return true;

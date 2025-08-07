@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
+using static System.Net.Mime.MediaTypeNames;
 using Path = System.IO.Path;
 using Size = System.Drawing.Size;
 
@@ -36,7 +37,7 @@ namespace WindowsDesktopIconManagerForm
 
         private void pathButton_Click(object sender, EventArgs e)
         {
-            DesktopPrep.SetShortcutPaths();
+            DesktopPrep.SetIconPaths();
         }
 
         private void backupButton_Click(object sender, EventArgs e)
@@ -65,7 +66,7 @@ namespace WindowsDesktopIconManagerForm
             try
             {
                 Bitmap image = new Bitmap(arrowShowBox.BackgroundImage);
-                arrowShowBox.BackgroundImage = Coloration.HueShift(image, hueSlide.Value);
+                arrowShowBox.BackgroundImage = Arrow.ColorShift(image, hueSlide.Value, "h");
             }
             catch
             {
@@ -80,7 +81,7 @@ namespace WindowsDesktopIconManagerForm
                 satBox.Text = satSlide.Value.ToString();
                 Bitmap image = new Bitmap(arrowShowBox.BackgroundImage);
                 double sat = (double)satSlide.Value / 100;
-                arrowShowBox.BackgroundImage = Coloration.SatShift(image, sat);
+                arrowShowBox.BackgroundImage = Arrow.ColorShift(image, sat, "s");
             }
             catch
             {
@@ -95,7 +96,7 @@ namespace WindowsDesktopIconManagerForm
             {
                 Bitmap image = new Bitmap(arrowShowBox.BackgroundImage);
                 float bright = (float)lightSlide.Value / 100;
-                arrowShowBox.BackgroundImage = Coloration.BrightShift(image, bright);
+                arrowShowBox.BackgroundImage = Arrow.ColorShift(image, bright, "l");
             }
             catch
             {
@@ -151,22 +152,30 @@ namespace WindowsDesktopIconManagerForm
                 return;
             }
             // Sets path based on combo box selection
-            string iconPath = Coloration.PickArrowType(selectedItem);
+            string iconPath = Arrow.PickArrowType(selectedItem);
 
             // Bitmap from the path
-            Bitmap newArrowMap = Coloration.GetBitmap(iconPath);
-            arrowShowBox.BackgroundImage = newArrowMap;
-            arrowSaveButton.Enabled = true;
+            // If it fails (eg bitmap is null) it will just end
+            try
+            {
+                Bitmap newArrowMap = Arrow.GetBitmap(iconPath);
+                arrowShowBox.BackgroundImage = newArrowMap;
+                arrowSaveButton.Enabled = true;
+            }
+            catch
+            {
+                return;
+            }
 
             // Reapply colors on arrow change
             try
             {
                 Bitmap image = new Bitmap(arrowShowBox.BackgroundImage);
-                arrowShowBox.BackgroundImage = Coloration.HueShift(image, hueSlide.Value);
-                float bright = (float)lightSlide.Value / 100;
-                arrowShowBox.BackgroundImage = Coloration.BrightShift(image, bright);
+                arrowShowBox.BackgroundImage = Arrow.ColorShift(image, hueSlide.Value, "h");
                 double sat = (double)satSlide.Value / 100;
-                arrowShowBox.BackgroundImage = Coloration.SatShift(image, sat);
+                arrowShowBox.BackgroundImage = Arrow.ColorShift(image, sat, "s");
+                float bright = (float)lightSlide.Value / 100;
+                arrowShowBox.BackgroundImage = Arrow.ColorShift(image, bright, "l");
             }
             catch
             {
@@ -179,10 +188,7 @@ namespace WindowsDesktopIconManagerForm
             Bitmap arrowMap;
             try
             {
-                if (arrowShowBox.BackgroundImage == null)
-                {
-                    throw new Exception("No image selected");
-                }
+                if (arrowShowBox.BackgroundImage == null) { throw new Exception("No image selected"); }
                 arrowMap = (Bitmap)arrowShowBox.BackgroundImage;
             }
             catch
@@ -191,11 +197,9 @@ namespace WindowsDesktopIconManagerForm
                 return;
             }
             Icon myIcon = Arrow.ImageToIcon(arrowMap, 128);
-
             string newPath = Arrow.WhereToSave(myIcon);
             if (newPath == null)
             {
-                System.Windows.Forms.MessageBox.Show("The operation was cancelled. Please try again.", "Windows Desktop Icon Manager");
                 return;
             }
             Arrow.SaveIcon(myIcon, newPath);
@@ -204,6 +208,99 @@ namespace WindowsDesktopIconManagerForm
         private void arrowApplyButton_Click(object sender, EventArgs e)
         {
             Arrow.ChangeArrows();
+        }
+
+        private void cursiveLightRadio_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cursiveLightRadio.Enabled == true)
+            {
+                alphabetLabel.Text = "𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏𝒜𝐵𝒞𝒟𝐸𝐹𝒢𝐻𝐼𝒥𝒦𝐿𝑀𝒩𝒪𝒫𝒬𝑅𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿";
+            }
+        }
+
+        private void cursiveBoldRadio_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cursiveBoldRadio.Enabled == true)
+            {
+                alphabetLabel.Text = "𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗";
+            }
+        }
+
+        private void italicLightRadio_CheckedChanged(object sender, EventArgs e)
+        {
+            if (italicLightRadio.Enabled == true)
+            {
+                alphabetLabel.Text = "𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿";
+            }
+        }
+
+        private void italicBoldRadio_CheckedChanged(object sender, EventArgs e)
+        {
+            if (italicBoldRadio.Enabled == true)
+            {
+                alphabetLabel.Text = "𝙖𝙗𝙘𝙙𝙚𝙛𝙜𝙝𝙞𝙟𝙠𝙡𝙢𝙣𝙤𝙥𝙦𝙧𝙨𝙩𝙪𝙫𝙬𝙭𝙮𝙯𝘼𝘽𝘾𝘿𝙀𝙁𝙂𝙃𝙄𝙅𝙆𝙇𝙈𝙉𝙊𝙋𝙌𝙍𝙎𝙏𝙐𝙑𝙒𝙓𝙔𝙕𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗";
+            }
+        }
+
+        private void serifLightRadio_CheckedChanged(object sender, EventArgs e)
+        {
+            if (serifLightRadio.Enabled == true)
+            {
+                alphabetLabel.Text = "𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿";
+            }
+        }
+
+        private void serifBoldVideo_CheckedChanged(object sender, EventArgs e)
+        {
+            if (serifBoldVideo.Enabled == true)
+            {
+                alphabetLabel.Text = "𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗";
+            }
+        }
+
+        private void linedTextRadio_CheckedChanged(object sender, EventArgs e)
+        {
+            if (linedTextRadio.Enabled == true)
+            {
+                alphabetLabel.Text = "𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡";
+            }
+        }
+
+        private void thinTextRadio_CheckedChanged(object sender, EventArgs e)
+        {
+            if (thinTextRadio.Enabled == true)
+            {
+                alphabetLabel.Text = "ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ０１２３４５６７８９";
+            }
+        }
+
+        private void medievalTextRadio_CheckedChanged(object sender, EventArgs e)
+        {
+            if (medievalTextRadio.Enabled == true)
+            {
+                alphabetLabel.Text = "𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗";
+            }
+        }
+
+        private void circleTextRadio_CheckedChanged(object sender, EventArgs e)
+        {
+            if (circleTextRadio.Enabled == true)
+            {
+                alphabetLabel.Text = "ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ\n⓪①②③④⑤⑥⑦⑧⑨";
+            }
+        }
+
+        private void defaultFontRadio_CheckedChanged(object sender, EventArgs e)
+        {
+            if (defaultFontRadio.Enabled == true)
+            {
+                alphabetLabel.Text = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            }
+        }
+
+        private void labelButton_Click(object sender, EventArgs e)
+        {
+            Labels.ChangeDesktopLabels("serif");
         }
     }
 }

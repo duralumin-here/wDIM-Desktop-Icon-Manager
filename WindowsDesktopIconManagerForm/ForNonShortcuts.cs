@@ -1,5 +1,6 @@
 ﻿using IWshRuntimeLibrary;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using MS.WindowsAPICodePack.Internal;
 using System.IO;
 using File = System.IO.File;
 
@@ -7,108 +8,107 @@ namespace WindowsDesktopIconManagerForm
 {
     public class ForNonShortcuts
     {
-        // Counts how many files on desktop are not shortcuts and adds them to the array passed along
-        // TODO: Try to redo this all using a List instead of counting an imperfect array
-        public static int CountNonShortcuts(string[] notShortcuts)
-        {
-            // Create array and number to count entries
-            int numNonShortcuts = 0;
-            string[] allEntries = Utilities.CreateDesktopArray();
-            // Iterate through desktop; for each non-shortcut, add files to array and increment count
-            foreach (string fileName in allEntries)
-            {
-                if (!fileName.Contains(".lnk") && !fileName.Contains("desktop.ini"))
-                {
-                    notShortcuts[numNonShortcuts] = fileName;
-                    ++numNonShortcuts;
-                }
-            }
-            return numNonShortcuts;
-        }
 
         // ==================== Methods directly accessed through buttons ====================
 
         // Calls the method to check for non-shortcuts and asks the user what to do about them
-        // TODO: Try to implement List here so I can use it in the other method too
         public static void HandleNonShortcuts()
         {
-            string[] notShortcuts = new string[500];
-            int invalidFileNum = CountNonShortcuts(notShortcuts);
-            if (invalidFileNum != 0) // If invalid files exist, output message, prompt to fix, and run fixer
+            List<string> notShortcuts = CountNonShortcuts();
+            if (notShortcuts.Count() == 0) // If all files are valid, output success message and end
             {
-                bool showWarning = false;
-                string invalidItems = FormatInvalidItems(notShortcuts, invalidFileNum);
-                var resultNonshr = NonShortcutsContinue(invalidItems);
-                if (resultNonshr == DialogResult.Yes) // Proceed to helper if desired
-                {
-                    var resultMoveAll = PromptMoveAll();
-                    if (resultMoveAll == DialogResult.Yes) // If user decides to move them all at once
-                    {
-                        int iconResult = CreateShortcutAll(notShortcuts, invalidFileNum);
-                        if (iconResult == -1) // If it fails, show warning
-                        {
-                            showWarning = true;
-                        }
-                    }
-                    else if (resultMoveAll == DialogResult.No) // If user wants to move them individually
-                    {
-                        for (int i = 0; i < invalidFileNum; ++i)
-                        {
-                            int iconResult = CreateShortcutOneByOne(notShortcuts[i]); // Attempt to create shortcut for each file
-                            if (iconResult != 1) // If a move fails (returns other than 1)
-                            {
-                                showWarning = true;
-                                if (iconResult == -1) // If it fails and user asks to exit (-1), then escape loop
-                                {
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    else // If user exits the helper
-                    {
-                        showWarning = true;
-                    }
-                }
-                else // Warn user if there's non-shortcuts and they skip the helper
-                {
-                    showWarning = true;
-                }
+                ValidatedMessage(); return;
+            }
 
-                // Display appropriate message after running helper
-                if (showWarning)
+            if (!NonShortcutsContinue(notShortcuts)) // If user doesn't want to run the helper
+            {
+                WarningMessage(); return;
+            }
+
+            DialogResult resultMoveAll = PromptMoveAll();
+            // If user decides to move them all at once
+            if (resultMoveAll == DialogResult.Yes)
+            {
+                if (CreateShortcutAll(notShortcuts))
                 {
-                    WarningMessage();
+                    HelperCompleteMessage(); return;
                 }
                 else
                 {
-                    HelperCompleteMessage();
+                    WarningMessage(); return;
                 }
             }
-            // If all files are valid, output success message
-            else
+            // If user wants to move them individually
+            else if (resultMoveAll == DialogResult.No)
             {
-                ValidatedMessage();
+                if (MoveIndividually(notShortcuts))
+                {
+                    HelperCompleteMessage(); return;
+                }
+                else
+                {
+                    WarningMessage(); return;
+                }
             }
+            // If user doesn't want to use the helper
+            else WarningMessage(); return;
         }
 
         // ==================== Methods used within these methods ====================
 
-        public static DialogResult NonShortcutsContinue(string invalidItems)
+
+        // Counts how many files on desktop are not shortcuts and adds them to the array passed along
+        // Originally used arrays and had to keep a tally. Using List is easier.
+        public static List<string> CountNonShortcuts()
+        {
+            List<string> allEntries = Utilities.CreateDesktopArray();
+            List<string> notShortcuts = [];
+            foreach (string fileName in allEntries)
+            {
+                if (!fileName.Contains(".lnk") && !fileName.Contains("desktop.ini"))
+                {
+                    notShortcuts.Add(fileName);
+                }
+            }
+            return notShortcuts;
+        }
+
+        // Runs the shortcut maker for each file; returns true if all files were properly handled
+        public static bool MoveIndividually(List<string> notShortcuts)
+        {
+            bool allFilesHandled = true;
+            foreach (string nonShortcut in notShortcuts)
+            {
+                int iconResult = CreateShortcutForOneFile(nonShortcut); // Attempt to create shortcut for each file
+                if (iconResult != 1) // If a move fails (returns other than 1)
+                {
+                    allFilesHandled = false;
+                    if (iconResult == -1) // If it fails and user asks to exit (-1), then escape and warn
+                    {
+                        return false;
+                    }
+                }
+            }
+            return allFilesHandled;
+        }
+
+        // Returns whether user wants to run helper
+        public static bool NonShortcutsContinue(List<string> notShortcuts)
         {
             // Create and display message box
             string errorNonshr = "The following files on your desktop are not shortcuts:";
             string promptNonshr = "Would you like this app to help you move these files?";
             string extraNonshr = "(If you want to handle the files manually yourself, you should select No, move these files, and run this checker again when you're done.)";
-            string messageNonshr = errorNonshr + "\n\n" + invalidItems + "\n" + promptNonshr + " " + extraNonshr;
+            string messageNonshr = errorNonshr + "\n\n" + FormatInvalidItems(notShortcuts) + "\n" + promptNonshr + " " + extraNonshr;
             string captionNonshr = "Invalid Entries Detected";
             var result = System.Windows.Forms.MessageBox.Show(messageNonshr, captionNonshr, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            return result;
+            if (result == DialogResult.Yes) return true;
+            else return false;
         }
 
+        // Returns whether user wants to move all files at once
         public static DialogResult PromptMoveAll()
         {
-            // Ask user if they'd like to move all non-shortcuts on the desktop to one folder
             string promptMoveAll = "Would you like to select one folder to move all of the non-shortcut files to?";
             string extraMoveAll = "(Select \"No\" to go through them one by one, and select \"Cancel\" to abort this operation and leave the helper instead.)";
             string messageMoveAll = promptMoveAll + " " + extraMoveAll;
@@ -117,17 +117,19 @@ namespace WindowsDesktopIconManagerForm
             return result;
         }
 
-        public static string FormatInvalidItems(string[] notShortcuts, int invalidFileNum)
+        // Formats the list of invalid items for message boxes
+        public static string FormatInvalidItems(List<string> notShortcuts)
         {
             string invalidItems = "";
-            for (int i = 0; i < invalidFileNum; ++i)
+            foreach (string invalidItem in notShortcuts)
             {
-                string ogName = notShortcuts[i].Substring((notShortcuts[i].LastIndexOf("\\") + 1));
+                string ogName = invalidItem.Substring((invalidItem.LastIndexOf("\\") + 1));
                 invalidItems = invalidItems + ogName + "\n";
             }
-
             return invalidItems;
         }
+
+        // Warns user if non-shortcuts remain on desktop
         public static void WarningMessage()
         {
             string promptWarning = "This tool only changes shortcut icons, but your desktop still contains non-shortcuts.";
@@ -137,6 +139,7 @@ namespace WindowsDesktopIconManagerForm
             System.Windows.Forms.MessageBox.Show(messageWarning, captionWarning, MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
+        // Tells user that helper succeeded
         public static void HelperCompleteMessage()
         {
             string promptSuccess = "The helper is complete.";
@@ -146,6 +149,7 @@ namespace WindowsDesktopIconManagerForm
             System.Windows.Forms.MessageBox.Show(messageSuccess, captionSuccess, MessageBoxButtons.OK);
         }
 
+        // Tells user all files are already shortcuts; no helper needed
         public static void ValidatedMessage()
         {
             string promptValid = "All desktop files are shortcuts.";
@@ -155,7 +159,7 @@ namespace WindowsDesktopIconManagerForm
 
         // Creates a shortcut on the desktop for a file given its location.
         // Returns 1 if successful, 0 if unsuccessful, and -1 if unsuccessful and user does not want to continue.
-        static int CreateShortcutOneByOne(string itemPath)
+        static int CreateShortcutForOneFile(string itemPath)
         {
             int result = 0;
             string ogName = itemPath.Substring((itemPath.LastIndexOf("\\") + 1));
@@ -206,11 +210,9 @@ namespace WindowsDesktopIconManagerForm
                 result = AskToContinue(e);
                 return result;
             }
-            // Continue as long as user hasn't asked to stop
-            while (result != 1) ;
-            // Refresh desktop to remove old icon from screen
-            // FIXME: add a way to disable this since it flashes the screen
-            Utilities.RefreshDesktop();
+            
+            while (result != 1); // Continue as long as user hasn't asked to stop
+            Utilities.RefreshDesktop(); // Remove old icon from screen; FIXME may need flash warning
             // Ask user if they want a desktop shortcut for the moved file; skip if not
             string messageShcut = "Would you like to create a desktop shortcut for this item?";
             string captionShcut = "Windows Desktop Icon Manager";
@@ -233,63 +235,72 @@ namespace WindowsDesktopIconManagerForm
         // Get whether or not user would like to retry, exit, or skip when a file move error occurs and returns as int
         static int AskToContinue(Exception e)
         {
-            // Construct message
+            DialogResult resultMoveFail = FileMoveError(e);
+            if (resultMoveFail == DialogResult.Cancel) return -1; // Exit helper
+            if (resultMoveFail == DialogResult.TryAgain) return 1; // Pick another location
+            return 0; // Skip
+        }
+
+        public static DialogResult FileMoveError(Exception e)
+        {
             string promptMoveFail = "An error occurred while trying to move the file:\n\n" + e.Message;
             string extraMoveFail = "Would you like to cancel the helper, try picking another file location, or continue without moving the file(s)?";
             string messageMoveFail = promptMoveFail + "\n\n" + extraMoveFail;
             string captionMoveFail = "File Move Error";
-            var resultMoveFail = System.Windows.Forms.MessageBox.Show(messageMoveFail, captionMoveFail, MessageBoxButtons.CancelTryContinue);
-            // Defaults to continuing
-            int result = 0;
-            // Exits if requested
-            if (resultMoveFail == DialogResult.Cancel)
-            {
-                result = -1;
-            }
-            if (resultMoveFail == DialogResult.TryAgain)
-            {
-                result = 1;
-            }
-            return result;
+            return System.Windows.Forms.MessageBox.Show(messageMoveFail, captionMoveFail, MessageBoxButtons.CancelTryContinue);
         }
 
         // Moves all non-shortcuts on the desktop to a user-selected folder
         // Returns whether it was successful
-        static int CreateShortcutAll(string[] allItems, int invalidFileNum)
+        static bool CreateShortcutAll(List<string> allItems)
         {
-            int result = 0; // Start at zero to show the default behavior should skipping and trying again instead of aborting or looping
             bool loopFolder = true;
             string newFolder = "";
             do
             {
-                // Have user select a file
-                CommonOpenFileDialog dialog = new()
-                {
-                    InitialDirectory = "C:\\Users",
-                    IsFolderPicker = true
-                };
-                dialog.ShowDialog();
                 try
                 {
-                    newFolder = dialog.FileName;
+                    newFolder = GetFolder();
                     loopFolder = false;
                 }
                 catch (Exception e)
                 {
-                    result = AskToContinue(e); // Prompt for retry and proceed accordingly (0 and -1 will skip, but 1 is ignored)
-                    if (result < 1)
+                    if (AskToContinue(e) < 1) // If the user quit the helper (0 or -1)
                     {
-                        return result;
+                        return false;
                     }
                 }
             }
             while (loopFolder);
-            // Attempt to move all items        
-            for (int i = 0; i < invalidFileNum; ++i)
+
+            bool didItWork = MoveAll(allItems, newFolder); // Attempt to move all items
+            Utilities.RefreshDesktop(); // Remove icon(s) from screen
+            return didItWork; // Indicate success
+        }
+
+        // Has user select a folder
+        public static string GetFolder()
+        {
+            string newFolder;
+            CommonOpenFileDialog dialog = new()
             {
-                string itemPath = allItems[i];
+                InitialDirectory = "C:\\Users",
+                IsFolderPicker = true
+            };
+            dialog.ShowDialog();
+            newFolder = GetFolder();
+            newFolder = dialog.FileName;
+            return newFolder;
+        }
+
+        // Moves the items in the list to the specified folder
+        // Returns whether all items were successfully moved
+        public static bool MoveAll(List<string> allItems, string newFolder)
+        {
+            foreach (string item in allItems)
+            {
+                string itemPath = item;
                 string ogName = itemPath.Substring((itemPath.LastIndexOf("\\") + 1));
-                string shortcutName = ogName.Substring(0, ogName.IndexOf("."));
                 string newPath = Path.Combine(newFolder, ogName);
                 try
                 {
@@ -297,15 +308,13 @@ namespace WindowsDesktopIconManagerForm
                 }
                 catch (Exception e)
                 {
-                    result = AskToContinue(e); // Prompt for retry and proceed accordingly (0 and -1 will skip, but 1 is ignored)
-                    if (result < 1)
+                    if (AskToContinue(e) < 1)
                     {
-                        return result;
+                        return false; // Return that it didn't work if the user stops it partway through
                     }
                 }
             }
-            Utilities.RefreshDesktop(); // to remove icon from screen
-            return 1; // indicate success
+            return true; // If it makes it to the end, it worked
         }
     }
 }
