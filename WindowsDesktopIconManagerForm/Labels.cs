@@ -20,7 +20,7 @@ namespace WindowsDesktopIconManagerForm
 
         // Changes labels of lnk files on the desktop
         // Will not modify other files; ideally these have been handled with helper
-        public static void ChangeDesktopLabels(string font)
+        public static void ChangeDesktopLabels(string font, string startString, string endString)
         {
             List<string> allEntries = Utilities.CreateLinkArray(); // get list of all .lnk files on the desktop
             string[] newAlphabet = GetFontArray(font);
@@ -29,7 +29,7 @@ namespace WindowsDesktopIconManagerForm
             if (!File.Exists(filePath)) // if this is the first time it's being run
             {
                 string[] oldAlphabet = GetFontArray("default");
-                ChangeLabelsFirstTime(filePath, allEntries, oldAlphabet, newAlphabet);
+                ChangeLabelsFirstTime(filePath, allEntries, oldAlphabet, newAlphabet, startString, endString);
             }
             else
             {
@@ -42,37 +42,46 @@ namespace WindowsDesktopIconManagerForm
             Utilities.RefreshDesktop();
         }
 
-        public static void ChangeLabelsFirstTime(string filePath, List<string> allEntries, string[] oldAlphabet, string[] newAlphabet)
+        public static void ChangeLabelsFirstTime(string filePath, List<string> allEntries, string[] oldAlphabet, string[] newAlphabet, string startString, string endString)
         {
             using (File.Create(filePath)) { } // "using" closes the file afterward
             using (StreamWriter infoWriter = new StreamWriter(filePath, true))
             {
+                string separator = "||-||";
                 foreach (string entry in allEntries)
                 {
                     string oldName = entry.Substring((entry.LastIndexOf("\\") + 1));
-                    string oldNameNoExtension = oldName.Substring(0, oldName.IndexOf("."));
+                    string oldNameNoExtension = oldName.Substring(0, oldName.LastIndexOf('.'));
                     string newNameNoExtension = ApplyFontToEntry(oldNameNoExtension, oldAlphabet, newAlphabet);
-                    infoWriter.WriteLine(oldName + "||-||" + newNameNoExtension);
+                    infoWriter.WriteLine(oldName + separator + newNameNoExtension);
                     
                     object shDesktop = (object)"Desktop";
                     WshShell shell = new();
 
                     try
                     {
-                        // Delete old shortcut
-                        string shortcutAddress = (string)shell.SpecialFolders.Item(ref shDesktop) + @"\" + newNameNoExtension + ".lnk";
-                        IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
-                        shortcut.TargetPath = DesktopPrep.GetShortcutTarget(entry);
-                        shortcut.IconLocation = DesktopPrep.GetIconLocation();
-                        shortcut.Save();
+                        CopyShortcutWithLabel(shDesktop, shell, oldNameNoExtension, newNameNoExtension, startString, endString);
                     }
                     catch (Exception e)
                     {
-                        System.Windows.Forms.MessageBox.Show("An error has occurred while attempting to change the label for " + entry + ":\n\n" + e.Message + "\n\nThis entry will be skipped.", "Error");
+                        DialogResult result = MessageBox.Show("An error occurred processing " + entry + ":\n\n" + e.Message + "\n\nThis item will be skipped. Press OK to continue making shortcuts or press Cancel to end.", "Error", MessageBoxButtons.OKCancel);
+                        if (result == DialogResult.Cancel) return;
                     }
+                    MessageBox.Show("You can quit now.");
                 }
                 Utilities.RefreshDesktop();
             }
+        }
+
+        public static void CopyShortcutWithLabel(object shDesktop, WshShell shell, string oldNameNoExtension, string newNameNoExtension, string startString, string endString)
+        {
+            string desktop = shell.SpecialFolders.Item(ref shDesktop).ToString();
+            string oldLnk = Path.Combine(desktop, oldNameNoExtension + ".lnk");
+            string newLnk = Path.Combine(desktop, startString + newNameNoExtension + endString + ".lnk");
+
+            // Copying the shortcut to the new name makes WAY more sense than what I was trying before lol
+            // (Creating a shortcut with a Unicode name seems impossible thanks to Windows limitations)
+            File.Copy(oldLnk, newLnk, true);
         }
 
         public static string ApplyFontToEntry(string entry, string[] oldAlphabet, string[] newAlphabet)
@@ -166,12 +175,12 @@ namespace WindowsDesktopIconManagerForm
                         "𝓐","𝓑","𝓒","𝓓","𝓔","𝓕","𝓖","𝓗","𝓘","𝓙","𝓚","𝓛","𝓜","𝓝","𝓞","𝓟","𝓠","𝓡","𝓢","𝓣","𝓤","𝓥","𝓦","𝓧","𝓨","𝓩",
                         "𝟎","𝟏","𝟐","𝟑","𝟒","𝟓","𝟔","𝟕","𝟖","𝟗"};
                     return cursiveBoldLetters;
-                case "italics":
+                case "italic":
                     string[] italicLetters = new string[] {"𝘢","𝘣","𝘤","𝘥","𝘦","𝘧","𝘨","𝘩","𝘪","𝘫","𝘬","𝘭","𝘮","𝘯","𝘰","𝘱","𝘲","𝘳","𝘴","𝘵","𝘶","𝘷","𝘸","𝘹","𝘺","𝘻",
                         "𝘈","𝘉","𝘊","𝘋","𝘌","𝘍","𝘎","𝘏","𝘐","𝘑","𝘒","𝘓","𝘔","𝘕","𝘖","𝘗","𝘘","𝘙","𝘚","𝘛","𝘜","𝘝","𝘞","𝘟","𝘠","𝘡",
                         "𝟶","𝟷","𝟸","𝟹","𝟺","𝟻","𝟼","𝟽","𝟾","𝟿"};
                     return italicLetters;
-                case "italics-bold":
+                case "italic-bold":
                     string[] boldItalicLetters = new string[] {"𝙖","𝙗","𝙘","𝙙","𝙚","𝙛","𝙜","𝙝","𝙞","𝙟","𝙠","𝙡","𝙢","𝙣","𝙤","𝙥","𝙦","𝙧","𝙨","𝙩","𝙪","𝙫","𝙬","𝙭","𝙮","𝙯",
                         "𝘼","𝘽","𝘾","𝘿","𝙀","𝙁","𝙂","𝙃","𝙄","𝙅","𝙆","𝙇","𝙈","𝙉","𝙊","𝙋","𝙌","𝙍","𝙎","𝙏","𝙐","𝙑","𝙒","𝙓","𝙔","𝙕",
                         "𝟎","𝟏","𝟐","𝟑","𝟒","𝟓","𝟖","𝟕","𝟖","𝟗"};
@@ -186,11 +195,11 @@ namespace WindowsDesktopIconManagerForm
                         "𝐀","𝐁","𝐂","𝐃","𝐄","𝐅","𝐆","𝐇","𝐈","𝐉","𝐊","𝐋","𝐌","𝐍","𝐎","𝐏","𝐐","𝐑","𝐒","𝐓","𝐔","𝐕","𝐖","𝐗","𝐘","𝐙",
                         "𝟎","𝟏","𝟐","𝟑","𝟒","𝟓","𝟖","𝟕","𝟖","𝟗"};
                     return boldSerifLetters;
-                case "double":
-                    string[] doubleLetters = new string[] {"𝕒","𝕓","𝕔","𝕕","𝕖","𝕗","𝕘","𝕙","𝕚","𝕛","𝕜","𝕝","𝕞","𝕟","𝕠","𝕡","𝕢","𝕣","𝕤","𝕥","𝕦","𝕧","𝕨","𝕩","𝕪","𝕫",
+                case "lined":
+                    string[] linedLetters = new string[] {"𝕒","𝕓","𝕔","𝕕","𝕖","𝕗","𝕘","𝕙","𝕚","𝕛","𝕜","𝕝","𝕞","𝕟","𝕠","𝕡","𝕢","𝕣","𝕤","𝕥","𝕦","𝕧","𝕨","𝕩","𝕪","𝕫",
                         "𝔸","𝔹","ℂ","𝔻","𝔼","𝔽","𝔾","ℍ","𝕀","𝕁","𝕂","𝕃","𝕄","ℕ","𝕆","𝕃","𝕀","𝕀","𝕊","𝕋","𝕌","𝕍","𝕎","𝕏","𝕐","ℤ",
                         "𝟘","𝟙","𝟚","𝟛","𝟜","𝟝","𝟞","𝟟","𝟠","𝟡"};
-                    return doubleLetters;
+                    return linedLetters;
                 case "thin":
                     string[] thinLetters = new string[] {"ａ","ｂ","ｃ","ｄ","ｅ","ｆ","ｇ","ｈ","ｉ","ｊ","ｋ","ｌ","ｍ","ｎ","ｏ","ｐ","ｑ","ｒ","ｓ","ｔ","ｕ","ｖ","ｗ","ｘ","ｙ","ｚ",
                         "Ａ","Ｂ","Ｃ","Ｄ","Ｅ","Ｆ","Ｇ","Ｈ","Ｉ","Ｊ","Ｋ","Ｌ","Ｍ","Ｎ","Ｏ","Ｐ","Ｑ","Ｒ","Ｓ","Ｔ","Ｕ","Ｖ","Ｗ","Ｘ","Ｙ","Ｚ",

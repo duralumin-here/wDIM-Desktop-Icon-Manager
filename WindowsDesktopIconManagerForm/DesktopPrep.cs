@@ -29,7 +29,7 @@ namespace WindowsDesktopIconManagerForm
                 {
                     targetPath = GetShortcutTarget(shortcut);
                     targetFile = Path.GetFileName(targetPath);
-                    targetName = targetFile.Substring(0, targetFile.IndexOf("."));
+                    targetName = targetFile.Substring(0, targetFile.LastIndexOf('.'));
                     ChangeIcon(shortcut, startFolder, targetName, targetPath);
                 }
                 catch

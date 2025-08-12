@@ -195,7 +195,7 @@ namespace WindowsDesktopIconManagerForm
             }
             while (loopFolder);
             // Find file name without extension to use as name of shortcut
-            string shortcutName = ogName.Substring(0, ogName.IndexOf("."));
+            string shortcutName = ogName.Substring(0, ogName.LastIndexOf('.'));
             // Create new file path to move file to
             string newPath = Path.Combine(newFolder, ogName);
             // Attempt to move file

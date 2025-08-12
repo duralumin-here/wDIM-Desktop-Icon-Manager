@@ -51,10 +51,10 @@
             label11 = new Label();
             labelButton = new Button();
             label10 = new Label();
-            endCharBox = new TextBox();
-            startCharBox = new TextBox();
-            checkBox2 = new CheckBox();
-            checkBox1 = new CheckBox();
+            endCharTextBox = new TextBox();
+            startCharTextBox = new TextBox();
+            charEndCheck = new CheckBox();
+            charStartCheck = new CheckBox();
             defaultFontRadio = new RadioButton();
             serifLightRadio = new RadioButton();
             italicBoldRadio = new RadioButton();
@@ -288,10 +288,10 @@
             tabPage4.Controls.Add(label11);
             tabPage4.Controls.Add(labelButton);
             tabPage4.Controls.Add(label10);
-            tabPage4.Controls.Add(endCharBox);
-            tabPage4.Controls.Add(startCharBox);
-            tabPage4.Controls.Add(checkBox2);
-            tabPage4.Controls.Add(checkBox1);
+            tabPage4.Controls.Add(endCharTextBox);
+            tabPage4.Controls.Add(startCharTextBox);
+            tabPage4.Controls.Add(charEndCheck);
+            tabPage4.Controls.Add(charStartCheck);
             tabPage4.Controls.Add(defaultFontRadio);
             tabPage4.Controls.Add(serifLightRadio);
             tabPage4.Controls.Add(italicBoldRadio);
@@ -317,6 +317,7 @@
             alphabetLabel.Name = "alphabetLabel";
             alphabetLabel.Size = new Size(628, 20);
             alphabetLabel.TabIndex = 19;
+            alphabetLabel.Tag = "cursive";
             alphabetLabel.Text = "𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏𝒜𝐵𝒞𝒟𝐸𝐹𝒢𝐻𝐼𝒥𝒦𝐿𝑀𝒩𝒪𝒫𝒬𝑅𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿";
             // 
             // label11
@@ -348,39 +349,39 @@
             label10.TabIndex = 15;
             label10.Text = "Stylize shortcut labels";
             // 
-            // endCharBox
+            // endCharTextBox
             // 
-            endCharBox.Location = new Point(590, 146);
-            endCharBox.Name = "endCharBox";
-            endCharBox.Size = new Size(130, 27);
-            endCharBox.TabIndex = 14;
+            endCharTextBox.Location = new Point(590, 146);
+            endCharTextBox.Name = "endCharTextBox";
+            endCharTextBox.Size = new Size(130, 27);
+            endCharTextBox.TabIndex = 14;
             // 
-            // startCharBox
+            // startCharTextBox
             // 
-            startCharBox.Location = new Point(228, 147);
-            startCharBox.Name = "startCharBox";
-            startCharBox.Size = new Size(130, 27);
-            startCharBox.TabIndex = 12;
+            startCharTextBox.Location = new Point(228, 147);
+            startCharTextBox.Name = "startCharTextBox";
+            startCharTextBox.Size = new Size(130, 27);
+            startCharTextBox.TabIndex = 12;
             // 
-            // checkBox2
+            // charEndCheck
             // 
-            checkBox2.AutoSize = true;
-            checkBox2.Location = new Point(379, 149);
-            checkBox2.Name = "checkBox2";
-            checkBox2.Size = new Size(205, 24);
-            checkBox2.TabIndex = 13;
-            checkBox2.Text = "Append characters to end:";
-            checkBox2.UseVisualStyleBackColor = true;
+            charEndCheck.AutoSize = true;
+            charEndCheck.Location = new Point(379, 149);
+            charEndCheck.Name = "charEndCheck";
+            charEndCheck.Size = new Size(205, 24);
+            charEndCheck.TabIndex = 13;
+            charEndCheck.Text = "Append characters to end:";
+            charEndCheck.UseVisualStyleBackColor = true;
             // 
-            // checkBox1
+            // charStartCheck
             // 
-            checkBox1.AutoSize = true;
-            checkBox1.Location = new Point(17, 149);
-            checkBox1.Name = "checkBox1";
-            checkBox1.Size = new Size(209, 24);
-            checkBox1.TabIndex = 11;
-            checkBox1.Text = "Append characters to start:";
-            checkBox1.UseVisualStyleBackColor = true;
+            charStartCheck.AutoSize = true;
+            charStartCheck.Location = new Point(17, 149);
+            charStartCheck.Name = "charStartCheck";
+            charStartCheck.Size = new Size(209, 24);
+            charStartCheck.TabIndex = 11;
+            charStartCheck.Text = "Append characters to start:";
+            charStartCheck.UseVisualStyleBackColor = true;
             // 
             // defaultFontRadio
             // 
@@ -719,10 +720,10 @@
         private Label label11;
         private Button labelButton;
         private Label label10;
-        private TextBox endCharBox;
-        private TextBox startCharBox;
-        private CheckBox checkBox2;
-        private CheckBox checkBox1;
+        private TextBox endCharTextBox;
+        private TextBox startCharTextBox;
+        private CheckBox charEndCheck;
+        private CheckBox charStartCheck;
         private RadioButton defaultFontRadio;
         private RadioButton serifLightRadio;
         private RadioButton italicBoldRadio;
