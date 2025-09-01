@@ -42,7 +42,7 @@ namespace WindowsDesktopIconManagerForm
 
         private void backupButton_Click(object sender, EventArgs e)
         {
-            Utilities.CreateLnkBackups(true); // true to output result message
+            Utilities.CreateDesktopBackups(true, true);
         }
 
         private void refreshButton_Click(object sender, EventArgs e)
@@ -324,6 +324,11 @@ namespace WindowsDesktopIconManagerForm
             }
 
             Labels.ChangeDesktopLabels(alphabetLabel.Tag.ToString(), startString, endString);
+        }
+
+        private void label11_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -8,54 +8,28 @@ namespace WindowsDesktopIconManagerForm
 {
     public class ForNonShortcuts
     {
-
-        // ==================== Methods directly accessed through buttons ====================
-
         // Calls the method to check for non-shortcuts and asks the user what to do about them
         public static void HandleNonShortcuts()
         {
             List<string> notShortcuts = CountNonShortcuts();
-            if (notShortcuts.Count() == 0) // If all files are valid, output success message and end
-            {
-                ValidatedMessage(); return;
-            }
-
-            if (!NonShortcutsContinue(notShortcuts)) // If user doesn't want to run the helper
-            {
-                WarningMessage(); return;
-            }
+            if (notShortcuts.Count() == 0) {ValidatedMessage(); return;} // If all files are valid
+            if (!NonShortcutsContinue(notShortcuts)) {WarningMessage(); return;} // If user doesn't want to run the helper
 
             DialogResult resultMoveAll = PromptMoveAll();
-            // If user decides to move them all at once
-            if (resultMoveAll == DialogResult.Yes)
+            if (resultMoveAll == DialogResult.Yes) // If user decides to move them all at once
             {
-                if (CreateShortcutAll(notShortcuts))
-                {
-                    HelperCompleteMessage(); return;
-                }
-                else
-                {
-                    WarningMessage(); return;
-                }
+                if (CreateShortcutAll(notShortcuts)) {HelperCompleteMessage(); return;} // If it works
+                else {WarningMessage(); return;} // If something goes wrong
             }
-            // If user wants to move them individually
-            else if (resultMoveAll == DialogResult.No)
+            
+            else if (resultMoveAll == DialogResult.No) // If user wants to move them individually
             {
-                if (MoveIndividually(notShortcuts))
-                {
-                    HelperCompleteMessage(); return;
-                }
-                else
-                {
-                    WarningMessage(); return;
-                }
+                if (MoveIndividually(notShortcuts)) {HelperCompleteMessage(); return; } // If it works
+                else {WarningMessage(); return;} // If something goes wrong
             }
-            // If user doesn't want to use the helper
-            else WarningMessage(); return;
+            
+            else WarningMessage(); return; // If user doesn't want to use the helper
         }
-
-        // ==================== Methods used within these methods ====================
-
 
         // Counts how many files on desktop are not shortcuts and adds them to the array passed along
         // Originally used arrays and had to keep a tally. Using List is easier.

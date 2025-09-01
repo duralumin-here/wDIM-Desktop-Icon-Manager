@@ -22,66 +22,87 @@ namespace WindowsDesktopIconManagerForm
         // Will not modify other files; ideally these have been handled with helper
         public static void ChangeDesktopLabels(string font, string startString, string endString)
         {
+            if (!ConfirmContinue()) return;
             List<string> allEntries = Utilities.CreateLinkArray(); // get list of all .lnk files on the desktop
             string[] newAlphabet = GetFontArray(font);
 
-            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager", "Current-Icons", "details.txt");
-            if (!File.Exists(filePath)) // if this is the first time it's being run
-            {
-                string[] oldAlphabet = GetFontArray("default");
-                ChangeLabelsFirstTime(filePath, allEntries, oldAlphabet, newAlphabet, startString, endString);
-            }
-            else
-            {
-                // "Do you wanna restore the labels contained in the set or make new ones"
-                    // Restore: restore labels
-                    // New ones: do stuff
-                // TODO: Dynamically get default alphabet based on the font used on the desktop
-                // etc
-            }
+            bool hasDetails;
+            string detailsFilePath = Path.Combine(Utilities.GetCurrentIconsFolder(), "details.txt");
+            if (!File.Exists(detailsFilePath)) hasDetails = false; // if this is the first time it's being run
+            else hasDetails = true;
+
+            ChangeLabels(detailsFilePath, allEntries, newAlphabet, startString, endString, hasDetails);
             Utilities.RefreshDesktop();
         }
 
-        public static void ChangeLabelsFirstTime(string filePath, List<string> allEntries, string[] oldAlphabet, string[] newAlphabet, string startString, string endString)
+        public static void ChangeLabels(string detailsFilePath, List<string> desktopEntries, string[] newAlphabet, string startString, string endString, bool hasDetails)
         {
-            using (File.Create(filePath)) { } // "using" closes the file afterward
-            using (StreamWriter infoWriter = new StreamWriter(filePath, true))
+            string[] oldAlphabet = GetFontArray("default");
+            if (hasDetails)
             {
-                string separator = "||-||";
-                foreach (string entry in allEntries)
+                /* For each entry in desktopEntries
+                 * - Get the noExtension name for it
+                 * - Search the details file for it
+                 * - If it's found, change 
+                 * 
+                 
+                 
+                 */
+                // Get the noExtension name of ea through "desktopEntries" and search the details 
+            }
+                
+            using (StreamWriter infoWriter = new StreamWriter(detailsFilePath)) // Overwrite file if it already exists; don't append
+            {
+                string separator = "|"; // this character is not allowed in Windows file names, so I know it'll work to separate them
+                foreach (string entry in desktopEntries)
                 {
+                    // Get file name
                     string oldName = entry.Substring((entry.LastIndexOf("\\") + 1));
+                    // Get it without .lnk (remember the list only got the .lnk files)
                     string oldNameNoExtension = oldName.Substring(0, oldName.LastIndexOf('.'));
+                    // Convert file name to new font
                     string newNameNoExtension = ApplyFontToEntry(oldNameNoExtension, oldAlphabet, newAlphabet);
-                    infoWriter.WriteLine(oldName + separator + newNameNoExtension);
-                    
-                    object shDesktop = (object)"Desktop";
-                    WshShell shell = new();
+                    // Record pairing
+                    infoWriter.WriteLine(oldNameNoExtension + separator + newNameNoExtension);
 
                     try
                     {
-                        CopyShortcutWithLabel(shDesktop, shell, oldNameNoExtension, newNameNoExtension, startString, endString);
+                        CopyShortcutWithLabel(oldNameNoExtension, newNameNoExtension, startString, endString);
                     }
                     catch (Exception e)
                     {
                         DialogResult result = MessageBox.Show("An error occurred processing " + entry + ":\n\n" + e.Message + "\n\nThis item will be skipped. Press OK to continue making shortcuts or press Cancel to end.", "Error", MessageBoxButtons.OKCancel);
-                        if (result == DialogResult.Cancel) return;
+                        if (result == DialogResult.Cancel)
+                        {
+                            infoWriter.Flush();
+                            infoWriter.Close();
+                            return;
+                        }
                     }
-                    MessageBox.Show("You can quit now.");
+                    // MessageBox.Show("FIXME: This box is a test");
                 }
                 Utilities.RefreshDesktop();
             }
         }
 
-        public static void CopyShortcutWithLabel(object shDesktop, WshShell shell, string oldNameNoExtension, string newNameNoExtension, string startString, string endString)
+        public static void CopyShortcutWithLabel(string oldNameNoExtension, string newNameNoExtension, string startString, string endString)
         {
-            string desktop = shell.SpecialFolders.Item(ref shDesktop).ToString();
+            // Shortcuts will be made in private desktop even if the originals were public
+            // TBD whether this is a bug or a feature. I believe the icon-changing does the same
+            // Messing with global shortcuts might not be good
+            // but it's probably better for all these shenannigans to stay to the private desktop.
+            // Just did some research and found it's not feasible to hide public icons for one person.
+            // I think for now I'll just say that this app is meant for computers that only one person uses.
+
+            string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             string oldLnk = Path.Combine(desktop, oldNameNoExtension + ".lnk");
             string newLnk = Path.Combine(desktop, startString + newNameNoExtension + endString + ".lnk");
 
-            // Copying the shortcut to the new name makes WAY more sense than what I was trying before lol
-            // (Creating a shortcut with a Unicode name seems impossible thanks to Windows limitations)
-            File.Copy(oldLnk, newLnk, true);
+            // For some reason I was copying the file instead of creating a new one. Not sure what
+            // the rationale was there, but this works better.
+            // TODO: (? not sure if it can be fixed) this mixes all the icons up
+            // File.Copy(oldLnk, newLnk, true);
+            File.Move(oldLnk, newLnk);
         }
 
         public static string ApplyFontToEntry(string entry, string[] oldAlphabet, string[] newAlphabet)
@@ -100,39 +121,6 @@ namespace WindowsDesktopIconManagerForm
                 }
             }
             return ArrayToString(entryArr);
-        }
-
-        public static string ApplyFontToEntry(string entry, string font)
-        {
-            string[] oldAlphabet = GetFontArray("default");
-            string[] newAlphabet = GetFontArray(font);
-
-            string[] entryArr = StringToArray(entry);
-
-            for (int i = 0; i < entryArr.Length; ++i)
-            {
-                for (int j = 0; j < oldAlphabet.Length; ++j)
-                {
-                    if (entryArr[i] == oldAlphabet[j])
-                    {
-                        entryArr[i] = newAlphabet[j];
-                        break;
-                    }
-                }
-            }
-
-
-            string changedWord = ArrayToString(entryArr);
-
-            if (changedWord != entry)
-            {
-                return changedWord;
-            }
-            else
-            {
-                // TODO: check font
-                return changedWord;
-            }
         }
 
         public static string ArrayToString(string[] entryArr)
@@ -178,7 +166,7 @@ namespace WindowsDesktopIconManagerForm
                 case "italic":
                     string[] italicLetters = new string[] {"𝘢","𝘣","𝘤","𝘥","𝘦","𝘧","𝘨","𝘩","𝘪","𝘫","𝘬","𝘭","𝘮","𝘯","𝘰","𝘱","𝘲","𝘳","𝘴","𝘵","𝘶","𝘷","𝘸","𝘹","𝘺","𝘻",
                         "𝘈","𝘉","𝘊","𝘋","𝘌","𝘍","𝘎","𝘏","𝘐","𝘑","𝘒","𝘓","𝘔","𝘕","𝘖","𝘗","𝘘","𝘙","𝘚","𝘛","𝘜","𝘝","𝘞","𝘟","𝘠","𝘡",
-                        "𝟶","𝟷","𝟸","𝟹","𝟺","𝟻","𝟼","𝟽","𝟾","𝟿"};
+                        "0","1","2","3","4","5","6","7","8","9"};
                     return italicLetters;
                 case "italic-bold":
                     string[] boldItalicLetters = new string[] {"𝙖","𝙗","𝙘","𝙙","𝙚","𝙛","𝙜","𝙝","𝙞","𝙟","𝙠","𝙡","𝙢","𝙣","𝙤","𝙥","𝙦","𝙧","𝙨","𝙩","𝙪","𝙫","𝙬","𝙭","𝙮","𝙯",
@@ -223,9 +211,15 @@ namespace WindowsDesktopIconManagerForm
             }
         }
 
-        public static void GetChosenFont()
+        // Returns whether user wants to go through with label change.
+        public static bool ConfirmContinue()
         {
-            
+            var result = System.Windows.Forms.MessageBox.Show("This will replace your desktop shortcuts with ones having the modified labels. However, they will all pop up on the left of the screen, all mixed up, so you may have to rearrange them.", "Label Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+            if (result == DialogResult.Cancel)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

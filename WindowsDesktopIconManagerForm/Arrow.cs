@@ -16,18 +16,18 @@ namespace WindowsDesktopIconManagerForm
         {
             if (!ConfirmChange()) return;
 
-            string appPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager");
+            string appPath = Utilities.GetAppFolder();
             string iconPath = "";
 
-            if (UseIncluded()) {iconPath = Path.Combine(appPath, "Current-Icons", "current-arrow.ico");}
-            else
+            if (!UseIncluded())
             {
                 iconPath = ChooseArrow();
                 if (iconPath.Equals("")) return;
             }
+            else iconPath = Utilities.GetCurrentArrowPath();
 
-            // TODO: Maybe ask user if they want to save the arrow to the current set if it wasn't already taken from it
-            string newPath = Path.Combine(appPath, "Used-Arrows", DateTime.Now.ToString("yyyyMMddhhmmss") + ".ico");
+                // TODO: Maybe ask user if they want to save the arrow to the current set if it wasn't already taken from it
+                string newPath = Path.Combine(appPath, "Used-Arrows", DateTime.Now.ToString("yyyyMMddhhmmss") + ".ico");
 
             try {File.Copy(iconPath, newPath, overwrite: true);}
             catch
@@ -92,7 +92,7 @@ namespace WindowsDesktopIconManagerForm
         // Checks if there is a "current-arrow" icon in the icon set
         public static bool CheckIncluded()
         {
-            string checkedPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager", "Current-Icons", "current-arrow.ico");
+            string checkedPath = Utilities.GetCurrentArrowPath();
             if (File.Exists(checkedPath)) return true;
             else return false;
         }
@@ -101,7 +101,7 @@ namespace WindowsDesktopIconManagerForm
         public static string ChooseArrow()
         {
             string iconPath = "";
-            string arrowDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager", "Shortcut-Arrows");
+            string arrowDir = Path.Combine(Utilities.GetAppFolder(), "Shortcut-Arrows");
             bool loopFolder = true;
             do
             {
@@ -193,7 +193,7 @@ namespace WindowsDesktopIconManagerForm
         {
             try
             {
-                string targetFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager", "Current-Icons", "current-arrow.ico");
+                string targetFilePath = Utilities.GetCurrentArrowPath();
                 File.Copy(iconPath, targetFilePath, overwrite: true);
             }
             catch
@@ -265,7 +265,7 @@ namespace WindowsDesktopIconManagerForm
 
             if (BoolSaveArrowToCurrent())
             {
-                path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager", "Current-Icons", "current-arrow.ico");
+                path = Utilities.GetCurrentArrowPath();
             }
             else
             {
@@ -430,7 +430,7 @@ namespace WindowsDesktopIconManagerForm
         // Sets the appropriate icon path based on the choice in the box
         public static string PickArrowType(string selectedItem)
         {
-            string iconPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager", "Shortcut-Arrows");
+            string iconPath = Path.Combine(Utilities.GetAppFolder(), "Shortcut-Arrows");
             switch (selectedItem)
             {
                 case "Blank/No Arrow":

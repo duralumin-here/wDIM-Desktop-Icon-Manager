@@ -5,8 +5,6 @@ namespace WindowsDesktopIconManagerForm
 {
     public class DesktopPrep
     {
-        // ==================== Methods directly accessed through buttons ====================
-
         // Changes the shortcut icon paths to point to a new custom file based on the executable/file name being pointed to
         // References https://bytescout.com/blog/create-shortcuts-in-c-and-vbnet.html
         public static void SetIconPaths()
@@ -24,7 +22,7 @@ namespace WindowsDesktopIconManagerForm
             bool success = true;
             foreach (string shortcut in allEntries)
             {
-                string startFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager", "Current-Icons");
+                string startFolder = Utilities.GetCurrentIconsFolder();
                 try
                 {
                     targetPath = GetShortcutTarget(shortcut);
@@ -43,10 +41,8 @@ namespace WindowsDesktopIconManagerForm
             System.Windows.Forms.MessageBox.Show("Icon paths should be set. If some shortcuts didn't work, try re-running this program in Admin mode.", "Desktop Icon Manager");
         }
 
-        // ==================== Methods used within these methods ====================
-
         // Technically creates a replacement shortcut with a new icon path, but effectively works as "changing the icon"
-        public static void ChangeIcon(string shortcut, string startFolder, string targetName, string targetPath)
+        private static void ChangeIcon(string shortcut, string startFolder, string targetName, string targetPath)
         {
             WshShell shell = new();
             IWshShortcut shortcut2 = (IWshShortcut)shell.CreateShortcut(shortcut);
@@ -59,10 +55,11 @@ namespace WindowsDesktopIconManagerForm
             shortcut2.Save();
         }
 
-        public static string GetIconLocation(/*string startFolder*/)
+        public static string GetIconLocation(/*TODO: string startFolder, string targetName*/)
         {
             string iconLocation;
-            string startFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager", "Current-Icons");
+            string startFolder = Utilities.GetCurrentIconsFolder();
+            // Get target name
             // iconLocation = Path.Combine(startFolder, targetName) + ".ico"; // Named after target path so names can be later changed if desired
             iconLocation = Path.Combine(startFolder, "Baba") + ".ico";
             return iconLocation;
@@ -91,15 +88,9 @@ namespace WindowsDesktopIconManagerForm
                 {
                     FileInfo fileInfo = new FileInfo(shortcutPath);
                     target = fileInfo.LinkTarget;
-                    if (target == "" || target == null)
-                    {
-                        throw new Exception("Empty target");
-                    }
+                    if (target == "" || target == null) throw new Exception("Empty target");
                 }
-                catch
-                {
-                    target = "";
-                }
+                catch {target = "";}
             }
             return target;
         }
@@ -107,8 +98,10 @@ namespace WindowsDesktopIconManagerForm
         // Housekeeping before actually changing the icon paths
         public static void Prepare()
         {
-            Utilities.CreateLnkBackups(false); // Silent backup
-            Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "DesktopIconManager", "Current-Icons")); // Create folder
+            bool printOutput = false;
+            bool justLinks = true;
+            Utilities.CreateDesktopBackups(printOutput, justLinks); // Silent backup
+            Directory.CreateDirectory(Utilities.GetCurrentIconsFolder()); // Create folder
         }
 
         // Checks for invalid (non-lnk) files

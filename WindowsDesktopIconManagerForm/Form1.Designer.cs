@@ -81,6 +81,7 @@
             label2 = new Label();
             label3 = new Label();
             tabControl1 = new TabControl();
+            labelRestoreButton = new Button();
             tabPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)lightSlide).BeginInit();
             ((System.ComponentModel.ISupportInitialize)satSlide).BeginInit();
@@ -284,6 +285,7 @@
             // tabPage4
             // 
             tabPage4.BackColor = SystemColors.Control;
+            tabPage4.Controls.Add(labelRestoreButton);
             tabPage4.Controls.Add(alphabetLabel);
             tabPage4.Controls.Add(label11);
             tabPage4.Controls.Add(labelButton);
@@ -325,13 +327,14 @@
             label11.AutoSize = true;
             label11.Location = new Point(14, 47);
             label11.Name = "label11";
-            label11.Size = new Size(382, 20);
+            label11.Size = new Size(650, 20);
             label11.TabIndex = 18;
-            label11.Text = "All changes will apply to the shortcut set currently in use.";
+            label11.Text = "All changes will apply to the shortcut set currently in use. (May require Administator permissions.)";
+            label11.Click += label11_Click;
             // 
             // labelButton
             // 
-            labelButton.Location = new Point(588, 301);
+            labelButton.Location = new Point(590, 265);
             labelButton.Name = "labelButton";
             labelButton.Size = new Size(163, 29);
             labelButton.TabIndex = 15;
@@ -639,9 +642,9 @@
             label2.AutoSize = true;
             label2.Location = new Point(6, 157);
             label2.Name = "label2";
-            label2.Size = new Size(598, 20);
+            label2.Size = new Size(737, 20);
             label2.TabIndex = 4;
-            label2.Text = "Automatically applies custom icon paths to shortcuts. (May require Administrator access.)";
+            label2.Text = "Automatically applies custom icon paths to shortcuts. (May take a moment. May require Administrator access.)";
             // 
             // label3
             // 
@@ -665,6 +668,15 @@
             tabControl1.SelectedIndex = 0;
             tabControl1.Size = new Size(778, 379);
             tabControl1.TabIndex = 14;
+            // 
+            // labelRestoreButton
+            // 
+            labelRestoreButton.Location = new Point(590, 300);
+            labelRestoreButton.Name = "labelRestoreButton";
+            labelRestoreButton.Size = new Size(163, 29);
+            labelRestoreButton.TabIndex = 20;
+            labelRestoreButton.Text = "Restore Labels";
+            labelRestoreButton.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -751,5 +763,6 @@
         private TabControl tabControl1;
         private Label alphabetLabel;
         private Button explorerButton;
+        private Button labelRestoreButton;
     }
 }
