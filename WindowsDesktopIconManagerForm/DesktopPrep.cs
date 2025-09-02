@@ -48,14 +48,13 @@ namespace WindowsDesktopIconManagerForm
             IWshShortcut shortcut2 = (IWshShortcut)shell.CreateShortcut(shortcut);
             // shortcut2.Description = "Title text here";
             // shortcut2.Hotkey = "Ctrl+Shift+N";
-            // TODO: Functionality to save an app's name somewhere along with any name changes
             // TODO: Support for different icons even if target is the same (ie: chrome web apps)
-            shortcut2.IconLocation = GetIconLocation();
+            shortcut2.IconLocation = GetNewIconLocation();
             shortcut2.TargetPath = targetPath;
             shortcut2.Save();
         }
 
-        public static string GetIconLocation(/*TODO: string startFolder, string targetName*/)
+        public static string GetNewIconLocation(/*TODO: string startFolder, string targetName*/)
         {
             string iconLocation;
             string startFolder = Utilities.GetCurrentIconsFolder();
@@ -66,7 +65,6 @@ namespace WindowsDesktopIconManagerForm
         }
 
         // Returns the target than an .lnk file points to
-        // Primary way from https://forums.overclockers.co.uk/threads/c-accessing-the-target-path-of-a-shortcut-lnk.17966879/post-13328225
         // Back-up way from https://learn.microsoft.com/en-us/dotnet/api/system.io.filesysteminfo.linktarget
         public static string GetShortcutTarget(string shortcutPath)
         {

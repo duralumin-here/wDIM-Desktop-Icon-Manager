@@ -56,6 +56,11 @@ namespace WindowsDesktopIconManagerForm
                 string separator = "|"; // this character is not allowed in Windows file names, so I know it'll work to separate them
                 foreach (string entry in desktopEntries)
                 {
+                    // Check for which desktop it's on
+                    bool isPublic;
+                    if (entry.Contains("C:\\Users\\Public")) isPublic = true;
+                    else isPublic = false;
+
                     // Get file name
                     string oldName = entry.Substring((entry.LastIndexOf("\\") + 1));
                     // Get it without .lnk (remember the list only got the .lnk files)
@@ -67,7 +72,7 @@ namespace WindowsDesktopIconManagerForm
 
                     try
                     {
-                        CopyShortcutWithLabel(oldNameNoExtension, newNameNoExtension, startString, endString);
+                        CopyShortcutWithLabel(isPublic, oldNameNoExtension, newNameNoExtension, startString, endString);
                     }
                     catch (Exception e)
                     {
@@ -85,23 +90,22 @@ namespace WindowsDesktopIconManagerForm
             }
         }
 
-        public static void CopyShortcutWithLabel(string oldNameNoExtension, string newNameNoExtension, string startString, string endString)
+        public static void CopyShortcutWithLabel(bool isPublic, string oldNameNoExtension, string newNameNoExtension, string startString, string endString)
         {
-            // Shortcuts will be made in private desktop even if the originals were public
-            // TBD whether this is a bug or a feature. I believe the icon-changing does the same
-            // Messing with global shortcuts might not be good
-            // but it's probably better for all these shenannigans to stay to the private desktop.
-            // Just did some research and found it's not feasible to hide public icons for one person.
-            // I think for now I'll just say that this app is meant for computers that only one person uses.
+            /* Shortcuts used to always be made/moved to private desktop when using the label feature.
+             * This has since been fixed. TODO: Could potentially bring it back as a feature for single-user computers
+             * who'd rather move it all to the private desktop so they don't have to run as admin.
+             */
 
-            string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            // Select proper desktop
+            string desktop;
+            if (isPublic) desktop = @"C:\Users\Public\Desktop";
+            else desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
             string oldLnk = Path.Combine(desktop, oldNameNoExtension + ".lnk");
             string newLnk = Path.Combine(desktop, startString + newNameNoExtension + endString + ".lnk");
 
-            // For some reason I was copying the file instead of creating a new one. Not sure what
-            // the rationale was there, but this works better.
             // TODO: (? not sure if it can be fixed) this mixes all the icons up
-            // File.Copy(oldLnk, newLnk, true);
             File.Move(oldLnk, newLnk);
         }
 
