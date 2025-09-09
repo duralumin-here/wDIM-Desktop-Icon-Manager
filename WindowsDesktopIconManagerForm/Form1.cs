@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 using static System.Net.Mime.MediaTypeNames;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using Path = System.IO.Path;
 using Size = System.Drawing.Size;
 
@@ -12,10 +13,10 @@ using Size = System.Drawing.Size;
 // TODO: Method to restore a selected backup through the app GUI
 // TODO: Figure out the workflow for a user to actually set up icon sets
 // TODO: Saving and loading icon sets
-// TODO: Clean up the new form code with methods; add markers to delineate tabs
+// TODO: Implement wallpaper workflow
 // Can just have a menu to copy icons from a set to current icons, or from current icons to a set
 // May need a workflow for people to upload specific icons for apps so they can be renamed accordingly
-// A way to change the names of shortcuts with fancy text, append symbols/emojis, or change the names to blank altogether
+// A way to blank out shortcut names
 
 namespace WindowsDesktopIconManagerForm
 {
@@ -32,7 +33,7 @@ namespace WindowsDesktopIconManagerForm
 
         private void validateButton_Click(object sender, EventArgs e)
         {
-            ForNonShortcuts.HandleNonShortcuts();
+            ForNonShortcuts.NonShortcutTool();
         }
 
         private void pathButton_Click(object sender, EventArgs e)
@@ -326,9 +327,28 @@ namespace WindowsDesktopIconManagerForm
             Labels.ChangeDesktopLabels(alphabetLabel.Tag.ToString(), startString, endString);
         }
 
-        private void label11_Click(object sender, EventArgs e)
+        private void arrowCheck_CheckedChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void tabPageSettings_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void defaultWallpaperCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            if (defaultWallpaperCheck.Checked == false)
+            {
+                defaultWallpaperButton.Enabled = false;
+                wallpaperPathLabel.Enabled = false;
+            }
+            else
+            {
+                defaultWallpaperButton.Enabled = true;
+                wallpaperPathLabel.Enabled = true;
+            }
         }
     }
 }

@@ -1,6 +1,10 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using MS.WindowsAPICodePack.Internal;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Xml.Linq;
 
 namespace WindowsDesktopIconManagerForm
 {
@@ -37,6 +41,23 @@ namespace WindowsDesktopIconManagerForm
             return Path.Combine(GetCurrentIconsFolder(), "current-arrow.ico");
         }
 
+        public static string GetCurrentWallpaperPath()
+        {
+            string iconsFolder = GetCurrentIconsFolder();
+            string wallpaperName = "";
+            string[] potentialNames = {"wallpaper.png", "wallpaper.jpeg", "wallpaper.jpg", "wallpaper.bmp", "wallpaper.gif"};
+            foreach (string format in potentialNames)
+            {
+                string filePath = Path.Combine(iconsFolder, format);
+                if (File.Exists(filePath))
+                {
+                    wallpaperName = filePath;
+                    break;
+                }
+            }
+            return Path.Combine(GetCurrentIconsFolder(), wallpaperName);
+        }
+
         // Creates and returns list on lnk files on the desktop
         public static List<string> CreateLinkArray()
         {
@@ -63,11 +84,18 @@ namespace WindowsDesktopIconManagerForm
         // Allows me to refresh desktop to clear old icons
         [DllImport("Shell32.dll")]
         private static extern int SHChangeNotify(int eventId, int flags, IntPtr item1, IntPtr item2);
-        private const uint SHCNE_ALLEVENTS = 0x80000000;
-        private const uint SHCNF_FLUSH = 0x1000;
         public static void RefreshDesktop()
         {
             SHChangeNotify(0x8000000, 0x1000, IntPtr.Zero, IntPtr.Zero);
+        }
+
+        // Changes the wallpaper and refreshes the screen
+        [DllImport("user32.dll")]
+        public static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
+        public static void ChangeWallpaper(string wallpaperPath)
+        {
+            // Roughly (Change Wallpaper, [Required Variable], path, Persist Change | Refresh)
+            SystemParametersInfo(20, 0, wallpaperPath, 0x01 | 0x02);
         }
 
         // Creates the folders this app expects to see
@@ -81,13 +109,29 @@ namespace WindowsDesktopIconManagerForm
             Directory.CreateDirectory(Path.Combine(appPath, "Used-Arrows"));
         }
 
-        // Restarts Windows Explorer
-        // SLOW. MIGHT NOT INCLUDE.
-        // However this application is meant for people who may not be comfortable opening
-        // Task Manager and this is the most reliable method to restart explorer with C# I've tried yet.
+        // Restarts Windows Explorer using batch script (has to be a better way)
+
         public static void RestartExplorer()
         {
-            Process.Start("taskkill", "/F /IM sihost.exe");
+            // FIXME: string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "restart_explorer.bat");
+            string filePath = @"C:\Users\User\Documents\DesktopIconManager\RestartExplorer.bat";
+
+            try
+            {
+                Process runBatchFile = new Process();
+                runBatchFile.StartInfo.FileName = filePath;
+                runBatchFile.StartInfo.UseShellExecute = false; // Don't open a new window
+                runBatchFile.StartInfo.RedirectStandardOutput = true; // Redirect output
+                runBatchFile.StartInfo.RedirectStandardError = true; // Redirect error output
+
+                // Start the process
+                runBatchFile.Start();
+            }
+            catch (Exception e)
+            {
+                // Handle any exceptions that occur during the process
+                MessageBox.Show("An error occurred: " + e.Message, "Desktop Icon Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         // Copies files from one directory to another
@@ -186,6 +230,83 @@ namespace WindowsDesktopIconManagerForm
             string message = "Saved backups to \"" + backupPath + "\".";
             string caption = "Task Completed";
             System.Windows.Forms.MessageBox.Show(message, caption);
+        }
+
+        // Folder picker
+        public static string FolderSelector(string title, bool canSkip)
+        {
+            do
+            {
+                // Display dialogue
+                CommonOpenFileDialog dialog = new()
+                {
+                    InitialDirectory = "C:\\Users",
+                    IsFolderPicker = true,
+                    Title = title
+                };
+                dialog.ShowDialog();
+                try
+                {
+                    return dialog.FileName;
+                }
+                catch (Exception e)
+                {
+                    if (canSkip)
+                    {
+                        DialogResult result = PickerContinueAlt(e);
+                        if (result == DialogResult.Abort) return "quit";
+                        if (result == DialogResult.Continue) return "skip";
+                    }
+                    else if (!PickerContinueNormal(e)) return null;
+                }
+            }
+            while (1 == 1);
+        }
+
+        private static bool PickerContinueNormal(Exception e)
+        {
+            string message = "An error occurred: " + e.Message + "\n\n" + "Would you like to try again?";
+            DialogResult result = System.Windows.Forms.MessageBox.Show(message, "Desktop Icon Manager", MessageBoxButtons.RetryCancel);
+            if (result == DialogResult.Retry)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private static DialogResult PickerContinueAlt(Exception e)
+        {
+            string message = "An error occurred: " + e.Message + "\n\n" + "Would you like to abort (end the helper), try again, or ignore this file and continue?";
+            return System.Windows.Forms.MessageBox.Show(message, "Desktop Icon Manager", MessageBoxButtons.AbortRetryIgnore);
+        }
+
+        public static bool ConfirmContinue(string message)
+        {
+            var result = System.Windows.Forms.MessageBox.Show(message, "Desktop Icon Manager", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+            if (result == DialogResult.Cancel)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        // Counts how many files on desktop are not shortcuts and adds them to the array passed along
+        // Originally used arrays and had to keep a tally. Using List is easier.
+        public static List<string> CountNonShortcuts()
+        {
+            List<string> allEntries = Utilities.CreateDesktopArray();
+            List<string> nonShortcuts = [];
+            foreach (string fileName in allEntries)
+            {
+                if (!fileName.Contains(".lnk") && !fileName.Contains("desktop.ini"))
+                {
+                    nonShortcuts.Add(fileName);
+                }
+            }
+            return nonShortcuts;
         }
     }
 }
