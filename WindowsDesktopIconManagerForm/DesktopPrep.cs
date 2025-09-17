@@ -24,7 +24,7 @@ namespace WindowsDesktopIconManagerForm
                 string startFolder = Utilities.GetCurrentIconsFolder();
                 try
                 {
-                    targetPath = GetShortcutTarget(shortcut);
+                    targetPath = Utilities.GetShortcutTarget(shortcut);
                     targetFile = Path.GetFileName(targetPath);
                     targetName = targetFile.Substring(0, targetFile.LastIndexOf('.'));
                     ChangeIcon(shortcut, startFolder, targetName, targetPath);
@@ -45,48 +45,19 @@ namespace WindowsDesktopIconManagerForm
             IWshShortcut shortcut2 = (IWshShortcut)shell.CreateShortcut(shortcut);
             // Can use .Description and .Hotkey
             // TODO: Support for different icons even if target is the same (ie: chrome web apps)
-            shortcut2.IconLocation = GetNewIconLocation();
+            shortcut2.IconLocation = GetIconLocation();
             shortcut2.TargetPath = targetPath;
             shortcut2.Save();
         }
 
-        private static string GetNewIconLocation(/*TODO: string startFolder, string targetName*/)
+        public static string GetIconLocation(/*TODO: string startFolder, string targetName*/)
         {
             string iconLocation;
             string startFolder = Utilities.GetCurrentIconsFolder();
             // Get target name
             // iconLocation = Path.Combine(startFolder, targetName) + ".ico"; // Named after target path so names can be later changed if desired
-            iconLocation = Path.Combine(startFolder, "Baba") + ".ico";
+            iconLocation = Path.Combine(startFolder, "Off") + ".ico";
             return iconLocation;
-        }
-
-        // Returns the target than an .lnk file points to
-        // Back-up way from https://learn.microsoft.com/en-us/dotnet/api/system.io.filesysteminfo.linktarget
-        private static string GetShortcutTarget(string shortcutPath)
-        {
-            string target = "";
-            try // Primary method
-            {
-                WshShell shell = new();
-                IWshShortcut linkAlt = (IWshShortcut)shell.CreateShortcut(shortcutPath);
-
-                target = linkAlt.TargetPath;
-                if (target == "")
-                {
-                    throw new Exception("Empty target");
-                }
-            }
-            catch
-            {
-                try // Secondary method
-                {
-                    FileInfo fileInfo = new FileInfo(shortcutPath);
-                    target = fileInfo.LinkTarget;
-                    if (target == "" || target == null) throw new Exception("Empty target");
-                }
-                catch {target = "";}
-            }
-            return target;
         }
 
         // Housekeeping before actually changing the icon paths

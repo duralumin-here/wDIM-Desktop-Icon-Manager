@@ -1,4 +1,5 @@
-﻿using Microsoft.WindowsAPICodePack.Dialogs;
+﻿using IWshRuntimeLibrary;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using MS.WindowsAPICodePack.Internal;
 using System.Diagnostics;
 using System.IO;
@@ -49,7 +50,7 @@ namespace WindowsDesktopIconManagerForm
             foreach (string format in potentialNames)
             {
                 string filePath = Path.Combine(iconsFolder, format);
-                if (File.Exists(filePath))
+                if (System.IO.File.Exists(filePath))
                 {
                     wallpaperName = filePath;
                     break;
@@ -190,7 +191,7 @@ namespace WindowsDesktopIconManagerForm
                 {
                     string fileName = Path.GetFileName(file);
                     string destination = Path.Combine(newPublicPath, fileName);
-                    File.Copy(file, destination);
+                    System.IO.File.Copy(file, destination);
                 }
             }
             else Utilities.CopyDirectory(@"C:\Users\Public\Desktop", newPublicPath);
@@ -209,7 +210,7 @@ namespace WindowsDesktopIconManagerForm
                 {
                     string fileName = Path.GetFileName(file);
                     string destination = Path.Combine(newPrivatePath, fileName);
-                    File.Copy(file, destination);
+                    System.IO.File.Copy(file, destination);
                 }
             }
             else Utilities.CopyDirectory(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), newPrivatePath);
@@ -307,6 +308,36 @@ namespace WindowsDesktopIconManagerForm
                 }
             }
             return nonShortcuts;
+        }
+
+
+        // Returns the target than an .lnk file points to
+        // Back-up way from https://learn.microsoft.com/en-us/dotnet/api/system.io.filesysteminfo.linktarget
+        public static string GetShortcutTarget(string shortcutPath)
+        {
+            string target = "";
+            try // Primary method
+            {
+                WshShell shell = new();
+                IWshShortcut linkAlt = (IWshShortcut)shell.CreateShortcut(shortcutPath);
+
+                target = linkAlt.TargetPath;
+                if (target == "")
+                {
+                    throw new Exception("Empty target");
+                }
+            }
+            catch
+            {
+                try // Secondary method
+                {
+                    FileInfo fileInfo = new FileInfo(shortcutPath);
+                    target = fileInfo.LinkTarget;
+                    if (target == "" || target == null) throw new Exception("Empty target");
+                }
+                catch { target = ""; }
+            }
+            return target;
         }
     }
 }

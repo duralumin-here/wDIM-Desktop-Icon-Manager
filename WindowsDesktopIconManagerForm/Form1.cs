@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
+using WindowsDesktopIconManagerForm.Properties;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using Path = System.IO.Path;
@@ -29,6 +30,14 @@ namespace WindowsDesktopIconManagerForm
             hueBox.Text = hueSlide.Value.ToString();
             satBox.Text = satSlide.Value.ToString();
             lightBox.Text = lightSlide.Value.ToString();
+
+            arrowCheck.Checked = Properties.Settings.Default.autoApplyArrows;
+            explorerCheck.Checked = Properties.Settings.Default.autoRestartExplorer;
+            lightDarkCheck.Checked = Properties.Settings.Default.enableLightDark;
+            wallpaperCheck.Checked = Properties.Settings.Default.autoApplyWallpaper;
+            defaultWallpaperCheck.Checked = Properties.Settings.Default.applyDefaultWallpaper;
+            defaultWallpaperButton.Enabled = Properties.Settings.Default.applyDefaultWallpaper;
+            wallpaperPathLabel.Enabled = Properties.Settings.Default.applyDefaultWallpaper;
         }
 
         private void validateButton_Click(object sender, EventArgs e)
@@ -327,14 +336,14 @@ namespace WindowsDesktopIconManagerForm
             Labels.ChangeDesktopLabels(alphabetLabel.Tag.ToString(), startString, endString);
         }
 
-        private void arrowCheck_CheckedChanged(object sender, EventArgs e)
+        private void tabPageSettings_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void tabPageSettings_Click(object sender, EventArgs e)
+        private void wallpaperCheck_CheckedChanged(object sender, EventArgs e)
         {
-
+            Properties.Settings.Default.autoApplyWallpaper = wallpaperCheck.Checked;
         }
 
         private void defaultWallpaperCheck_CheckedChanged(object sender, EventArgs e)
@@ -343,12 +352,29 @@ namespace WindowsDesktopIconManagerForm
             {
                 defaultWallpaperButton.Enabled = false;
                 wallpaperPathLabel.Enabled = false;
+                Properties.Settings.Default.applyDefaultWallpaper = false;
             }
             else
             {
                 defaultWallpaperButton.Enabled = true;
                 wallpaperPathLabel.Enabled = true;
+                Properties.Settings.Default.applyDefaultWallpaper = true;
             }
+        }
+
+        private void arrowCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.autoApplyArrows = arrowCheck.Checked;
+        }
+
+        private void explorerCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.autoRestartExplorer = explorerCheck.Checked;
+        }
+
+        private void lightDarkCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.enableLightDark = lightDarkCheck.Checked;
         }
     }
 }

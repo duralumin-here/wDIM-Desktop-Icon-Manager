@@ -1,14 +1,5 @@
-﻿using IWshRuntimeLibrary;
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using File = System.IO.File;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using static System.Net.Mime.MediaTypeNames;
-using System.Windows.Forms;
 
 namespace WindowsDesktopIconManagerForm
 {
@@ -105,7 +96,8 @@ namespace WindowsDesktopIconManagerForm
             string oldLnk = Path.Combine(desktop, oldNameNoExtension + ".lnk");
             string newLnk = Path.Combine(desktop, startString + newNameNoExtension + endString + ".lnk");
 
-            // TODO: (? not sure if it can be fixed) this mixes all the icons up
+            // Unfortunately, it seems like the icons getting mixed up is a operating system limitation unless
+            // I can figure out how to manually store the shortcut locations.
             File.Move(oldLnk, newLnk);
         }
 
@@ -218,7 +210,7 @@ namespace WindowsDesktopIconManagerForm
         // Returns whether user wants to go through with label change.
         public static bool ConfirmContinue()
         {
-            var result = System.Windows.Forms.MessageBox.Show("This will replace your desktop shortcuts with ones having the modified labels. However, they will all pop up on the left of the screen, all mixed up, so you may have to rearrange them.", "Label Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+            var result = System.Windows.Forms.MessageBox.Show("This will replace your desktop shortcuts with ones having the modified labels. However, they will all pop up on the left of the screen, all mixed up, so you'll likely have to rearrange them.", "Label Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
             if (result == DialogResult.Cancel)
             {
                 return false;

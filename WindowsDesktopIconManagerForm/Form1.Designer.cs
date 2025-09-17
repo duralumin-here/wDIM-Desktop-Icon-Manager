@@ -138,6 +138,7 @@
             lightDarkCheck.TabIndex = 21;
             lightDarkCheck.Text = "Enable light/dark mode sets (experimental)";
             lightDarkCheck.UseVisualStyleBackColor = true;
+            lightDarkCheck.CheckedChanged += lightDarkCheck_CheckedChanged;
             // 
             // defaultWallpaperCheck
             // 
@@ -189,6 +190,7 @@
             explorerCheck.TabIndex = 2;
             explorerCheck.Text = "Restart Windows Explorer when applying icon set (may be disruptive; required for arrow changes to show)";
             explorerCheck.UseVisualStyleBackColor = true;
+            explorerCheck.CheckedChanged += explorerCheck_CheckedChanged;
             // 
             // arrowCheck
             // 
@@ -212,6 +214,7 @@
             wallpaperCheck.TabIndex = 0;
             wallpaperCheck.Text = "Automatically apply wallpapers included in icon sets";
             wallpaperCheck.UseVisualStyleBackColor = true;
+            wallpaperCheck.CheckedChanged += wallpaperCheck_CheckedChanged;
             // 
             // tabPageArrows
             // 
