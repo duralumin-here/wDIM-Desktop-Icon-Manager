@@ -39,17 +39,21 @@ namespace WindowsDesktopIconManagerForm
 
         public static string GetCurrentArrowPath()
         {
-            return Path.Combine(GetCurrentIconsFolder(), "current-arrow.ico");
+            return Path.Combine(GetCurrentIconsFolder(), "arrow.ico");
         }
 
-        public static string GetCurrentWallpaperPath()
+        public static string GetIconSetsFolder()
         {
-            string iconsFolder = GetCurrentIconsFolder();
+            return Path.Combine(GetAppFolder(), "Icon-Sets");
+        }
+
+        public static string GetWallpaperPath(string folder)
+        {
             string wallpaperName = "";
             string[] potentialNames = {"wallpaper.png", "wallpaper.jpeg", "wallpaper.jpg", "wallpaper.bmp", "wallpaper.gif"};
             foreach (string format in potentialNames)
             {
-                string filePath = Path.Combine(iconsFolder, format);
+                string filePath = Path.Combine(folder, format);
                 if (System.IO.File.Exists(filePath))
                 {
                     wallpaperName = filePath;

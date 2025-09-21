@@ -1,11 +1,15 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 using WindowsDesktopIconManagerForm.Properties;
 using static System.Net.Mime.MediaTypeNames;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using Path = System.IO.Path;
 using Size = System.Drawing.Size;
@@ -17,13 +21,13 @@ using Size = System.Drawing.Size;
 // TODO: Implement wallpaper workflow
 // Can just have a menu to copy icons from a set to current icons, or from current icons to a set
 // May need a workflow for people to upload specific icons for apps so they can be renamed accordingly
-// A way to blank out shortcut names
+// A way to blank out shortcut names?
 
 namespace WindowsDesktopIconManagerForm
 {
-    public partial class Form1 : Form
+    public partial class MainMenu : Form
     {
-        public Form1()
+        public MainMenu()
         {
             InitializeComponent();
             Utilities.CreateStartingDirectories();
@@ -38,6 +42,11 @@ namespace WindowsDesktopIconManagerForm
             defaultWallpaperCheck.Checked = Properties.Settings.Default.applyDefaultWallpaper;
             defaultWallpaperButton.Enabled = Properties.Settings.Default.applyDefaultWallpaper;
             wallpaperPathLabel.Enabled = Properties.Settings.Default.applyDefaultWallpaper;
+
+            // Allows the arrow to have proper transparency
+            wallpaperDisplay.Controls.Add(arrowDisplay);
+            arrowDisplay.Location = new System.Drawing.Point(0, (wallpaperDisplay.Height - arrowDisplay.Height));
+            arrowDisplay.BackColor = Color.Transparent;
         }
 
         private void validateButton_Click(object sender, EventArgs e)
@@ -152,15 +161,23 @@ namespace WindowsDesktopIconManagerForm
             hueSlide.Value = 0;
             satSlide.Value = 100;
             lightSlide.Value = 50;
+
+            try
+            {
+                Bitmap newArrowMap = Arrow.GetBitmap(Arrow.PickArrowType(comboBox1.SelectedItem as string));
+                arrowShowBox.BackgroundImage = newArrowMap;
+            }
+            catch
+            {
+                return;
+            }
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             string selectedItem = comboBox1.SelectedItem as string;
-            if (selectedItem == null)
-            {
-                return;
-            }
+            if (selectedItem == null) return;
+
             // Sets path based on combo box selection
             string iconPath = Arrow.PickArrowType(selectedItem);
 
@@ -375,6 +392,97 @@ namespace WindowsDesktopIconManagerForm
         private void lightDarkCheck_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.enableLightDark = lightDarkCheck.Checked;
+        }
+
+        private void validateButton_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+
+        private void TabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Check if the selected tab is tabPageIcons
+            if (tabControl1.SelectedTab == tabPageIcons)
+            {
+                DirectoryInfo dinfo = new DirectoryInfo(Utilities.GetIconSetsFolder());
+                DirectoryInfo[] directories = dinfo.GetDirectories();
+                if (directories.Length == 0)
+                {
+                    return;
+                }
+
+                foreach (DirectoryInfo directory in directories)
+                {
+                    if (!listBox1.Items.Contains(directory.Name))
+                    {
+                        listBox1.Items.Add(directory.Name);
+                    }
+                }
+            }
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string selectedSet = Path.Combine(Utilities.GetIconSetsFolder(), listBox1.SelectedItem.ToString());
+            string arrowPath = Path.Combine(selectedSet, "arrow.ico");
+            string wallpaperPath = Utilities.GetWallpaperPath(selectedSet);
+
+            AddElement(wallpaperPath, wallpaperDisplay);
+            AddElement(arrowPath, arrowDisplay);
+            listView1.Clear();
+
+            string[] icons = Directory.GetFiles(selectedSet, "*.ico");
+            foreach (string icon in icons)
+            {
+                if (!icon.Equals(arrowPath))
+                {
+                    imageList1.Images.Add(System.Drawing.Image.FromFile(icon));
+
+                    System.Windows.Forms.ListViewItem item = new System.Windows.Forms.ListViewItem
+                    {
+                        ImageIndex = imageList1.Images.Count - 1,
+                    };
+
+                    listView1.Items.Add(item);
+                }
+            }
+        }
+
+        private void AddElement(string path, PictureBox display)
+        {
+
+            if (File.Exists(path)) display.BackgroundImage = new Bitmap(path);
+            else display.BackgroundImage = null;
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void charStartCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            if (charStartCheck.Checked) startCharTextBox.Enabled = true;
+            else startCharTextBox.Enabled = false;
+        }
+
+        private void charEndCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            if (charEndCheck.Checked) endCharTextBox.Enabled = true;
+            else endCharTextBox.Enabled = false;
+        }
+
+        private void iconsDisplay_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+
+
+        private void arrowDisplay_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

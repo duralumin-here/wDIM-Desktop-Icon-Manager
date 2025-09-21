@@ -1,6 +1,8 @@
-﻿namespace WindowsDesktopIconManagerForm
+﻿using System.Windows.Forms;
+
+namespace WindowsDesktopIconManagerForm
 {
-    partial class Form1
+    partial class MainMenu
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,18 +30,22 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenu));
             tabPageSettings = new TabPage();
-            lightDarkCheck = new CheckBox();
+            button2 = new Button();
+            shortcutToPersonalButton = new Button();
+            radioButton3 = new RadioButton();
+            radioButton2 = new RadioButton();
+            radioButton1 = new RadioButton();
+            label15 = new Label();
             defaultWallpaperCheck = new CheckBox();
             defaultWallpaperButton = new Button();
             wallpaperPathLabel = new Label();
-            label12 = new Label();
             explorerCheck = new CheckBox();
             arrowCheck = new CheckBox();
             wallpaperCheck = new CheckBox();
             tabPageArrows = new TabPage();
-            arrowApplyButton = new Button();
             resetColorButton = new Button();
             lightBox = new TextBox();
             satBox = new TextBox();
@@ -51,7 +57,6 @@
             satSlide = new TrackBar();
             label5 = new Label();
             hueSlide = new TrackBar();
-            restoreArrowButton = new Button();
             arrowSaveButton = new Button();
             label7 = new Label();
             arrowShowBox = new PictureBox();
@@ -60,7 +65,6 @@
             alphabetLabel = new Label();
             label11 = new Label();
             labelButton = new Button();
-            label10 = new Label();
             endCharTextBox = new TextBox();
             startCharTextBox = new TextBox();
             charEndCheck = new CheckBox();
@@ -77,26 +81,32 @@
             cursiveLightRadio = new RadioButton();
             cursiveBoldRadio = new RadioButton();
             tabPageIcons = new TabPage();
-            label6 = new Label();
+            arrowDisplay = new PictureBox();
+            button1 = new Button();
+            listView1 = new ListView();
+            imageList1 = new ImageList(components);
+            richTextBox1 = new RichTextBox();
+            wallpaperDisplay = new PictureBox();
+            listBox1 = new ListBox();
+            button4 = new Button();
+            button3 = new Button();
             button5 = new Button();
             tabPageManage = new TabPage();
+            arrowApplyButton = new Button();
+            restoreArrowButton = new Button();
+            refreshButton = new Button();
             label4 = new Label();
             backupButton = new Button();
             label3 = new Label();
             explorerButton = new Button();
-            refreshButton = new Button();
             validateButton = new Button();
             pathButton = new Button();
             label1 = new Label();
             label2 = new Label();
             tabControl1 = new TabControl();
-            tabPage1 = new TabPage();
-            label14 = new Label();
-            button3 = new Button();
-            label13 = new Label();
-            checkBox2 = new CheckBox();
-            button2 = new Button();
-            shortcutToPersonalButton = new Button();
+            tabPageExperimental = new TabPage();
+            lightDarkCheck = new CheckBox();
+            tabPageHelp = new TabPage();
             tabPageSettings.SuspendLayout();
             tabPageArrows.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)lightSlide).BeginInit();
@@ -105,45 +115,100 @@
             ((System.ComponentModel.ISupportInitialize)arrowShowBox).BeginInit();
             tabPageLabels.SuspendLayout();
             tabPageIcons.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)arrowDisplay).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)wallpaperDisplay).BeginInit();
             tabPageManage.SuspendLayout();
             tabControl1.SuspendLayout();
-            tabPage1.SuspendLayout();
+            tabPageExperimental.SuspendLayout();
             SuspendLayout();
             // 
             // tabPageSettings
             // 
             tabPageSettings.BackColor = Color.WhiteSmoke;
-            tabPageSettings.Controls.Add(lightDarkCheck);
+            tabPageSettings.Controls.Add(button2);
+            tabPageSettings.Controls.Add(shortcutToPersonalButton);
+            tabPageSettings.Controls.Add(radioButton3);
+            tabPageSettings.Controls.Add(radioButton2);
+            tabPageSettings.Controls.Add(radioButton1);
+            tabPageSettings.Controls.Add(label15);
             tabPageSettings.Controls.Add(defaultWallpaperCheck);
             tabPageSettings.Controls.Add(defaultWallpaperButton);
             tabPageSettings.Controls.Add(wallpaperPathLabel);
-            tabPageSettings.Controls.Add(label12);
             tabPageSettings.Controls.Add(explorerCheck);
             tabPageSettings.Controls.Add(arrowCheck);
             tabPageSettings.Controls.Add(wallpaperCheck);
             tabPageSettings.Location = new Point(4, 29);
             tabPageSettings.Name = "tabPageSettings";
             tabPageSettings.Padding = new Padding(3);
-            tabPageSettings.Size = new Size(770, 346);
+            tabPageSettings.Size = new Size(770, 296);
             tabPageSettings.TabIndex = 6;
             tabPageSettings.Text = "Settings";
             tabPageSettings.Click += tabPageSettings_Click;
             // 
-            // lightDarkCheck
+            // button2
             // 
-            lightDarkCheck.AutoSize = true;
-            lightDarkCheck.Location = new Point(16, 210);
-            lightDarkCheck.Name = "lightDarkCheck";
-            lightDarkCheck.Size = new Size(318, 24);
-            lightDarkCheck.TabIndex = 21;
-            lightDarkCheck.Text = "Enable light/dark mode sets (experimental)";
-            lightDarkCheck.UseVisualStyleBackColor = true;
-            lightDarkCheck.CheckedChanged += lightDarkCheck_CheckedChanged;
+            button2.Location = new Point(570, 297);
+            button2.Name = "button2";
+            button2.Size = new Size(175, 29);
+            button2.TabIndex = 27;
+            button2.Text = "Open App Folder";
+            button2.UseVisualStyleBackColor = true;
+            // 
+            // shortcutToPersonalButton
+            // 
+            shortcutToPersonalButton.Location = new Point(16, 297);
+            shortcutToPersonalButton.Name = "shortcutToPersonalButton";
+            shortcutToPersonalButton.Size = new Size(289, 29);
+            shortcutToPersonalButton.TabIndex = 26;
+            shortcutToPersonalButton.Text = "Move all shortcuts to personal desktop";
+            shortcutToPersonalButton.UseVisualStyleBackColor = true;
+            // 
+            // radioButton3
+            // 
+            radioButton3.AutoSize = true;
+            radioButton3.Location = new Point(570, 117);
+            radioButton3.Name = "radioButton3";
+            radioButton3.Size = new Size(139, 24);
+            radioButton3.TabIndex = 25;
+            radioButton3.TabStop = true;
+            radioButton3.Text = "Use in slideshow";
+            radioButton3.UseVisualStyleBackColor = true;
+            // 
+            // radioButton2
+            // 
+            radioButton2.AutoSize = true;
+            radioButton2.Location = new Point(398, 117);
+            radioButton2.Name = "radioButton2";
+            radioButton2.Size = new Size(166, 24);
+            radioButton2.TabIndex = 24;
+            radioButton2.TabStop = true;
+            radioButton2.Text = "Select one randomly";
+            radioButton2.UseVisualStyleBackColor = true;
+            // 
+            // radioButton1
+            // 
+            radioButton1.AutoSize = true;
+            radioButton1.Location = new Point(255, 117);
+            radioButton1.Name = "radioButton1";
+            radioButton1.Size = new Size(137, 24);
+            radioButton1.TabIndex = 23;
+            radioButton1.TabStop = true;
+            radioButton1.Text = "Use the first one";
+            radioButton1.UseVisualStyleBackColor = true;
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(13, 118);
+            label15.Name = "label15";
+            label15.Size = new Size(236, 20);
+            label15.TabIndex = 22;
+            label15.Text = "Icon sets with multiple wallpapers:";
             // 
             // defaultWallpaperCheck
             // 
             defaultWallpaperCheck.AutoSize = true;
-            defaultWallpaperCheck.Location = new Point(39, 88);
+            defaultWallpaperCheck.Location = new Point(37, 53);
             defaultWallpaperCheck.Name = "defaultWallpaperCheck";
             defaultWallpaperCheck.Size = new Size(438, 24);
             defaultWallpaperCheck.TabIndex = 20;
@@ -154,7 +219,7 @@
             // defaultWallpaperButton
             // 
             defaultWallpaperButton.Enabled = false;
-            defaultWallpaperButton.Location = new Point(38, 115);
+            defaultWallpaperButton.Location = new Point(37, 80);
             defaultWallpaperButton.Name = "defaultWallpaperButton";
             defaultWallpaperButton.Size = new Size(201, 29);
             defaultWallpaperButton.TabIndex = 19;
@@ -165,26 +230,16 @@
             // 
             wallpaperPathLabel.AutoSize = true;
             wallpaperPathLabel.Enabled = false;
-            wallpaperPathLabel.Location = new Point(245, 120);
+            wallpaperPathLabel.Location = new Point(245, 84);
             wallpaperPathLabel.Name = "wallpaperPathLabel";
             wallpaperPathLabel.Size = new Size(86, 20);
             wallpaperPathLabel.TabIndex = 18;
             wallpaperPathLabel.Text = "No path set";
             // 
-            // label12
-            // 
-            label12.AutoSize = true;
-            label12.Font = new Font("Segoe UI Semibold", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label12.Location = new Point(11, 17);
-            label12.Name = "label12";
-            label12.Size = new Size(98, 31);
-            label12.TabIndex = 16;
-            label12.Text = "Settings";
-            // 
             // explorerCheck
             // 
             explorerCheck.AutoSize = true;
-            explorerCheck.Location = new Point(37, 180);
+            explorerCheck.Location = new Point(37, 174);
             explorerCheck.Name = "explorerCheck";
             explorerCheck.Size = new Size(731, 24);
             explorerCheck.TabIndex = 2;
@@ -195,7 +250,7 @@
             // arrowCheck
             // 
             arrowCheck.AutoSize = true;
-            arrowCheck.Location = new Point(16, 150);
+            arrowCheck.Location = new Point(16, 144);
             arrowCheck.Name = "arrowCheck";
             arrowCheck.Size = new Size(604, 24);
             arrowCheck.TabIndex = 1;
@@ -208,7 +263,7 @@
             wallpaperCheck.AutoSize = true;
             wallpaperCheck.Checked = true;
             wallpaperCheck.CheckState = CheckState.Checked;
-            wallpaperCheck.Location = new Point(16, 59);
+            wallpaperCheck.Location = new Point(16, 23);
             wallpaperCheck.Name = "wallpaperCheck";
             wallpaperCheck.Size = new Size(378, 24);
             wallpaperCheck.TabIndex = 0;
@@ -219,7 +274,6 @@
             // tabPageArrows
             // 
             tabPageArrows.BackColor = Color.WhiteSmoke;
-            tabPageArrows.Controls.Add(arrowApplyButton);
             tabPageArrows.Controls.Add(resetColorButton);
             tabPageArrows.Controls.Add(lightBox);
             tabPageArrows.Controls.Add(satBox);
@@ -231,30 +285,19 @@
             tabPageArrows.Controls.Add(satSlide);
             tabPageArrows.Controls.Add(label5);
             tabPageArrows.Controls.Add(hueSlide);
-            tabPageArrows.Controls.Add(restoreArrowButton);
             tabPageArrows.Controls.Add(arrowSaveButton);
             tabPageArrows.Controls.Add(label7);
             tabPageArrows.Controls.Add(arrowShowBox);
             tabPageArrows.Location = new Point(4, 29);
             tabPageArrows.Name = "tabPageArrows";
             tabPageArrows.Padding = new Padding(3);
-            tabPageArrows.Size = new Size(770, 346);
+            tabPageArrows.Size = new Size(770, 296);
             tabPageArrows.TabIndex = 5;
             tabPageArrows.Text = "Shortcut Arrows";
             // 
-            // arrowApplyButton
-            // 
-            arrowApplyButton.Location = new Point(27, 300);
-            arrowApplyButton.Name = "arrowApplyButton";
-            arrowApplyButton.Size = new Size(152, 29);
-            arrowApplyButton.TabIndex = 9;
-            arrowApplyButton.Text = "Apply Arrows";
-            arrowApplyButton.UseVisualStyleBackColor = true;
-            arrowApplyButton.Click += arrowApplyButton_Click;
-            // 
             // resetColorButton
             // 
-            resetColorButton.Location = new Point(628, 90);
+            resetColorButton.Location = new Point(624, 53);
             resetColorButton.Name = "resetColorButton";
             resetColorButton.Size = new Size(126, 29);
             resetColorButton.TabIndex = 7;
@@ -334,7 +377,7 @@
             satSlide.LargeChange = 10;
             satSlide.Location = new Point(248, 132);
             satSlide.Maximum = 100;
-            satSlide.Minimum = 1;
+            satSlide.Minimum = 2;
             satSlide.Name = "satSlide";
             satSlide.Size = new Size(276, 56);
             satSlide.TabIndex = 3;
@@ -354,7 +397,7 @@
             // 
             // hueSlide
             // 
-            hueSlide.BackColor = SystemColors.Control;
+            hueSlide.BackColor = Color.WhiteSmoke;
             hueSlide.LargeChange = 10;
             hueSlide.Location = new Point(248, 45);
             hueSlide.Maximum = 360;
@@ -365,20 +408,10 @@
             hueSlide.TickStyle = TickStyle.Both;
             hueSlide.ValueChanged += hueSlide_ValueChanged;
             // 
-            // restoreArrowButton
-            // 
-            restoreArrowButton.Location = new Point(185, 300);
-            restoreArrowButton.Name = "restoreArrowButton";
-            restoreArrowButton.Size = new Size(152, 29);
-            restoreArrowButton.TabIndex = 10;
-            restoreArrowButton.Text = "Restore Defaults";
-            restoreArrowButton.UseVisualStyleBackColor = true;
-            restoreArrowButton.Click += restoreArrowButton_Click;
-            // 
             // arrowSaveButton
             // 
             arrowSaveButton.Enabled = false;
-            arrowSaveButton.Location = new Point(628, 54);
+            arrowSaveButton.Location = new Point(624, 88);
             arrowSaveButton.Name = "arrowSaveButton";
             arrowSaveButton.Size = new Size(126, 29);
             arrowSaveButton.TabIndex = 8;
@@ -413,7 +446,6 @@
             tabPageLabels.Controls.Add(alphabetLabel);
             tabPageLabels.Controls.Add(label11);
             tabPageLabels.Controls.Add(labelButton);
-            tabPageLabels.Controls.Add(label10);
             tabPageLabels.Controls.Add(endCharTextBox);
             tabPageLabels.Controls.Add(startCharTextBox);
             tabPageLabels.Controls.Add(charEndCheck);
@@ -432,13 +464,13 @@
             tabPageLabels.Location = new Point(4, 29);
             tabPageLabels.Name = "tabPageLabels";
             tabPageLabels.Padding = new Padding(3);
-            tabPageLabels.Size = new Size(770, 346);
+            tabPageLabels.Size = new Size(770, 296);
             tabPageLabels.TabIndex = 4;
             tabPageLabels.Text = "Customize Labels";
             // 
             // labelRestoreButton
             // 
-            labelRestoreButton.Location = new Point(590, 300);
+            labelRestoreButton.Location = new Point(421, 178);
             labelRestoreButton.Name = "labelRestoreButton";
             labelRestoreButton.Size = new Size(163, 29);
             labelRestoreButton.TabIndex = 20;
@@ -448,7 +480,7 @@
             // alphabetLabel
             // 
             alphabetLabel.AutoSize = true;
-            alphabetLabel.Location = new Point(13, 189);
+            alphabetLabel.Location = new Point(13, 136);
             alphabetLabel.Name = "alphabetLabel";
             alphabetLabel.Size = new Size(628, 20);
             alphabetLabel.TabIndex = 19;
@@ -458,7 +490,7 @@
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(14, 47);
+            label11.Location = new Point(15, 210);
             label11.Name = "label11";
             label11.Size = new Size(736, 20);
             label11.TabIndex = 18;
@@ -466,7 +498,7 @@
             // 
             // labelButton
             // 
-            labelButton.Location = new Point(590, 265);
+            labelButton.Location = new Point(590, 178);
             labelButton.Name = "labelButton";
             labelButton.Size = new Size(163, 29);
             labelButton.TabIndex = 15;
@@ -474,54 +506,50 @@
             labelButton.UseVisualStyleBackColor = true;
             labelButton.Click += labelButton_Click;
             // 
-            // label10
-            // 
-            label10.AutoSize = true;
-            label10.Font = new Font("Segoe UI Semibold", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label10.Location = new Point(11, 12);
-            label10.Name = "label10";
-            label10.Size = new Size(223, 31);
-            label10.TabIndex = 15;
-            label10.Text = "Style shortcut labels";
-            // 
             // endCharTextBox
             // 
-            endCharTextBox.Location = new Point(590, 146);
+            endCharTextBox.Enabled = false;
+            endCharTextBox.Location = new Point(590, 93);
             endCharTextBox.Name = "endCharTextBox";
+            endCharTextBox.PlaceholderText = "Text goes here...";
             endCharTextBox.Size = new Size(130, 27);
             endCharTextBox.TabIndex = 14;
             // 
             // startCharTextBox
             // 
-            startCharTextBox.Location = new Point(228, 147);
+            startCharTextBox.Enabled = false;
+            startCharTextBox.Location = new Point(228, 94);
             startCharTextBox.Name = "startCharTextBox";
+            startCharTextBox.PlaceholderText = "Text goes here...";
             startCharTextBox.Size = new Size(130, 27);
             startCharTextBox.TabIndex = 12;
             // 
             // charEndCheck
             // 
             charEndCheck.AutoSize = true;
-            charEndCheck.Location = new Point(379, 149);
+            charEndCheck.Location = new Point(379, 96);
             charEndCheck.Name = "charEndCheck";
             charEndCheck.Size = new Size(205, 24);
             charEndCheck.TabIndex = 13;
             charEndCheck.Text = "Append characters to end:";
             charEndCheck.UseVisualStyleBackColor = true;
+            charEndCheck.CheckedChanged += charEndCheck_CheckedChanged;
             // 
             // charStartCheck
             // 
             charStartCheck.AutoSize = true;
-            charStartCheck.Location = new Point(17, 149);
+            charStartCheck.Location = new Point(17, 96);
             charStartCheck.Name = "charStartCheck";
             charStartCheck.Size = new Size(209, 24);
             charStartCheck.TabIndex = 11;
             charStartCheck.Text = "Append characters to start:";
             charStartCheck.UseVisualStyleBackColor = true;
+            charStartCheck.CheckedChanged += charStartCheck_CheckedChanged;
             // 
             // defaultFontRadio
             // 
             defaultFontRadio.AutoSize = true;
-            defaultFontRadio.Location = new Point(632, 80);
+            defaultFontRadio.Location = new Point(632, 27);
             defaultFontRadio.Name = "defaultFontRadio";
             defaultFontRadio.Size = new Size(79, 24);
             defaultFontRadio.TabIndex = 10;
@@ -532,7 +560,7 @@
             // serifLightRadio
             // 
             serifLightRadio.AutoSize = true;
-            serifLightRadio.Location = new Point(265, 80);
+            serifLightRadio.Location = new Point(265, 27);
             serifLightRadio.Name = "serifLightRadio";
             serifLightRadio.Size = new Size(60, 24);
             serifLightRadio.TabIndex = 4;
@@ -543,7 +571,7 @@
             // italicBoldRadio
             // 
             italicBoldRadio.AutoSize = true;
-            italicBoldRadio.Location = new Point(144, 110);
+            italicBoldRadio.Location = new Point(144, 57);
             italicBoldRadio.Name = "italicBoldRadio";
             italicBoldRadio.Size = new Size(113, 24);
             italicBoldRadio.TabIndex = 3;
@@ -554,7 +582,7 @@
             // italicLightRadio
             // 
             italicLightRadio.AutoSize = true;
-            italicLightRadio.Location = new Point(144, 80);
+            italicLightRadio.Location = new Point(144, 27);
             italicLightRadio.Name = "italicLightRadio";
             italicLightRadio.Size = new Size(68, 24);
             italicLightRadio.TabIndex = 2;
@@ -565,7 +593,7 @@
             // serifBoldVideo
             // 
             serifBoldVideo.AutoSize = true;
-            serifBoldVideo.Location = new Point(265, 110);
+            serifBoldVideo.Location = new Point(265, 57);
             serifBoldVideo.Name = "serifBoldVideo";
             serifBoldVideo.Size = new Size(105, 24);
             serifBoldVideo.TabIndex = 5;
@@ -576,7 +604,7 @@
             // circleTextRadio
             // 
             circleTextRadio.AutoSize = true;
-            circleTextRadio.Location = new Point(511, 110);
+            circleTextRadio.Location = new Point(511, 57);
             circleTextRadio.Name = "circleTextRadio";
             circleTextRadio.Size = new Size(73, 24);
             circleTextRadio.TabIndex = 9;
@@ -587,7 +615,7 @@
             // medievalTextRadio
             // 
             medievalTextRadio.AutoSize = true;
-            medievalTextRadio.Location = new Point(511, 80);
+            medievalTextRadio.Location = new Point(511, 27);
             medievalTextRadio.Name = "medievalTextRadio";
             medievalTextRadio.Size = new Size(91, 24);
             medievalTextRadio.TabIndex = 8;
@@ -598,7 +626,7 @@
             // thinTextRadio
             // 
             thinTextRadio.AutoSize = true;
-            thinTextRadio.Location = new Point(379, 110);
+            thinTextRadio.Location = new Point(379, 57);
             thinTextRadio.Name = "thinTextRadio";
             thinTextRadio.Size = new Size(58, 24);
             thinTextRadio.TabIndex = 7;
@@ -609,7 +637,7 @@
             // linedTextRadio
             // 
             linedTextRadio.AutoSize = true;
-            linedTextRadio.Location = new Point(379, 80);
+            linedTextRadio.Location = new Point(379, 27);
             linedTextRadio.Name = "linedTextRadio";
             linedTextRadio.Size = new Size(116, 24);
             linedTextRadio.TabIndex = 6;
@@ -621,7 +649,7 @@
             // 
             cursiveLightRadio.AutoSize = true;
             cursiveLightRadio.Checked = true;
-            cursiveLightRadio.Location = new Point(17, 80);
+            cursiveLightRadio.Location = new Point(17, 27);
             cursiveLightRadio.Name = "cursiveLightRadio";
             cursiveLightRadio.Size = new Size(77, 24);
             cursiveLightRadio.TabIndex = 0;
@@ -633,7 +661,7 @@
             // cursiveBoldRadio
             // 
             cursiveBoldRadio.AutoSize = true;
-            cursiveBoldRadio.Location = new Point(17, 110);
+            cursiveBoldRadio.Location = new Point(17, 57);
             cursiveBoldRadio.Name = "cursiveBoldRadio";
             cursiveBoldRadio.Size = new Size(122, 24);
             cursiveBoldRadio.TabIndex = 1;
@@ -644,41 +672,135 @@
             // tabPageIcons
             // 
             tabPageIcons.BackColor = Color.WhiteSmoke;
-            tabPageIcons.Controls.Add(label6);
+            tabPageIcons.Controls.Add(arrowDisplay);
+            tabPageIcons.Controls.Add(button1);
+            tabPageIcons.Controls.Add(listView1);
+            tabPageIcons.Controls.Add(richTextBox1);
+            tabPageIcons.Controls.Add(wallpaperDisplay);
+            tabPageIcons.Controls.Add(listBox1);
+            tabPageIcons.Controls.Add(button4);
+            tabPageIcons.Controls.Add(button3);
             tabPageIcons.Controls.Add(button5);
             tabPageIcons.Location = new Point(4, 29);
             tabPageIcons.Name = "tabPageIcons";
             tabPageIcons.Padding = new Padding(3);
-            tabPageIcons.Size = new Size(770, 346);
+            tabPageIcons.Size = new Size(770, 296);
             tabPageIcons.TabIndex = 2;
             tabPageIcons.Text = "Icon Sets";
             // 
-            // label6
+            // arrowDisplay
             // 
-            label6.AutoSize = true;
-            label6.Location = new Point(15, 71);
-            label6.Name = "label6";
-            label6.Size = new Size(408, 20);
-            label6.TabIndex = 12;
-            label6.Text = "Lets you select a saved icon set and apply it to your desktop.";
+            arrowDisplay.BackColor = Color.Gainsboro;
+            arrowDisplay.BackgroundImageLayout = ImageLayout.Stretch;
+            arrowDisplay.Location = new Point(399, 69);
+            arrowDisplay.Name = "arrowDisplay";
+            arrowDisplay.Size = new Size(75, 75);
+            arrowDisplay.TabIndex = 33;
+            arrowDisplay.TabStop = false;
+            arrowDisplay.Click += arrowDisplay_Click;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(16, 249);
+            button1.Name = "button1";
+            button1.Size = new Size(191, 29);
+            button1.TabIndex = 32;
+            button1.Text = "Import icon set";
+            button1.UseVisualStyleBackColor = true;
+            // 
+            // listView1
+            // 
+            listView1.BackColor = Color.Gainsboro;
+            listView1.BorderStyle = BorderStyle.FixedSingle;
+            listView1.GridLines = true;
+            listView1.HideSelection = true;
+            listView1.LargeImageList = imageList1;
+            listView1.Location = new Point(213, 19);
+            listView1.Name = "listView1";
+            listView1.Size = new Size(180, 259);
+            listView1.SmallImageList = imageList1;
+            listView1.TabIndex = 31;
+            listView1.TileSize = new Size(80, 80);
+            listView1.UseCompatibleStateImageBehavior = false;
+            listView1.View = View.Tile;
+            // 
+            // imageList1
+            // 
+            imageList1.ColorDepth = ColorDepth.Depth32Bit;
+            imageList1.ImageSize = new Size(75, 75);
+            imageList1.TransparentColor = Color.Transparent;
+            // 
+            // richTextBox1
+            // 
+            richTextBox1.BackColor = SystemColors.Info;
+            richTextBox1.BorderStyle = BorderStyle.FixedSingle;
+            richTextBox1.Location = new Point(399, 151);
+            richTextBox1.Name = "richTextBox1";
+            richTextBox1.ReadOnly = true;
+            richTextBox1.ScrollBars = RichTextBoxScrollBars.Vertical;
+            richTextBox1.Size = new Size(212, 127);
+            richTextBox1.TabIndex = 29;
+            richTextBox1.Text = "If the icon set has details, they'll show up here.";
+            richTextBox1.TextChanged += richTextBox1_TextChanged;
+            // 
+            // wallpaperDisplay
+            // 
+            wallpaperDisplay.BackColor = Color.Gainsboro;
+            wallpaperDisplay.BackgroundImageLayout = ImageLayout.Stretch;
+            wallpaperDisplay.BorderStyle = BorderStyle.FixedSingle;
+            wallpaperDisplay.Location = new Point(399, 19);
+            wallpaperDisplay.Name = "wallpaperDisplay";
+            wallpaperDisplay.Size = new Size(212, 125);
+            wallpaperDisplay.TabIndex = 28;
+            wallpaperDisplay.TabStop = false;
+            // 
+            // listBox1
+            // 
+            listBox1.BackColor = SystemColors.Window;
+            listBox1.FormattingEnabled = true;
+            listBox1.Location = new Point(16, 19);
+            listBox1.Name = "listBox1";
+            listBox1.Size = new Size(191, 184);
+            listBox1.TabIndex = 25;
+            listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged;
+            // 
+            // button4
+            // 
+            button4.Location = new Point(619, 54);
+            button4.Name = "button4";
+            button4.Size = new Size(140, 29);
+            button4.TabIndex = 22;
+            button4.Text = "Edit icon set";
+            button4.UseVisualStyleBackColor = true;
+            // 
+            // button3
+            // 
+            button3.Location = new Point(16, 214);
+            button3.Name = "button3";
+            button3.Size = new Size(191, 29);
+            button3.TabIndex = 21;
+            button3.Text = "Create new icon set";
+            button3.UseVisualStyleBackColor = true;
             // 
             // button5
             // 
-            button5.Location = new Point(15, 39);
+            button5.Location = new Point(619, 19);
             button5.Name = "button5";
-            button5.Size = new Size(212, 29);
+            button5.Size = new Size(140, 29);
             button5.TabIndex = 11;
-            button5.Text = "Apply Icon Set";
+            button5.Text = "Apply icon set";
             button5.UseVisualStyleBackColor = true;
             // 
             // tabPageManage
             // 
             tabPageManage.BackColor = Color.WhiteSmoke;
+            tabPageManage.Controls.Add(arrowApplyButton);
+            tabPageManage.Controls.Add(restoreArrowButton);
+            tabPageManage.Controls.Add(refreshButton);
             tabPageManage.Controls.Add(label4);
             tabPageManage.Controls.Add(backupButton);
             tabPageManage.Controls.Add(label3);
             tabPageManage.Controls.Add(explorerButton);
-            tabPageManage.Controls.Add(refreshButton);
             tabPageManage.Controls.Add(validateButton);
             tabPageManage.Controls.Add(pathButton);
             tabPageManage.Controls.Add(label1);
@@ -686,9 +808,37 @@
             tabPageManage.Location = new Point(4, 29);
             tabPageManage.Name = "tabPageManage";
             tabPageManage.Padding = new Padding(3);
-            tabPageManage.Size = new Size(770, 346);
+            tabPageManage.Size = new Size(770, 296);
             tabPageManage.TabIndex = 1;
             tabPageManage.Text = "Desktop Management";
+            // 
+            // arrowApplyButton
+            // 
+            arrowApplyButton.Location = new Point(530, 252);
+            arrowApplyButton.Name = "arrowApplyButton";
+            arrowApplyButton.Size = new Size(229, 29);
+            arrowApplyButton.TabIndex = 22;
+            arrowApplyButton.Text = "Apply arrows from current set";
+            arrowApplyButton.UseVisualStyleBackColor = true;
+            // 
+            // restoreArrowButton
+            // 
+            restoreArrowButton.Location = new Point(295, 252);
+            restoreArrowButton.Name = "restoreArrowButton";
+            restoreArrowButton.Size = new Size(229, 29);
+            restoreArrowButton.TabIndex = 21;
+            restoreArrowButton.Text = "Restore default arrows";
+            restoreArrowButton.UseVisualStyleBackColor = true;
+            // 
+            // refreshButton
+            // 
+            refreshButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            refreshButton.Location = new Point(542, 19);
+            refreshButton.Name = "refreshButton";
+            refreshButton.Size = new Size(212, 29);
+            refreshButton.TabIndex = 18;
+            refreshButton.Text = "Refresh Desktop";
+            refreshButton.UseVisualStyleBackColor = true;
             // 
             // label4
             // 
@@ -720,22 +870,12 @@
             // 
             // explorerButton
             // 
-            explorerButton.Location = new Point(542, 298);
+            explorerButton.Location = new Point(542, 54);
             explorerButton.Name = "explorerButton";
             explorerButton.Size = new Size(212, 29);
             explorerButton.TabIndex = 14;
             explorerButton.Text = "Restart Explorer";
             explorerButton.UseVisualStyleBackColor = true;
-            // 
-            // refreshButton
-            // 
-            refreshButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            refreshButton.Location = new Point(324, 298);
-            refreshButton.Name = "refreshButton";
-            refreshButton.Size = new Size(212, 29);
-            refreshButton.TabIndex = 13;
-            refreshButton.Text = "Refresh Desktop";
-            refreshButton.UseVisualStyleBackColor = true;
             // 
             // validateButton
             // 
@@ -745,6 +885,7 @@
             validateButton.TabIndex = 5;
             validateButton.Text = "Validate Desktop";
             validateButton.UseVisualStyleBackColor = true;
+            validateButton.Click += validateButton_Click_1;
             // 
             // pathButton
             // 
@@ -752,7 +893,7 @@
             pathButton.Name = "pathButton";
             pathButton.Size = new Size(212, 29);
             pathButton.TabIndex = 6;
-            pathButton.Text = "Set Custom Icon Paths";
+            pathButton.Text = "Initialize icon paths";
             pathButton.UseVisualStyleBackColor = true;
             // 
             // label1
@@ -767,7 +908,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(17, 148);
+            label2.Location = new Point(17, 150);
             label2.Name = "label2";
             label2.Size = new Size(737, 20);
             label2.TabIndex = 8;
@@ -781,100 +922,57 @@
             tabControl1.Controls.Add(tabPageLabels);
             tabControl1.Controls.Add(tabPageArrows);
             tabControl1.Controls.Add(tabPageSettings);
-            tabControl1.Controls.Add(tabPage1);
+            tabControl1.Controls.Add(tabPageExperimental);
+            tabControl1.Controls.Add(tabPageHelp);
             tabControl1.Location = new Point(12, 12);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(778, 379);
+            tabControl1.Size = new Size(778, 329);
             tabControl1.TabIndex = 14;
+            tabControl1.SelectedIndexChanged += TabControl1_SelectedIndexChanged;
             // 
-            // tabPage1
+            // tabPageExperimental
             // 
-            tabPage1.BackColor = Color.WhiteSmoke;
-            tabPage1.Controls.Add(label14);
-            tabPage1.Controls.Add(button3);
-            tabPage1.Controls.Add(label13);
-            tabPage1.Controls.Add(checkBox2);
-            tabPage1.Controls.Add(button2);
-            tabPage1.Controls.Add(shortcutToPersonalButton);
-            tabPage1.Location = new Point(4, 29);
-            tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(770, 346);
-            tabPage1.TabIndex = 7;
-            tabPage1.Text = "Advanced";
+            tabPageExperimental.BackColor = Color.WhiteSmoke;
+            tabPageExperimental.Controls.Add(lightDarkCheck);
+            tabPageExperimental.Location = new Point(4, 29);
+            tabPageExperimental.Name = "tabPageExperimental";
+            tabPageExperimental.Padding = new Padding(3);
+            tabPageExperimental.Size = new Size(770, 296);
+            tabPageExperimental.TabIndex = 7;
+            tabPageExperimental.Text = "Experimental";
             // 
-            // label14
+            // lightDarkCheck
             // 
-            label14.AutoSize = true;
-            label14.Font = new Font("Segoe UI Semibold", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label14.Location = new Point(15, 20);
-            label14.Name = "label14";
-            label14.Size = new Size(514, 31);
-            label14.TabIndex = 22;
-            label14.Text = "Advanced Settings (be careful, here be dragons)";
+            lightDarkCheck.AutoSize = true;
+            lightDarkCheck.Location = new Point(18, 25);
+            lightDarkCheck.Name = "lightDarkCheck";
+            lightDarkCheck.Size = new Size(217, 24);
+            lightDarkCheck.TabIndex = 22;
+            lightDarkCheck.Text = "Enable light/dark mode sets";
+            lightDarkCheck.UseVisualStyleBackColor = true;
             // 
-            // button3
+            // tabPageHelp
             // 
-            button3.Enabled = false;
-            button3.Location = new Point(35, 94);
-            button3.Name = "button3";
-            button3.Size = new Size(201, 29);
-            button3.TabIndex = 21;
-            button3.Text = "Select Automation Config";
-            button3.UseVisualStyleBackColor = true;
+            tabPageHelp.BackColor = Color.WhiteSmoke;
+            tabPageHelp.Location = new Point(4, 29);
+            tabPageHelp.Name = "tabPageHelp";
+            tabPageHelp.Padding = new Padding(3);
+            tabPageHelp.Size = new Size(770, 296);
+            tabPageHelp.TabIndex = 8;
+            tabPageHelp.Text = "About/Help";
             // 
-            // label13
-            // 
-            label13.AutoSize = true;
-            label13.Enabled = false;
-            label13.Location = new Point(242, 99);
-            label13.Name = "label13";
-            label13.Size = new Size(86, 20);
-            label13.TabIndex = 20;
-            label13.Text = "No path set";
-            // 
-            // checkBox2
-            // 
-            checkBox2.AutoSize = true;
-            checkBox2.Location = new Point(15, 64);
-            checkBox2.Name = "checkBox2";
-            checkBox2.Size = new Size(310, 24);
-            checkBox2.TabIndex = 2;
-            checkBox2.Text = "Enable custom automation (experimental)";
-            checkBox2.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            button2.Location = new Point(574, 297);
-            button2.Name = "button2";
-            button2.Size = new Size(175, 29);
-            button2.TabIndex = 1;
-            button2.Text = "Open App Folder";
-            button2.UseVisualStyleBackColor = true;
-            // 
-            // shortcutToPersonalButton
-            // 
-            shortcutToPersonalButton.Location = new Point(15, 145);
-            shortcutToPersonalButton.Name = "shortcutToPersonalButton";
-            shortcutToPersonalButton.Size = new Size(289, 29);
-            shortcutToPersonalButton.TabIndex = 0;
-            shortcutToPersonalButton.Text = "Move all shortcuts to personal desktop";
-            shortcutToPersonalButton.UseVisualStyleBackColor = true;
-            // 
-            // Form1
+            // MainMenu
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ControlLight;
-            ClientSize = new Size(802, 403);
+            ClientSize = new Size(802, 353);
             Controls.Add(tabControl1);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
-            MaximumSize = new Size(820, 450);
-            MinimumSize = new Size(820, 450);
-            Name = "Form1";
+            Name = "MainMenu";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Desktop Icon Manager";
             tabPageSettings.ResumeLayout(false);
@@ -888,27 +986,32 @@
             tabPageLabels.ResumeLayout(false);
             tabPageLabels.PerformLayout();
             tabPageIcons.ResumeLayout(false);
-            tabPageIcons.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)arrowDisplay).EndInit();
+            ((System.ComponentModel.ISupportInitialize)wallpaperDisplay).EndInit();
             tabPageManage.ResumeLayout(false);
             tabPageManage.PerformLayout();
             tabControl1.ResumeLayout(false);
-            tabPage1.ResumeLayout(false);
-            tabPage1.PerformLayout();
+            tabPageExperimental.ResumeLayout(false);
+            tabPageExperimental.PerformLayout();
             ResumeLayout(false);
         }
 
         #endregion
 
         private TabPage tabPageSettings;
+        private Button button2;
+        private Button shortcutToPersonalButton;
+        private RadioButton radioButton3;
+        private RadioButton radioButton2;
+        private RadioButton radioButton1;
+        private Label label15;
         private CheckBox defaultWallpaperCheck;
         private Button defaultWallpaperButton;
         private Label wallpaperPathLabel;
-        private Label label12;
         private CheckBox explorerCheck;
         private CheckBox arrowCheck;
         private CheckBox wallpaperCheck;
         private TabPage tabPageArrows;
-        private Button arrowApplyButton;
         private Button resetColorButton;
         private TextBox lightBox;
         private TextBox satBox;
@@ -920,7 +1023,6 @@
         private TrackBar satSlide;
         private Label label5;
         private TrackBar hueSlide;
-        private Button restoreArrowButton;
         private Button arrowSaveButton;
         private Label label7;
         private PictureBox arrowShowBox;
@@ -929,7 +1031,6 @@
         private Label alphabetLabel;
         private Label label11;
         private Button labelButton;
-        private Label label10;
         private TextBox endCharTextBox;
         private TextBox startCharTextBox;
         private CheckBox charEndCheck;
@@ -946,26 +1047,31 @@
         private RadioButton cursiveLightRadio;
         private RadioButton cursiveBoldRadio;
         private TabPage tabPageIcons;
-        private Label label6;
         private Button button5;
         private TabPage tabPageManage;
         private Label label4;
         private Button backupButton;
         private Label label3;
         private Button explorerButton;
-        private Button refreshButton;
         private Button validateButton;
-        private Button pathButton;
         private Label label1;
-        private Label label2;
         private TabControl tabControl1;
-        private TabPage tabPage1;
-        private Button button2;
-        private Button shortcutToPersonalButton;
+        private Button button4;
         private Button button3;
-        private Label label13;
-        private CheckBox checkBox2;
-        private Label label14;
+        private Button pathButton;
+        private Label label2;
+        private ListBox listBox1;
+        private TabPage tabPageExperimental;
+        private Button refreshButton;
         private CheckBox lightDarkCheck;
+        private Button arrowApplyButton;
+        private Button restoreArrowButton;
+        private TabPage tabPageHelp;
+        private PictureBox wallpaperDisplay;
+        private RichTextBox richTextBox1;
+        private ListView listView1;
+        private ImageList imageList1;
+        private Button button1;
+        private PictureBox arrowDisplay;
     }
 }

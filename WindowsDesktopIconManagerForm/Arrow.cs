@@ -75,12 +75,12 @@ namespace WindowsDesktopIconManagerForm
             else return true;
         }
 
-        // Returns bool for if current-arrow exists and user wants to use it
+        // Returns bool for if arrow exists and user wants to use it
         public static bool UseIncluded()
         {
             if (CheckIncluded())
             {
-                string message = "A \"current-arrow.ico\" file has been detected in the current icon set. Would you like to skip the file picker and just apply it automatically?";
+                string message = "A \"arrow.ico\" file has been detected in the current icon set. Would you like to skip the file picker and just apply it automatically?";
                 string title = "Arrow Detected";
                 var resultWarning = System.Windows.Forms.MessageBox.Show(message, title, MessageBoxButtons.YesNo);
 
@@ -89,7 +89,7 @@ namespace WindowsDesktopIconManagerForm
             return false;
         }
 
-        // Checks if there is a "current-arrow" icon in the icon set
+        // Checks if there is a "arrow" icon in the icon set
         public static bool CheckIncluded()
         {
             string checkedPath = Utilities.GetCurrentArrowPath();
@@ -289,7 +289,7 @@ namespace WindowsDesktopIconManagerForm
                     catch (Exception e) {if (!BoolPickAnotherArrowFolder(e)) return null;} // Otherwise, prompt for retry
                 }
                 while (loopFolder);
-                path = Path.Combine(path, "current-arrow.ico");
+                path = Path.Combine(path, "arrow.ico");
             }
             return path;
         }
