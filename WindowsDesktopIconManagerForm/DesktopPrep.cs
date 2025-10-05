@@ -35,7 +35,6 @@ namespace WindowsDesktopIconManagerForm
                 }
             }
             Utilities.RefreshDesktop(); // refresh icons
-            System.Windows.Forms.MessageBox.Show("Icon paths should be set. If some shortcuts didn't work, try re-running this program in Admin mode.", "Desktop Icon Manager");
         }
 
         // Technically creates a replacement shortcut with a new icon path, but effectively works as "changing the icon"

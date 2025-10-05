@@ -37,8 +37,7 @@ namespace WindowsDesktopIconManagerForm
             {
                 satBox.Text = satSlide.Value.ToString();
                 Bitmap image = new Bitmap(arrowShowBox.BackgroundImage);
-                double sat = (double)satSlide.Value / 100;
-                arrowShowBox.BackgroundImage = Arrow.ColorShift(image, sat, "s");
+                arrowShowBox.BackgroundImage = Arrow.ColorShift(image, satSlide.Value, "s");
             }
             catch
             {
@@ -52,8 +51,7 @@ namespace WindowsDesktopIconManagerForm
             try
             {
                 Bitmap image = new Bitmap(arrowShowBox.BackgroundImage);
-                float bright = (float)lightSlide.Value / 100;
-                arrowShowBox.BackgroundImage = Arrow.ColorShift(image, bright, "l");
+                arrowShowBox.BackgroundImage = Arrow.ColorShift(image, lightSlide.Value, "l");
             }
             catch
             {
@@ -109,7 +107,7 @@ namespace WindowsDesktopIconManagerForm
                 return;
             }
             // Sets path based on combo box selection
-            string iconPath = Arrow.PickArrowType(selectedItem);
+            string iconPath = Arrow.GetArrowTemplatePath(selectedItem);
 
             // Bitmap from the path
             // If it fails (eg bitmap is null) it will just end
@@ -129,10 +127,8 @@ namespace WindowsDesktopIconManagerForm
             {
                 Bitmap image = new Bitmap(arrowShowBox.BackgroundImage);
                 arrowShowBox.BackgroundImage = Arrow.ColorShift(image, hueSlide.Value, "h");
-                double sat = (double)satSlide.Value / 100;
-                arrowShowBox.BackgroundImage = Arrow.ColorShift(image, sat, "s");
-                float bright = (float)lightSlide.Value / 100;
-                arrowShowBox.BackgroundImage = Arrow.ColorShift(image, bright, "l");
+                arrowShowBox.BackgroundImage = Arrow.ColorShift(image, satSlide.Value, "s");
+                arrowShowBox.BackgroundImage = Arrow.ColorShift(image, lightSlide.Value, "l");
             }
             catch
             {

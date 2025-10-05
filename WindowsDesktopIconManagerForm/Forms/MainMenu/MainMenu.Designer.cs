@@ -33,6 +33,7 @@ namespace WindowsDesktopIconManagerForm
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenu));
             tabPageSettings = new TabPage();
+            arrowFolderClear = new Button();
             button2 = new Button();
             shortcutToPersonalButton = new Button();
             radioButton3 = new RadioButton();
@@ -46,19 +47,22 @@ namespace WindowsDesktopIconManagerForm
             arrowCheck = new CheckBox();
             wallpaperCheck = new CheckBox();
             tabPageArrows = new TabPage();
+            restoreArrowButton = new Button();
             resetColorButton = new Button();
+            arrowSaveButton = new Button();
+            label8 = new Label();
+            label5 = new Label();
+            label7 = new Label();
+            arrowApplyButton = new Button();
+            ArrowApplyMainMenuButton = new Button();
             lightBox = new TextBox();
             satBox = new TextBox();
             hueBox = new TextBox();
             label9 = new Label();
             comboBox1 = new ComboBox();
             lightSlide = new TrackBar();
-            label8 = new Label();
             satSlide = new TrackBar();
-            label5 = new Label();
             hueSlide = new TrackBar();
-            arrowSaveButton = new Button();
-            label7 = new Label();
             arrowShowBox = new PictureBox();
             tabPageLabels = new TabPage();
             labelRestoreButton = new Button();
@@ -73,7 +77,7 @@ namespace WindowsDesktopIconManagerForm
             serifLightRadio = new RadioButton();
             italicBoldRadio = new RadioButton();
             italicLightRadio = new RadioButton();
-            serifBoldVideo = new RadioButton();
+            serifBoldRadio = new RadioButton();
             circleTextRadio = new RadioButton();
             medievalTextRadio = new RadioButton();
             thinTextRadio = new RadioButton();
@@ -85,15 +89,13 @@ namespace WindowsDesktopIconManagerForm
             button1 = new Button();
             listView1 = new ListView();
             imageList1 = new ImageList(components);
-            richTextBox1 = new RichTextBox();
+            detailsBox = new RichTextBox();
             wallpaperDisplay = new PictureBox();
-            listBox1 = new ListBox();
+            iconSetListBox = new ListBox();
             button4 = new Button();
             button3 = new Button();
             button5 = new Button();
             tabPageManage = new TabPage();
-            arrowApplyButton = new Button();
-            restoreArrowButton = new Button();
             refreshButton = new Button();
             label4 = new Label();
             backupButton = new Button();
@@ -125,6 +127,7 @@ namespace WindowsDesktopIconManagerForm
             // tabPageSettings
             // 
             tabPageSettings.BackColor = Color.WhiteSmoke;
+            tabPageSettings.Controls.Add(arrowFolderClear);
             tabPageSettings.Controls.Add(button2);
             tabPageSettings.Controls.Add(shortcutToPersonalButton);
             tabPageSettings.Controls.Add(radioButton3);
@@ -143,7 +146,15 @@ namespace WindowsDesktopIconManagerForm
             tabPageSettings.Size = new Size(770, 296);
             tabPageSettings.TabIndex = 6;
             tabPageSettings.Text = "Settings";
-            tabPageSettings.Click += tabPageSettings_Click;
+            // 
+            // arrowFolderClear
+            // 
+            arrowFolderClear.Location = new Point(13, 249);
+            arrowFolderClear.Name = "arrowFolderClear";
+            arrowFolderClear.Size = new Size(173, 29);
+            arrowFolderClear.TabIndex = 20;
+            arrowFolderClear.Text = "Clear previous arrows";
+            arrowFolderClear.UseVisualStyleBackColor = true;
             // 
             // button2
             // 
@@ -191,7 +202,7 @@ namespace WindowsDesktopIconManagerForm
             radioButton1.Location = new Point(255, 117);
             radioButton1.Name = "radioButton1";
             radioButton1.Size = new Size(137, 24);
-            radioButton1.TabIndex = 23;
+            radioButton1.TabIndex = 3;
             radioButton1.TabStop = true;
             radioButton1.Text = "Use the first one";
             radioButton1.UseVisualStyleBackColor = true;
@@ -211,7 +222,7 @@ namespace WindowsDesktopIconManagerForm
             defaultWallpaperCheck.Location = new Point(37, 53);
             defaultWallpaperCheck.Name = "defaultWallpaperCheck";
             defaultWallpaperCheck.Size = new Size(438, 24);
-            defaultWallpaperCheck.TabIndex = 20;
+            defaultWallpaperCheck.TabIndex = 1;
             defaultWallpaperCheck.Text = "Apply default wallpaper when set does not contain wallpaper";
             defaultWallpaperCheck.UseVisualStyleBackColor = true;
             defaultWallpaperCheck.CheckedChanged += defaultWallpaperCheck_CheckedChanged;
@@ -219,10 +230,10 @@ namespace WindowsDesktopIconManagerForm
             // defaultWallpaperButton
             // 
             defaultWallpaperButton.Enabled = false;
-            defaultWallpaperButton.Location = new Point(37, 80);
+            defaultWallpaperButton.Location = new Point(37, 83);
             defaultWallpaperButton.Name = "defaultWallpaperButton";
             defaultWallpaperButton.Size = new Size(201, 29);
-            defaultWallpaperButton.TabIndex = 19;
+            defaultWallpaperButton.TabIndex = 2;
             defaultWallpaperButton.Text = "Select Default Wallpaper...";
             defaultWallpaperButton.UseVisualStyleBackColor = true;
             // 
@@ -230,7 +241,7 @@ namespace WindowsDesktopIconManagerForm
             // 
             wallpaperPathLabel.AutoSize = true;
             wallpaperPathLabel.Enabled = false;
-            wallpaperPathLabel.Location = new Point(245, 84);
+            wallpaperPathLabel.Location = new Point(245, 87);
             wallpaperPathLabel.Name = "wallpaperPathLabel";
             wallpaperPathLabel.Size = new Size(86, 20);
             wallpaperPathLabel.TabIndex = 18;
@@ -242,7 +253,7 @@ namespace WindowsDesktopIconManagerForm
             explorerCheck.Location = new Point(37, 174);
             explorerCheck.Name = "explorerCheck";
             explorerCheck.Size = new Size(731, 24);
-            explorerCheck.TabIndex = 2;
+            explorerCheck.TabIndex = 5;
             explorerCheck.Text = "Restart Windows Explorer when applying icon set (may be disruptive; required for arrow changes to show)";
             explorerCheck.UseVisualStyleBackColor = true;
             explorerCheck.CheckedChanged += explorerCheck_CheckedChanged;
@@ -253,7 +264,7 @@ namespace WindowsDesktopIconManagerForm
             arrowCheck.Location = new Point(16, 144);
             arrowCheck.Name = "arrowCheck";
             arrowCheck.Size = new Size(604, 24);
-            arrowCheck.TabIndex = 1;
+            arrowCheck.TabIndex = 4;
             arrowCheck.Text = "Automatically apply shortcut arrows included in icon sets (requires Admin permissions)";
             arrowCheck.UseVisualStyleBackColor = true;
             arrowCheck.CheckedChanged += arrowCheck_CheckedChanged;
@@ -274,19 +285,22 @@ namespace WindowsDesktopIconManagerForm
             // tabPageArrows
             // 
             tabPageArrows.BackColor = Color.WhiteSmoke;
+            tabPageArrows.Controls.Add(restoreArrowButton);
             tabPageArrows.Controls.Add(resetColorButton);
+            tabPageArrows.Controls.Add(arrowSaveButton);
+            tabPageArrows.Controls.Add(label8);
+            tabPageArrows.Controls.Add(label5);
+            tabPageArrows.Controls.Add(label7);
+            tabPageArrows.Controls.Add(arrowApplyButton);
+            tabPageArrows.Controls.Add(ArrowApplyMainMenuButton);
             tabPageArrows.Controls.Add(lightBox);
             tabPageArrows.Controls.Add(satBox);
             tabPageArrows.Controls.Add(hueBox);
             tabPageArrows.Controls.Add(label9);
             tabPageArrows.Controls.Add(comboBox1);
             tabPageArrows.Controls.Add(lightSlide);
-            tabPageArrows.Controls.Add(label8);
             tabPageArrows.Controls.Add(satSlide);
-            tabPageArrows.Controls.Add(label5);
             tabPageArrows.Controls.Add(hueSlide);
-            tabPageArrows.Controls.Add(arrowSaveButton);
-            tabPageArrows.Controls.Add(label7);
             tabPageArrows.Controls.Add(arrowShowBox);
             tabPageArrows.Location = new Point(4, 29);
             tabPageArrows.Name = "tabPageArrows";
@@ -295,9 +309,19 @@ namespace WindowsDesktopIconManagerForm
             tabPageArrows.TabIndex = 5;
             tabPageArrows.Text = "Shortcut Arrows";
             // 
+            // restoreArrowButton
+            // 
+            restoreArrowButton.Location = new Point(568, 160);
+            restoreArrowButton.Name = "restoreArrowButton";
+            restoreArrowButton.Size = new Size(175, 30);
+            restoreArrowButton.TabIndex = 11;
+            restoreArrowButton.Text = "Restore Default Arrows";
+            restoreArrowButton.UseVisualStyleBackColor = true;
+            restoreArrowButton.Click += restoreArrowButton_Click;
+            // 
             // resetColorButton
             // 
-            resetColorButton.Location = new Point(624, 53);
+            resetColorButton.Location = new Point(258, 242);
             resetColorButton.Name = "resetColorButton";
             resetColorButton.Size = new Size(126, 29);
             resetColorButton.TabIndex = 7;
@@ -305,9 +329,68 @@ namespace WindowsDesktopIconManagerForm
             resetColorButton.UseVisualStyleBackColor = true;
             resetColorButton.Click += resetColorButton_Click;
             // 
+            // arrowSaveButton
+            // 
+            arrowSaveButton.Enabled = false;
+            arrowSaveButton.Location = new Point(390, 242);
+            arrowSaveButton.Name = "arrowSaveButton";
+            arrowSaveButton.Size = new Size(126, 29);
+            arrowSaveButton.TabIndex = 8;
+            arrowSaveButton.Text = "Save Arrow";
+            arrowSaveButton.UseVisualStyleBackColor = true;
+            arrowSaveButton.Click += arrowSaveButton_Click;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(230, 169);
+            label8.Name = "label8";
+            label8.Size = new Size(70, 20);
+            label8.TabIndex = 38;
+            label8.Text = "Lightness";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(230, 100);
+            label5.Name = "label5";
+            label5.Size = new Size(77, 20);
+            label5.TabIndex = 36;
+            label5.Text = "Saturation";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(230, 34);
+            label7.Name = "label7";
+            label7.Size = new Size(36, 20);
+            label7.TabIndex = 31;
+            label7.Text = "Hue";
+            // 
+            // arrowApplyButton
+            // 
+            arrowApplyButton.Location = new Point(568, 125);
+            arrowApplyButton.Name = "arrowApplyButton";
+            arrowApplyButton.Size = new Size(175, 30);
+            arrowApplyButton.TabIndex = 10;
+            arrowApplyButton.Text = "Apply Other Arrow";
+            arrowApplyButton.UseVisualStyleBackColor = true;
+            arrowApplyButton.Click += arrowApplyButton_Click;
+            // 
+            // ArrowApplyMainMenuButton
+            // 
+            ArrowApplyMainMenuButton.Enabled = false;
+            ArrowApplyMainMenuButton.Location = new Point(568, 90);
+            ArrowApplyMainMenuButton.Name = "ArrowApplyMainMenuButton";
+            ArrowApplyMainMenuButton.Size = new Size(175, 30);
+            ArrowApplyMainMenuButton.TabIndex = 9;
+            ArrowApplyMainMenuButton.Text = "Apply This Arrow";
+            ArrowApplyMainMenuButton.UseVisualStyleBackColor = true;
+            ArrowApplyMainMenuButton.Click += ArrowApplyMainMenuButton_Click;
+            // 
             // lightBox
             // 
-            lightBox.Location = new Point(541, 228);
+            lightBox.Location = new Point(480, 190);
             lightBox.Name = "lightBox";
             lightBox.Size = new Size(64, 27);
             lightBox.TabIndex = 6;
@@ -315,7 +398,7 @@ namespace WindowsDesktopIconManagerForm
             // 
             // satBox
             // 
-            satBox.Location = new Point(541, 140);
+            satBox.Location = new Point(480, 121);
             satBox.Name = "satBox";
             satBox.Size = new Size(64, 27);
             satBox.TabIndex = 4;
@@ -323,7 +406,7 @@ namespace WindowsDesktopIconManagerForm
             // 
             // hueBox
             // 
-            hueBox.Location = new Point(541, 54);
+            hueBox.Location = new Point(480, 53);
             hueBox.Name = "hueBox";
             hueBox.Size = new Size(64, 27);
             hueBox.TabIndex = 2;
@@ -332,7 +415,7 @@ namespace WindowsDesktopIconManagerForm
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(29, 216);
+            label9.Location = new Point(27, 219);
             label9.Name = "label9";
             label9.Size = new Size(148, 20);
             label9.TabIndex = 41;
@@ -343,97 +426,59 @@ namespace WindowsDesktopIconManagerForm
             comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBox1.FormattingEnabled = true;
             comboBox1.Items.AddRange(new object[] { "Blank/No Arrow", "Curved (Transparent)", "Curved (Black)", "Curved (White)", "Straight (Transparent)", "Straight (Black)", "Straight (White)" });
-            comboBox1.Location = new Point(27, 239);
+            comboBox1.Location = new Point(27, 242);
             comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(190, 28);
+            comboBox1.Size = new Size(152, 28);
             comboBox1.TabIndex = 0;
             comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 
             // lightSlide
             // 
             lightSlide.LargeChange = 10;
-            lightSlide.Location = new Point(248, 219);
+            lightSlide.Location = new Point(224, 181);
             lightSlide.Maximum = 98;
             lightSlide.Minimum = 2;
             lightSlide.Name = "lightSlide";
-            lightSlide.Size = new Size(276, 56);
+            lightSlide.Size = new Size(240, 56);
             lightSlide.TabIndex = 5;
             lightSlide.TickFrequency = 0;
             lightSlide.TickStyle = TickStyle.Both;
             lightSlide.Value = 50;
             lightSlide.ValueChanged += lightSlide_ValueChanged;
             // 
-            // label8
-            // 
-            label8.AutoSize = true;
-            label8.Location = new Point(248, 196);
-            label8.Name = "label8";
-            label8.Size = new Size(70, 20);
-            label8.TabIndex = 38;
-            label8.Text = "Lightness";
-            // 
             // satSlide
             // 
             satSlide.LargeChange = 10;
-            satSlide.Location = new Point(248, 132);
+            satSlide.Location = new Point(224, 111);
             satSlide.Maximum = 100;
             satSlide.Minimum = 2;
             satSlide.Name = "satSlide";
-            satSlide.Size = new Size(276, 56);
+            satSlide.Size = new Size(240, 56);
             satSlide.TabIndex = 3;
             satSlide.TickFrequency = 0;
             satSlide.TickStyle = TickStyle.Both;
             satSlide.Value = 100;
             satSlide.ValueChanged += satSlide_ValueChanged;
             // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new Point(248, 110);
-            label5.Name = "label5";
-            label5.Size = new Size(77, 20);
-            label5.TabIndex = 36;
-            label5.Text = "Saturation";
-            // 
             // hueSlide
             // 
             hueSlide.BackColor = Color.WhiteSmoke;
             hueSlide.LargeChange = 10;
-            hueSlide.Location = new Point(248, 45);
+            hueSlide.Location = new Point(224, 42);
             hueSlide.Maximum = 360;
             hueSlide.Name = "hueSlide";
-            hueSlide.Size = new Size(276, 56);
+            hueSlide.Size = new Size(240, 56);
             hueSlide.TabIndex = 1;
             hueSlide.TickFrequency = 0;
             hueSlide.TickStyle = TickStyle.Both;
             hueSlide.ValueChanged += hueSlide_ValueChanged;
-            // 
-            // arrowSaveButton
-            // 
-            arrowSaveButton.Enabled = false;
-            arrowSaveButton.Location = new Point(624, 88);
-            arrowSaveButton.Name = "arrowSaveButton";
-            arrowSaveButton.Size = new Size(126, 29);
-            arrowSaveButton.TabIndex = 8;
-            arrowSaveButton.Text = "Save Arrow";
-            arrowSaveButton.UseVisualStyleBackColor = true;
-            arrowSaveButton.Click += arrowSaveButton_Click;
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Location = new Point(248, 26);
-            label7.Name = "label7";
-            label7.Size = new Size(36, 20);
-            label7.TabIndex = 31;
-            label7.Text = "Hue";
             // 
             // arrowShowBox
             // 
             arrowShowBox.BackColor = Color.LightGray;
             arrowShowBox.BackgroundImageLayout = ImageLayout.Stretch;
             arrowShowBox.BorderStyle = BorderStyle.Fixed3D;
-            arrowShowBox.Location = new Point(29, 35);
+            arrowShowBox.Location = new Point(29, 43);
             arrowShowBox.Name = "arrowShowBox";
             arrowShowBox.Size = new Size(150, 150);
             arrowShowBox.TabIndex = 30;
@@ -454,7 +499,7 @@ namespace WindowsDesktopIconManagerForm
             tabPageLabels.Controls.Add(serifLightRadio);
             tabPageLabels.Controls.Add(italicBoldRadio);
             tabPageLabels.Controls.Add(italicLightRadio);
-            tabPageLabels.Controls.Add(serifBoldVideo);
+            tabPageLabels.Controls.Add(serifBoldRadio);
             tabPageLabels.Controls.Add(circleTextRadio);
             tabPageLabels.Controls.Add(medievalTextRadio);
             tabPageLabels.Controls.Add(thinTextRadio);
@@ -470,7 +515,7 @@ namespace WindowsDesktopIconManagerForm
             // 
             // labelRestoreButton
             // 
-            labelRestoreButton.Location = new Point(421, 178);
+            labelRestoreButton.Location = new Point(590, 251);
             labelRestoreButton.Name = "labelRestoreButton";
             labelRestoreButton.Size = new Size(163, 29);
             labelRestoreButton.TabIndex = 20;
@@ -490,7 +535,7 @@ namespace WindowsDesktopIconManagerForm
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(15, 210);
+            label11.Location = new Point(13, 177);
             label11.Name = "label11";
             label11.Size = new Size(736, 20);
             label11.TabIndex = 18;
@@ -498,10 +543,10 @@ namespace WindowsDesktopIconManagerForm
             // 
             // labelButton
             // 
-            labelButton.Location = new Point(590, 178);
+            labelButton.Location = new Point(590, 216);
             labelButton.Name = "labelButton";
             labelButton.Size = new Size(163, 29);
-            labelButton.TabIndex = 15;
+            labelButton.TabIndex = 19;
             labelButton.Text = "Convert Labels";
             labelButton.UseVisualStyleBackColor = true;
             labelButton.Click += labelButton_Click;
@@ -513,7 +558,7 @@ namespace WindowsDesktopIconManagerForm
             endCharTextBox.Name = "endCharTextBox";
             endCharTextBox.PlaceholderText = "Text goes here...";
             endCharTextBox.Size = new Size(130, 27);
-            endCharTextBox.TabIndex = 14;
+            endCharTextBox.TabIndex = 18;
             // 
             // startCharTextBox
             // 
@@ -522,7 +567,7 @@ namespace WindowsDesktopIconManagerForm
             startCharTextBox.Name = "startCharTextBox";
             startCharTextBox.PlaceholderText = "Text goes here...";
             startCharTextBox.Size = new Size(130, 27);
-            startCharTextBox.TabIndex = 12;
+            startCharTextBox.TabIndex = 16;
             // 
             // charEndCheck
             // 
@@ -530,7 +575,7 @@ namespace WindowsDesktopIconManagerForm
             charEndCheck.Location = new Point(379, 96);
             charEndCheck.Name = "charEndCheck";
             charEndCheck.Size = new Size(205, 24);
-            charEndCheck.TabIndex = 13;
+            charEndCheck.TabIndex = 17;
             charEndCheck.Text = "Append characters to end:";
             charEndCheck.UseVisualStyleBackColor = true;
             charEndCheck.CheckedChanged += charEndCheck_CheckedChanged;
@@ -541,7 +586,7 @@ namespace WindowsDesktopIconManagerForm
             charStartCheck.Location = new Point(17, 96);
             charStartCheck.Name = "charStartCheck";
             charStartCheck.Size = new Size(209, 24);
-            charStartCheck.TabIndex = 11;
+            charStartCheck.TabIndex = 15;
             charStartCheck.Text = "Append characters to start:";
             charStartCheck.UseVisualStyleBackColor = true;
             charStartCheck.CheckedChanged += charStartCheck_CheckedChanged;
@@ -555,7 +600,6 @@ namespace WindowsDesktopIconManagerForm
             defaultFontRadio.TabIndex = 10;
             defaultFontRadio.Text = "Default";
             defaultFontRadio.UseVisualStyleBackColor = true;
-            defaultFontRadio.CheckedChanged += defaultFontRadio_CheckedChanged;
             // 
             // serifLightRadio
             // 
@@ -566,7 +610,6 @@ namespace WindowsDesktopIconManagerForm
             serifLightRadio.TabIndex = 4;
             serifLightRadio.Text = "Serif";
             serifLightRadio.UseVisualStyleBackColor = true;
-            serifLightRadio.CheckedChanged += serifLightRadio_CheckedChanged;
             // 
             // italicBoldRadio
             // 
@@ -577,7 +620,6 @@ namespace WindowsDesktopIconManagerForm
             italicBoldRadio.TabIndex = 3;
             italicBoldRadio.Text = "Italics (bold)";
             italicBoldRadio.UseVisualStyleBackColor = true;
-            italicBoldRadio.CheckedChanged += italicBoldRadio_CheckedChanged;
             // 
             // italicLightRadio
             // 
@@ -588,18 +630,16 @@ namespace WindowsDesktopIconManagerForm
             italicLightRadio.TabIndex = 2;
             italicLightRadio.Text = "Italics";
             italicLightRadio.UseVisualStyleBackColor = true;
-            italicLightRadio.CheckedChanged += italicLightRadio_CheckedChanged;
             // 
-            // serifBoldVideo
+            // serifBoldRadio
             // 
-            serifBoldVideo.AutoSize = true;
-            serifBoldVideo.Location = new Point(265, 57);
-            serifBoldVideo.Name = "serifBoldVideo";
-            serifBoldVideo.Size = new Size(105, 24);
-            serifBoldVideo.TabIndex = 5;
-            serifBoldVideo.Text = "Serif (bold)";
-            serifBoldVideo.UseVisualStyleBackColor = true;
-            serifBoldVideo.CheckedChanged += serifBoldVideo_CheckedChanged;
+            serifBoldRadio.AutoSize = true;
+            serifBoldRadio.Location = new Point(265, 57);
+            serifBoldRadio.Name = "serifBoldRadio";
+            serifBoldRadio.Size = new Size(105, 24);
+            serifBoldRadio.TabIndex = 5;
+            serifBoldRadio.Text = "Serif (bold)";
+            serifBoldRadio.UseVisualStyleBackColor = true;
             // 
             // circleTextRadio
             // 
@@ -610,7 +650,6 @@ namespace WindowsDesktopIconManagerForm
             circleTextRadio.TabIndex = 9;
             circleTextRadio.Text = "Circles";
             circleTextRadio.UseVisualStyleBackColor = true;
-            circleTextRadio.CheckedChanged += circleTextRadio_CheckedChanged;
             // 
             // medievalTextRadio
             // 
@@ -621,7 +660,6 @@ namespace WindowsDesktopIconManagerForm
             medievalTextRadio.TabIndex = 8;
             medievalTextRadio.Text = "Medieval";
             medievalTextRadio.UseVisualStyleBackColor = true;
-            medievalTextRadio.CheckedChanged += medievalTextRadio_CheckedChanged;
             // 
             // thinTextRadio
             // 
@@ -632,7 +670,6 @@ namespace WindowsDesktopIconManagerForm
             thinTextRadio.TabIndex = 7;
             thinTextRadio.Text = "Thin";
             thinTextRadio.UseVisualStyleBackColor = true;
-            thinTextRadio.CheckedChanged += thinTextRadio_CheckedChanged;
             // 
             // linedTextRadio
             // 
@@ -643,7 +680,6 @@ namespace WindowsDesktopIconManagerForm
             linedTextRadio.TabIndex = 6;
             linedTextRadio.Text = "Double lined";
             linedTextRadio.UseVisualStyleBackColor = true;
-            linedTextRadio.CheckedChanged += linedTextRadio_CheckedChanged;
             // 
             // cursiveLightRadio
             // 
@@ -656,7 +692,6 @@ namespace WindowsDesktopIconManagerForm
             cursiveLightRadio.TabStop = true;
             cursiveLightRadio.Text = "Cursive";
             cursiveLightRadio.UseVisualStyleBackColor = true;
-            cursiveLightRadio.CheckedChanged += cursiveLightRadio_CheckedChanged;
             // 
             // cursiveBoldRadio
             // 
@@ -667,7 +702,6 @@ namespace WindowsDesktopIconManagerForm
             cursiveBoldRadio.TabIndex = 1;
             cursiveBoldRadio.Text = "Cursive (bold)";
             cursiveBoldRadio.UseVisualStyleBackColor = true;
-            cursiveBoldRadio.CheckedChanged += cursiveBoldRadio_CheckedChanged;
             // 
             // tabPageIcons
             // 
@@ -675,9 +709,9 @@ namespace WindowsDesktopIconManagerForm
             tabPageIcons.Controls.Add(arrowDisplay);
             tabPageIcons.Controls.Add(button1);
             tabPageIcons.Controls.Add(listView1);
-            tabPageIcons.Controls.Add(richTextBox1);
+            tabPageIcons.Controls.Add(detailsBox);
             tabPageIcons.Controls.Add(wallpaperDisplay);
-            tabPageIcons.Controls.Add(listBox1);
+            tabPageIcons.Controls.Add(iconSetListBox);
             tabPageIcons.Controls.Add(button4);
             tabPageIcons.Controls.Add(button3);
             tabPageIcons.Controls.Add(button5);
@@ -692,19 +726,20 @@ namespace WindowsDesktopIconManagerForm
             // 
             arrowDisplay.BackColor = Color.Gainsboro;
             arrowDisplay.BackgroundImageLayout = ImageLayout.Stretch;
-            arrowDisplay.Location = new Point(399, 69);
+            arrowDisplay.Location = new Point(411, 69);
             arrowDisplay.Name = "arrowDisplay";
             arrowDisplay.Size = new Size(75, 75);
             arrowDisplay.TabIndex = 33;
             arrowDisplay.TabStop = false;
-            arrowDisplay.Click += arrowDisplay_Click;
+            arrowDisplay.MouseEnter += ArrowDisplay_MouseEnter;
+            arrowDisplay.MouseLeave += ArrowDisplay_MouseLeave;
             // 
             // button1
             // 
             button1.Location = new Point(16, 249);
             button1.Name = "button1";
             button1.Size = new Size(191, 29);
-            button1.TabIndex = 32;
+            button1.TabIndex = 2;
             button1.Text = "Import icon set";
             button1.UseVisualStyleBackColor = true;
             // 
@@ -716,10 +751,11 @@ namespace WindowsDesktopIconManagerForm
             listView1.HideSelection = true;
             listView1.LargeImageList = imageList1;
             listView1.Location = new Point(213, 19);
+            listView1.MultiSelect = false;
             listView1.Name = "listView1";
-            listView1.Size = new Size(180, 259);
+            listView1.Size = new Size(192, 259);
             listView1.SmallImageList = imageList1;
-            listView1.TabIndex = 31;
+            listView1.TabIndex = 3;
             listView1.TileSize = new Size(80, 80);
             listView1.UseCompatibleStateImageBehavior = false;
             listView1.View = View.Tile;
@@ -730,46 +766,45 @@ namespace WindowsDesktopIconManagerForm
             imageList1.ImageSize = new Size(75, 75);
             imageList1.TransparentColor = Color.Transparent;
             // 
-            // richTextBox1
+            // detailsBox
             // 
-            richTextBox1.BackColor = SystemColors.Info;
-            richTextBox1.BorderStyle = BorderStyle.FixedSingle;
-            richTextBox1.Location = new Point(399, 151);
-            richTextBox1.Name = "richTextBox1";
-            richTextBox1.ReadOnly = true;
-            richTextBox1.ScrollBars = RichTextBoxScrollBars.Vertical;
-            richTextBox1.Size = new Size(212, 127);
-            richTextBox1.TabIndex = 29;
-            richTextBox1.Text = "If the icon set has details, they'll show up here.";
-            richTextBox1.TextChanged += richTextBox1_TextChanged;
+            detailsBox.BackColor = SystemColors.Info;
+            detailsBox.BorderStyle = BorderStyle.FixedSingle;
+            detailsBox.Location = new Point(411, 151);
+            detailsBox.Name = "detailsBox";
+            detailsBox.ReadOnly = true;
+            detailsBox.ScrollBars = RichTextBoxScrollBars.Vertical;
+            detailsBox.Size = new Size(212, 127);
+            detailsBox.TabIndex = 4;
+            detailsBox.Text = "If the icon set has details, they'll show up here.\n\nTip: Can't see the arrow clearly in the preview? Try moving your mouse over it!";
             // 
             // wallpaperDisplay
             // 
             wallpaperDisplay.BackColor = Color.Gainsboro;
             wallpaperDisplay.BackgroundImageLayout = ImageLayout.Stretch;
             wallpaperDisplay.BorderStyle = BorderStyle.FixedSingle;
-            wallpaperDisplay.Location = new Point(399, 19);
+            wallpaperDisplay.Location = new Point(411, 19);
             wallpaperDisplay.Name = "wallpaperDisplay";
             wallpaperDisplay.Size = new Size(212, 125);
             wallpaperDisplay.TabIndex = 28;
             wallpaperDisplay.TabStop = false;
             // 
-            // listBox1
+            // iconSetListBox
             // 
-            listBox1.BackColor = SystemColors.Window;
-            listBox1.FormattingEnabled = true;
-            listBox1.Location = new Point(16, 19);
-            listBox1.Name = "listBox1";
-            listBox1.Size = new Size(191, 184);
-            listBox1.TabIndex = 25;
-            listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged;
+            iconSetListBox.BackColor = SystemColors.Window;
+            iconSetListBox.FormattingEnabled = true;
+            iconSetListBox.Location = new Point(16, 19);
+            iconSetListBox.Name = "iconSetListBox";
+            iconSetListBox.Size = new Size(191, 184);
+            iconSetListBox.TabIndex = 0;
+            iconSetListBox.SelectedIndexChanged += iconSetListBox_SelectedIndexChanged;
             // 
             // button4
             // 
-            button4.Location = new Point(619, 54);
+            button4.Location = new Point(631, 54);
             button4.Name = "button4";
-            button4.Size = new Size(140, 29);
-            button4.TabIndex = 22;
+            button4.Size = new Size(128, 29);
+            button4.TabIndex = 6;
             button4.Text = "Edit icon set";
             button4.UseVisualStyleBackColor = true;
             // 
@@ -778,24 +813,22 @@ namespace WindowsDesktopIconManagerForm
             button3.Location = new Point(16, 214);
             button3.Name = "button3";
             button3.Size = new Size(191, 29);
-            button3.TabIndex = 21;
+            button3.TabIndex = 1;
             button3.Text = "Create new icon set";
             button3.UseVisualStyleBackColor = true;
             // 
             // button5
             // 
-            button5.Location = new Point(619, 19);
+            button5.Location = new Point(631, 19);
             button5.Name = "button5";
-            button5.Size = new Size(140, 29);
-            button5.TabIndex = 11;
+            button5.Size = new Size(128, 29);
+            button5.TabIndex = 5;
             button5.Text = "Apply icon set";
             button5.UseVisualStyleBackColor = true;
             // 
             // tabPageManage
             // 
             tabPageManage.BackColor = Color.WhiteSmoke;
-            tabPageManage.Controls.Add(arrowApplyButton);
-            tabPageManage.Controls.Add(restoreArrowButton);
             tabPageManage.Controls.Add(refreshButton);
             tabPageManage.Controls.Add(label4);
             tabPageManage.Controls.Add(backupButton);
@@ -812,33 +845,16 @@ namespace WindowsDesktopIconManagerForm
             tabPageManage.TabIndex = 1;
             tabPageManage.Text = "Desktop Management";
             // 
-            // arrowApplyButton
-            // 
-            arrowApplyButton.Location = new Point(530, 252);
-            arrowApplyButton.Name = "arrowApplyButton";
-            arrowApplyButton.Size = new Size(229, 29);
-            arrowApplyButton.TabIndex = 22;
-            arrowApplyButton.Text = "Apply arrows from current set";
-            arrowApplyButton.UseVisualStyleBackColor = true;
-            // 
-            // restoreArrowButton
-            // 
-            restoreArrowButton.Location = new Point(295, 252);
-            restoreArrowButton.Name = "restoreArrowButton";
-            restoreArrowButton.Size = new Size(229, 29);
-            restoreArrowButton.TabIndex = 21;
-            restoreArrowButton.Text = "Restore default arrows";
-            restoreArrowButton.UseVisualStyleBackColor = true;
-            // 
             // refreshButton
             // 
             refreshButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            refreshButton.Location = new Point(542, 19);
+            refreshButton.Location = new Point(406, 247);
             refreshButton.Name = "refreshButton";
-            refreshButton.Size = new Size(212, 29);
+            refreshButton.Size = new Size(171, 29);
             refreshButton.TabIndex = 18;
             refreshButton.Text = "Refresh Desktop";
             refreshButton.UseVisualStyleBackColor = true;
+            refreshButton.Click += refreshButton_Click;
             // 
             // label4
             // 
@@ -858,6 +874,7 @@ namespace WindowsDesktopIconManagerForm
             backupButton.TabIndex = 15;
             backupButton.Text = "Back Up Shortcuts";
             backupButton.UseVisualStyleBackColor = true;
+            backupButton.Click += backupButton_Click;
             // 
             // label3
             // 
@@ -870,12 +887,13 @@ namespace WindowsDesktopIconManagerForm
             // 
             // explorerButton
             // 
-            explorerButton.Location = new Point(542, 54);
+            explorerButton.Location = new Point(583, 247);
             explorerButton.Name = "explorerButton";
-            explorerButton.Size = new Size(212, 29);
+            explorerButton.Size = new Size(171, 29);
             explorerButton.TabIndex = 14;
             explorerButton.Text = "Restart Explorer";
             explorerButton.UseVisualStyleBackColor = true;
+            explorerButton.Click += explorerButton_Click;
             // 
             // validateButton
             // 
@@ -885,7 +903,7 @@ namespace WindowsDesktopIconManagerForm
             validateButton.TabIndex = 5;
             validateButton.Text = "Validate Desktop";
             validateButton.UseVisualStyleBackColor = true;
-            validateButton.Click += validateButton_Click_1;
+            validateButton.Click += validateButton_Click;
             // 
             // pathButton
             // 
@@ -893,8 +911,9 @@ namespace WindowsDesktopIconManagerForm
             pathButton.Name = "pathButton";
             pathButton.Size = new Size(212, 29);
             pathButton.TabIndex = 6;
-            pathButton.Text = "Initialize icon paths";
+            pathButton.Text = "Initialize Icon Paths";
             pathButton.UseVisualStyleBackColor = true;
+            pathButton.Click += pathButton_Click;
             // 
             // label1
             // 
@@ -1039,7 +1058,7 @@ namespace WindowsDesktopIconManagerForm
         private RadioButton serifLightRadio;
         private RadioButton italicBoldRadio;
         private RadioButton italicLightRadio;
-        private RadioButton serifBoldVideo;
+        private RadioButton serifBoldRadio;
         private RadioButton circleTextRadio;
         private RadioButton medievalTextRadio;
         private RadioButton thinTextRadio;
@@ -1052,7 +1071,6 @@ namespace WindowsDesktopIconManagerForm
         private Label label4;
         private Button backupButton;
         private Label label3;
-        private Button explorerButton;
         private Button validateButton;
         private Label label1;
         private TabControl tabControl1;
@@ -1060,18 +1078,21 @@ namespace WindowsDesktopIconManagerForm
         private Button button3;
         private Button pathButton;
         private Label label2;
-        private ListBox listBox1;
+        private ListBox iconSetListBox;
         private TabPage tabPageExperimental;
         private Button refreshButton;
         private CheckBox lightDarkCheck;
-        private Button arrowApplyButton;
-        private Button restoreArrowButton;
         private TabPage tabPageHelp;
         private PictureBox wallpaperDisplay;
-        private RichTextBox richTextBox1;
+        private RichTextBox detailsBox;
         private ListView listView1;
         private ImageList imageList1;
         private Button button1;
         private PictureBox arrowDisplay;
+        private Button ArrowApplyMainMenuButton;
+        private Button arrowFolderClear;
+        private Button explorerButton;
+        private Button arrowApplyButton;
+        private Button restoreArrowButton;
     }
 }

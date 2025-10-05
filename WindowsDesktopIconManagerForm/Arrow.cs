@@ -1,9 +1,10 @@
 ﻿using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using File = System.IO.File;
 using Path = System.IO.Path;
-using System.Drawing.Imaging;
 
 namespace WindowsDesktopIconManagerForm
 {
@@ -12,48 +13,93 @@ namespace WindowsDesktopIconManagerForm
         // ==================== Methods directly accessed through buttons ====================
         // Allows user to select a custom shortcut arrow icon and change shortcut arrows to it
 
-        public static void ChangeArrows()
+        public static void ChangeArrow()
         {
-            if (!ConfirmChange()) return;
-
-            string appPath = Utilities.GetAppFolder();
-            string iconPath = "";
-
-            if (!UseIncluded())
+            if (!ConfirmChange())
             {
-                iconPath = ChooseArrow();
-                if (iconPath.Equals("")) return;
-            }
-            else iconPath = Utilities.GetCurrentArrowPath();
-
-                // TODO: Maybe ask user if they want to save the arrow to the current set if it wasn't already taken from it
-                string newPath = Path.Combine(appPath, "Used-Arrows", DateTime.Now.ToString("yyyyMMddhhmmss") + ".ico");
-
-            try {File.Copy(iconPath, newPath, overwrite: true);}
-            catch
-            {
-                System.Windows.Forms.MessageBox.Show("Error: Could not copy arrow to Current-Arrow folder. Please try again.", "File Copy Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (SetArrowPath(newPath)) SuccessMessage(); // If it fails, it'll send the failure message within the method
+            string iconPath = "";
+            if (UseIncluded())
+            {
+                iconPath = Utilities.GetCurrentArrowPath();
+            }
+            else
+            {
+                iconPath = ChooseArrow();
+                if (iconPath.Equals(""))
+                {
+                    return;
+                }
+            }
+
+
+            // TODO: Maybe ask user if they want to save the arrow to the current set if it wasn't already taken from it
+            string newPath = Path.Combine(Utilities.GetAppFolder(), "Used-Arrows", DateTime.Now.ToString("yyyyMMddhhmmss") + ".ico");
+
+            try {
+                File.Copy(iconPath, newPath, overwrite: true);
+            }
+            catch
+            {
+                System.Windows.Forms.MessageBox.Show("Error: Could not copy arrow to Used-Arrows folder. Please try again.", "File Copy Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (SetArrowPath(newPath))
+            {
+                SuccessMessage(); // If it fails, it'll send the failure message within the method
+            }
+        }
+
+        public static void ChangeArrow(Bitmap arrowMap)
+        {
+            if (!ConfirmChange())
+            {
+                return;
+            }
+
+            // Bitmap was taken from editor before being passed here
+            Icon myIcon = Arrow.ImageToIcon(arrowMap, 128);
+
+            // TODO: Maybe ask user if they want to save the arrow to the current set if it wasn't already taken from it
+
+            // Attempt to save bitmap to new path (path update avoids arrow caching)
+            string newPath = Path.Combine(Utilities.GetAppFolder(), "Used-Arrows", DateTime.Now.ToString("yyyyMMddhhmmss") + ".ico");
+            using (Bitmap bitmap = myIcon.ToBitmap())
+            {
+                try
+                {
+                    bitmap.Save(newPath, ImageFormat.Icon);
+                }
+                catch
+                {
+                    System.Windows.Forms.MessageBox.Show("Error: Could not save arrow. Please try again.", "File Save Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+            }
+
+            // Attempt to edit registry
+            if (SetArrowPath(newPath))
+            {
+                SuccessMessage(); // If it fails, it'll send the failure message within the method
+            }
         }
 
         // Allows user to restore original shortcut arrows
         public static void Restore()
         {
-            if (ConfirmRestore() == false) return;
+            if (!ConfirmChange()) return;
             if (RestoreArrows()) SuccessMessage(); // If it fails, it'll send the failure message within the method
         }
 
-        // ==================== Methods used within these methods ====================
-
         // Warns user and asks if they want to proceed with arrow change
-        public static bool ConfirmChange()
+        private static bool ConfirmChange()
         {
-            string regEditWarning = "This feature uses an edit to the Windows registry in order to change or remove arrows from shortcut links on the desktop.";
+            string regEditWarning = "This feature uses an edit to the Windows registry in order to edit the arrow icons that show over shortcut links.";
             string disclaimer1 = "To the best of my knowledge, as of the time I created this app, this method works and is safe. However, it may not work on every computer and could break or stop working at any time.";
-            string context = "Additionally, shortcuts on the desktop link to other files, links, etc. Removing shortcut arrows may cause confusion as to whether something on the desktop is a shortcut or the file's direct location.";
+            string context = "Additionally, shortcuts link to other files, links, etc. Removing or changing shortcut arrows may cause confusion as to whether something is a shortcut or the file's direct location.";
             string disclaimer2 = "You assume all responsibility for any data loss or damage that may result from using this functionality.";
 
             var resultWarning = System.Windows.Forms.MessageBox.Show(regEditWarning + " " + disclaimer1 + " " + context + "\n\n" + disclaimer2, "Warning!", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
@@ -62,23 +108,10 @@ namespace WindowsDesktopIconManagerForm
             else return true;
         }
 
-        // Warns user and asks if they want to proceed with arrow restore
-        public static bool ConfirmRestore()
-        {
-            string regEditWarning = "This feature uses an edit to the Windows registry in order to restore arrows to shortcut links on the desktop.";
-            string disclaimer1 = "To the best of my knowledge, as of the time I created this app, this method works and is safe. However, it may not work on every computer and could break or stop working at any time.";
-            string context = "If you've never made any changes to the Windows shortcut arrows, there's no need to use this feature.";
-            string disclaimer2 = "You assume all responsibility for any data loss or damage that may result from using this functionality.";
-            var resultWarning = System.Windows.Forms.MessageBox.Show(regEditWarning + " " + disclaimer1 + " " + context + "\n\n" + disclaimer2, "Warning!", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-
-            if (resultWarning == DialogResult.Cancel) return false;
-            else return true;
-        }
-
         // Returns bool for if arrow exists and user wants to use it
         public static bool UseIncluded()
         {
-            if (CheckIncluded())
+            if (File.Exists(Utilities.GetCurrentArrowPath()))
             {
                 string message = "A \"arrow.ico\" file has been detected in the current icon set. Would you like to skip the file picker and just apply it automatically?";
                 string title = "Arrow Detected";
@@ -87,14 +120,6 @@ namespace WindowsDesktopIconManagerForm
                 if (resultWarning == DialogResult.Yes) return true;
             }
             return false;
-        }
-
-        // Checks if there is a "arrow" icon in the icon set
-        public static bool CheckIncluded()
-        {
-            string checkedPath = Utilities.GetCurrentArrowPath();
-            if (File.Exists(checkedPath)) return true;
-            else return false;
         }
 
         // Gets user to select an arrow icon
@@ -263,7 +288,7 @@ namespace WindowsDesktopIconManagerForm
         {
             string path = "";
 
-            if (BoolSaveArrowToCurrent())
+            if (WillSaveToCurrent())
             {
                 path = Utilities.GetCurrentArrowPath();
             }
@@ -275,7 +300,7 @@ namespace WindowsDesktopIconManagerForm
                 {
                     CommonOpenFileDialog dialog = new()
                     {
-                        InitialDirectory = "C:\\Users",
+                        InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
                         IsFolderPicker = true,
                         Title = "Select a location to save the shortcut arrow."
                     };
@@ -285,8 +310,15 @@ namespace WindowsDesktopIconManagerForm
                         path = dialog.FileName;
                         loopFolder = false;
                     }
-                    catch (InvalidOperationException e) {return null;} // if the dialog is closed, cancel operation
-                    catch (Exception e) {if (!BoolPickAnotherArrowFolder(e)) return null;} // Otherwise, prompt for retry
+                    catch (InvalidOperationException e) { // If the dialog is closed, cancel operation
+                        return null;
+                    } 
+                    catch (Exception e) { // Prompt for retry on other errors
+                        if (!WillTryAgain(e))
+                        {
+                            return null;
+                        }
+                    }
                 }
                 while (loopFolder);
                 path = Path.Combine(path, "arrow.ico");
@@ -294,14 +326,14 @@ namespace WindowsDesktopIconManagerForm
             return path;
         }
 
-        public static bool BoolSaveArrowToCurrent()
+        public static bool WillSaveToCurrent()
         {
             var resultWarning = System.Windows.Forms.MessageBox.Show("Would you like to save the arrow to the current icon set? The current arrow will be overwritten.\n\nPress No to select a different folder to save it to.", "Windows Desktop Icon Manager", MessageBoxButtons.YesNo);
             if (resultWarning == DialogResult.Yes) return true;
             else return false;
         }
 
-        public static bool BoolPickAnotherArrowFolder (Exception e) {
+        public static bool WillTryAgain (Exception e) {
             var resultFolder = System.Windows.Forms.MessageBox.Show("An error occurred:\n\n" + e.Message + "\n\nWould you like to try again?", "Windows Desktop Icon Manager", MessageBoxButtons.YesNo);
             if (resultFolder == DialogResult.No) return false;
             else return true;
@@ -311,32 +343,40 @@ namespace WindowsDesktopIconManagerForm
         // From what I've read this isn't the most efficient way to change pixels, but that hopefully won't matter for our purposes as the icons are small
         public static Bitmap ColorShift(Bitmap bm, double amountToChange, string typeOfChange)
         {
-            for (int x = 0; x < bm.Width; x++)
+            if (typeOfChange == "h")
             {
-                for (int y = 0; y < bm.Height; y++)
+                for (int x = 0; x < bm.Width; x++)
                 {
-                    System.Drawing.Color pixelColor = bm.GetPixel(x, y);
-                    if (IsSkippedPixel(pixelColor))
+                    for (int y = 0; y < bm.Height; y++)
                     {
-                        continue;
-                    }
-
-                    // Used to be three separate methods, then I realized combining them made way more sense
-                    if (typeOfChange == "h")
-                    {
+                        System.Drawing.Color pixelColor = bm.GetPixel(x, y);
+                        if (IsSkippedPixel(pixelColor)) continue;
                         bm.SetPixel(x, y, HsLtoRgb(amountToChange, pixelColor.GetSaturation(), pixelColor.GetBrightness(), pixelColor.A));
-                        continue; // no need to go through the next checks
                     }
-                    if (typeOfChange == "s")
+                }
+            }
+            if (typeOfChange == "s")
+            {
+                for (int x = 0; x < bm.Width; x++)
+                {
+                    for (int y = 0; y < bm.Height; y++)
                     {
-                        bm.SetPixel(x, y, HsLtoRgb(pixelColor.GetHue(), amountToChange, pixelColor.GetBrightness(), pixelColor.A));
-                        continue; // again, no need to waste time on the next check
+                        System.Drawing.Color pixelColor = bm.GetPixel(x, y);
+                        if (IsSkippedPixel(pixelColor)) continue;
+                        bm.SetPixel(x, y, HsLtoRgb(pixelColor.GetHue(), (double) amountToChange / 100, pixelColor.GetBrightness(), pixelColor.A));
                     }
-                    if (typeOfChange == "l")
+                }
+            }
+            if (typeOfChange == "l")
+            {
+                for (int x = 0; x < bm.Width; x++)
+                {
+                    for (int y = 0; y < bm.Height; y++)
                     {
-                        bm.SetPixel(x, y, HsLtoRgb(pixelColor.GetHue(), pixelColor.GetSaturation(), amountToChange, pixelColor.A));
+                        System.Drawing.Color pixelColor = bm.GetPixel(x, y);
+                        if (IsSkippedPixel(pixelColor)) continue;
+                        bm.SetPixel(x, y, HsLtoRgb(pixelColor.GetHue(), pixelColor.GetSaturation(), (float) amountToChange / 100, pixelColor.A));
                     }
-                    // Image will remain unchanged if the parameter isn't right
                 }
             }
             return bm;
@@ -345,31 +385,25 @@ namespace WindowsDesktopIconManagerForm
         // Checks if a pixel is close enough to black, white, or transparent to skip
         public static bool IsSkippedPixel(Color pixelColor)
         {
-            if (IsSimilarColorTo(pixelColor, System.Drawing.Color.Black) || IsSimilarColorTo(pixelColor, System.Drawing.Color.White) || pixelColor.A == 0)
+            if (pixelColor.A == 0 || IsSimilarColorTo(pixelColor, System.Drawing.Color.Black) || IsSimilarColorTo(pixelColor, System.Drawing.Color.White))
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            else return false;
         }
 
         // Finds if a color is close enough to another one
-        // Checks if red, green, and blue components are similar enough
         public static bool IsSimilarColorTo(System.Drawing.Color myColor, System.Drawing.Color testColor)
         {
+            // Checks if red, green, and blue components are similar enough
             if (Math.Abs(myColor.R - testColor.R) < 5 && Math.Abs(myColor.G - testColor.G) < 5 && Math.Abs(myColor.B - testColor.B) < 5)
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            else return false;
         }
 
-        // Produces a Color from HSL values
+        // Produces a Color from HSL values (math based on research online)
         public static System.Drawing.Color HsLtoRgb(double hue, double sat, double light, int alpha)
         {
             double maxRGBcomponent;
@@ -428,38 +462,38 @@ namespace WindowsDesktopIconManagerForm
         }
 
         // Sets the appropriate icon path based on the choice in the box
-        public static string PickArrowType(string selectedItem)
+        public static string GetArrowTemplatePath(string selectedItem)
         {
-            string iconPath = Path.Combine(Utilities.GetAppFolder(), "Shortcut-Arrows");
+            string path = Path.Combine(Utilities.GetAppFolder(), "Shortcut-Arrows");
             switch (selectedItem)
             {
                 case "Blank/No Arrow":
-                    iconPath = Path.Combine(iconPath, "empty.ico");
+                    path = Path.Combine(path, "empty.ico");
                     break;
                 case "Curved (Transparent)":
-                    iconPath = Path.Combine(iconPath, "transparent-arrow-curved.ico");
+                    path = Path.Combine(path, "transparent-arrow-curved.ico");
                     break;
                 case "Straight (Transparent)":
-                    iconPath = Path.Combine(iconPath, "transparent-arrow.ico");
+                    path = Path.Combine(path, "transparent-arrow.ico");
                     break;
                 case "Curved (Black)":
-                    iconPath = Path.Combine(iconPath, "filled-arrow-black.ico");
+                    path = Path.Combine(path, "filled-arrow-black.ico");
                     break;
                 case "Straight (Black)":
-                    iconPath = Path.Combine(iconPath, "filled-arrow-black-straight.ico");
+                    path = Path.Combine(path, "filled-arrow-black-straight.ico");
                     break;
                 case "Curved (White)":
-                    iconPath = Path.Combine(iconPath, "filled-arrow-white.ico");
+                    path = Path.Combine(path, "filled-arrow-white.ico");
                     break;
                 case "Straight (White)":
-                    iconPath = Path.Combine(iconPath, "filled-arrow-white-straight.ico");
+                    path = Path.Combine(path, "filled-arrow-white-straight.ico");
                     break;
                 case "Custom...":
                 // TODO: add custom functionality
                 default:
                     return null;
             }
-            return iconPath;
+            return path;
         }
 
         // Gets the bitmap for an icon path
@@ -473,6 +507,11 @@ namespace WindowsDesktopIconManagerForm
             catch (ArgumentOutOfRangeException)
             {
                 bm = Bitmap.FromHicon(new Icon(iconPath, new Size(48, 48)).Handle);
+            }
+            catch
+            {
+                // TODO: Better error handling?
+                bm = null;
             }
             return bm;
         }
