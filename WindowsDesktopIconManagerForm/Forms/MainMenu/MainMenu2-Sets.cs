@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace WindowsDesktopIconManagerForm
+namespace wDIMForm
 {
     public partial class MainMenu : Form
     {

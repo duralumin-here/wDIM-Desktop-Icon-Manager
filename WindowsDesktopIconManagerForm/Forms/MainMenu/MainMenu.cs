@@ -18,7 +18,7 @@
 // Page 6
     // FIXME: Add information there; may have to do it once Github site is up
 
-namespace WindowsDesktopIconManagerForm
+namespace wDIMForm
 {
     public partial class MainMenu : Form
     {

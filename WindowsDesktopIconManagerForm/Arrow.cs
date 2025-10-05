@@ -6,7 +6,7 @@ using System.IO;
 using File = System.IO.File;
 using Path = System.IO.Path;
 
-namespace WindowsDesktopIconManagerForm
+namespace wDIMForm
 {
     public class Arrow
     {
@@ -275,12 +275,12 @@ namespace WindowsDesktopIconManagerForm
                 using (FileStream stream = new FileStream(savePath, FileMode.Create, FileAccess.Write))
                 {
                     myIcon.Save(stream);
-                    System.Windows.Forms.MessageBox.Show("Icon saved.", "Windows Desktop Icon Manager");
+                    System.Windows.Forms.MessageBox.Show("Icon saved.", "Windows wDIM");
                 }
             }
             catch (Exception e)
             {
-                System.Windows.Forms.MessageBox.Show("An error occurred while trying to save the file:\n\n" + e.Message + "\n\nPlease try again.", "Windows Desktop Icon Manager");
+                System.Windows.Forms.MessageBox.Show("An error occurred while trying to save the file:\n\n" + e.Message + "\n\nPlease try again.", "Windows wDIM");
             }
         }
 
@@ -328,13 +328,13 @@ namespace WindowsDesktopIconManagerForm
 
         public static bool WillSaveToCurrent()
         {
-            var resultWarning = System.Windows.Forms.MessageBox.Show("Would you like to save the arrow to the current icon set? The current arrow will be overwritten.\n\nPress No to select a different folder to save it to.", "Windows Desktop Icon Manager", MessageBoxButtons.YesNo);
+            var resultWarning = System.Windows.Forms.MessageBox.Show("Would you like to save the arrow to the current icon set? The current arrow will be overwritten.\n\nPress No to select a different folder to save it to.", "Windows wDIM", MessageBoxButtons.YesNo);
             if (resultWarning == DialogResult.Yes) return true;
             else return false;
         }
 
         public static bool WillTryAgain (Exception e) {
-            var resultFolder = System.Windows.Forms.MessageBox.Show("An error occurred:\n\n" + e.Message + "\n\nWould you like to try again?", "Windows Desktop Icon Manager", MessageBoxButtons.YesNo);
+            var resultFolder = System.Windows.Forms.MessageBox.Show("An error occurred:\n\n" + e.Message + "\n\nWould you like to try again?", "Windows wDIM", MessageBoxButtons.YesNo);
             if (resultFolder == DialogResult.No) return false;
             else return true;
         }

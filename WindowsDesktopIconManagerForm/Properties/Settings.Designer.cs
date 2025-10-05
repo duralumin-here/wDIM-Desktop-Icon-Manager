@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WindowsDesktopIconManagerForm.Properties {
+namespace wDIMForm.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

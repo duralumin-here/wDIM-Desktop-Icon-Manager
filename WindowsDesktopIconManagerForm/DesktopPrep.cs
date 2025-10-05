@@ -1,7 +1,7 @@
 ﻿using IWshRuntimeLibrary;
 using System.IO;
 
-namespace WindowsDesktopIconManagerForm
+namespace wDIMForm
 {
     public class DesktopPrep
     {

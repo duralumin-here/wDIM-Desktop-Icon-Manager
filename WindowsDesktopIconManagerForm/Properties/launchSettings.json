@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "WindowsDesktopIconManagerForm": {
+    "wDIMForm": {
       "commandName": "Project",
       "hotReloadEnabled": false
     }

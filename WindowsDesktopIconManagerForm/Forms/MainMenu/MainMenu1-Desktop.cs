@@ -7,14 +7,14 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
-using WindowsDesktopIconManagerForm.Properties;
+using wDIMForm.Properties;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using Path = System.IO.Path;
 using Size = System.Drawing.Size;
 
-namespace WindowsDesktopIconManagerForm
+namespace wDIMForm
 {
     public partial class MainMenu : Form
     {
@@ -36,7 +36,7 @@ namespace WindowsDesktopIconManagerForm
             finally
             {
                 this.Cursor = Cursors.Default;
-                System.Windows.Forms.MessageBox.Show("Icon paths should be set. If some shortcuts didn't work, try re-running this program in Admin mode.", "Desktop Icon Manager");
+                System.Windows.Forms.MessageBox.Show("Icon paths should be set. If some shortcuts didn't work, try re-running this program in Admin mode.", "wDIM");
             }
         }
 

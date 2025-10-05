@@ -4,7 +4,7 @@ using MS.WindowsAPICodePack.Internal;
 using System.IO;
 using File = System.IO.File;
 
-namespace WindowsDesktopIconManagerForm
+namespace wDIMForm
 {
     public class ForNonShortcuts
     {
@@ -110,7 +110,7 @@ namespace WindowsDesktopIconManagerForm
             string MoveFilesPrompt = "Would you like to select one folder to move all of the non-shortcut files to?";
             string extraMoveAll = "(Select \"No\" to go through them one by one, and select \"Cancel\" to abort this operation and leave the helper instead.)";
             string messageMoveAll = MoveFilesPrompt + " " + extraMoveAll;
-            string captionMoveAll = "Desktop Icon Manager";
+            string captionMoveAll = "wDIM";
             var result = System.Windows.Forms.MessageBox.Show(messageMoveAll, captionMoveAll, MessageBoxButtons.YesNoCancel);
             return result;
         }
@@ -185,7 +185,7 @@ namespace WindowsDesktopIconManagerForm
             Utilities.RefreshDesktop(); // Remove old icon from screen; FIXME may need flash warning
             // Ask user if they want a desktop shortcut for the moved file; skip if not
             string messageShcut = "Would you like to create a desktop shortcut for this item?";
-            string captionShcut = "Windows Desktop Icon Manager";
+            string captionShcut = "Windows wDIM";
             var resultShcut = System.Windows.Forms.MessageBox.Show(messageShcut, captionShcut, MessageBoxButtons.YesNo);
             // Create a new shortcut on the desktop for the file if desired
             if (resultShcut == DialogResult.Yes)

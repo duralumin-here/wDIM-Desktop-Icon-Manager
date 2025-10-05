@@ -4,7 +4,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
-using WindowsDesktopIconManagerForm.Properties;
+using wDIMForm.Properties;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using Path = System.IO.Path;
@@ -19,7 +19,7 @@ using Size = System.Drawing.Size;
 // May need a workflow for people to upload specific icons for apps so they can be renamed accordingly
 // A way to blank out shortcut names
 
-namespace WindowsDesktopIconManagerForm
+namespace wDIMForm
 {
     public partial class IconMaker : Form
     {

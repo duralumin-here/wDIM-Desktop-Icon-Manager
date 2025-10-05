@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace WindowsDesktopIconManagerForm
+namespace wDIMForm
 {
     public class Utilities
     {
@@ -132,7 +132,7 @@ namespace WindowsDesktopIconManagerForm
             catch (Exception e)
             {
                 // Handle any exceptions that occur during the process
-                MessageBox.Show("An error occurred: " + e.Message, "Desktop Icon Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("An error occurred: " + e.Message, "wDIM", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -268,7 +268,7 @@ namespace WindowsDesktopIconManagerForm
         private static bool PickerContinueNormal(Exception e)
         {
             string message = "An error occurred: " + e.Message + "\n\n" + "Would you like to try again?";
-            DialogResult result = System.Windows.Forms.MessageBox.Show(message, "Desktop Icon Manager", MessageBoxButtons.RetryCancel);
+            DialogResult result = System.Windows.Forms.MessageBox.Show(message, "wDIM", MessageBoxButtons.RetryCancel);
             if (result == DialogResult.Retry)
             {
                 return true;
@@ -282,12 +282,12 @@ namespace WindowsDesktopIconManagerForm
         private static DialogResult PickerContinueAlt(Exception e)
         {
             string message = "An error occurred: " + e.Message + "\n\n" + "Would you like to abort (end the helper), try again, or ignore this file and continue?";
-            return System.Windows.Forms.MessageBox.Show(message, "Desktop Icon Manager", MessageBoxButtons.AbortRetryIgnore);
+            return System.Windows.Forms.MessageBox.Show(message, "wDIM", MessageBoxButtons.AbortRetryIgnore);
         }
 
         public static bool ConfirmContinue(string message)
         {
-            var result = System.Windows.Forms.MessageBox.Show(message, "Desktop Icon Manager", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+            var result = System.Windows.Forms.MessageBox.Show(message, "wDIM", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
             if (result == DialogResult.Cancel)
             {
                 return false;

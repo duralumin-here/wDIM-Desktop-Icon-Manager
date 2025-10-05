@@ -1,4 +1,4 @@
-﻿namespace WindowsDesktopIconManagerForm
+﻿namespace wDIMForm
 {
     partial class IconMaker
     {

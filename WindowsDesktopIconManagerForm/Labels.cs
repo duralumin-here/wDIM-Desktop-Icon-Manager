@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using File = System.IO.File;
 
-namespace WindowsDesktopIconManagerForm
+namespace wDIMForm
 {
     // What if every set gets a CSV file created once the labels are made that lists the original file, delineator, new name
     // Repeat delineator/new name as needed

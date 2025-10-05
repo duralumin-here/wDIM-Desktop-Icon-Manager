@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace WindowsDesktopIconManagerForm
+namespace wDIMForm
 {
     partial class MainMenu
     {
@@ -860,9 +860,9 @@ namespace WindowsDesktopIconManagerForm
             label4.Font = new Font("Segoe UI Semibold", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label4.Location = new Point(17, 14);
             label4.Name = "label4";
-            label4.Size = new Size(427, 31);
+            label4.Size = new Size(213, 31);
             label4.TabIndex = 17;
-            label4.Text = "Welcome to the Desktop Icon Manager!";
+            label4.Text = "Welcome to wDIM!";
             // 
             // backupButton
             // 
@@ -959,7 +959,7 @@ namespace WindowsDesktopIconManagerForm
             MaximizeBox = false;
             Name = "MainMenu";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Desktop Icon Manager";
+            Text = "wDIM";
             tabPageSettings.ResumeLayout(false);
             tabPageSettings.PerformLayout();
             tabPageArrows.ResumeLayout(false);

@@ -1,4 +1,4 @@
-namespace WindowsDesktopIconManagerForm
+namespace wDIMForm
 {
     internal static class Program
     {

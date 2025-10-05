@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WindowsDesktopIconManagerForm
+namespace wDIMForm
 {
     public partial class ArrowMaker : Form
     {

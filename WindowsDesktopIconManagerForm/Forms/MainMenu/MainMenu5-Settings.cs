@@ -1,9 +1,7 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
 using System.IO;
-using System.Linq.Expressions;
 
-
-namespace WindowsDesktopIconManagerForm
+namespace wDIMForm
 {
     public partial class MainMenu : Form
     {
@@ -51,7 +49,7 @@ namespace WindowsDesktopIconManagerForm
                     }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("An error occurred: " + ex.Message + "\n\nPlease try again.", "Desktop Icon Manager", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("An error occurred: " + ex.Message + "\n\nPlease try again.", "wDIM", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
