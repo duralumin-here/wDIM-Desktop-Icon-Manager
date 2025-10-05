@@ -32,13 +32,14 @@ namespace WindowsDesktopIconManagerForm
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenu));
+            imageList1 = new ImageList(components);
+            tabPageHelp = new TabPage();
             tabPageSettings = new TabPage();
-            arrowFolderClear = new Button();
+            restoreSettingsButton = new Button();
             button2 = new Button();
             shortcutToPersonalButton = new Button();
-            radioButton3 = new RadioButton();
-            radioButton2 = new RadioButton();
-            radioButton1 = new RadioButton();
+            multiplePaper2 = new RadioButton();
+            multiplePaper1 = new RadioButton();
             label15 = new Label();
             defaultWallpaperCheck = new CheckBox();
             defaultWallpaperButton = new Button();
@@ -88,7 +89,6 @@ namespace WindowsDesktopIconManagerForm
             arrowDisplay = new PictureBox();
             button1 = new Button();
             listView1 = new ListView();
-            imageList1 = new ImageList(components);
             detailsBox = new RichTextBox();
             wallpaperDisplay = new PictureBox();
             iconSetListBox = new ListBox();
@@ -106,9 +106,6 @@ namespace WindowsDesktopIconManagerForm
             label1 = new Label();
             label2 = new Label();
             tabControl1 = new TabControl();
-            tabPageExperimental = new TabPage();
-            lightDarkCheck = new CheckBox();
-            tabPageHelp = new TabPage();
             tabPageSettings.SuspendLayout();
             tabPageArrows.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)lightSlide).BeginInit();
@@ -121,18 +118,32 @@ namespace WindowsDesktopIconManagerForm
             ((System.ComponentModel.ISupportInitialize)wallpaperDisplay).BeginInit();
             tabPageManage.SuspendLayout();
             tabControl1.SuspendLayout();
-            tabPageExperimental.SuspendLayout();
             SuspendLayout();
+            // 
+            // imageList1
+            // 
+            imageList1.ColorDepth = ColorDepth.Depth32Bit;
+            imageList1.ImageSize = new Size(75, 75);
+            imageList1.TransparentColor = Color.Transparent;
+            // 
+            // tabPageHelp
+            // 
+            tabPageHelp.BackColor = Color.WhiteSmoke;
+            tabPageHelp.Location = new Point(4, 29);
+            tabPageHelp.Name = "tabPageHelp";
+            tabPageHelp.Padding = new Padding(3);
+            tabPageHelp.Size = new Size(770, 296);
+            tabPageHelp.TabIndex = 8;
+            tabPageHelp.Text = "About/Help";
             // 
             // tabPageSettings
             // 
             tabPageSettings.BackColor = Color.WhiteSmoke;
-            tabPageSettings.Controls.Add(arrowFolderClear);
+            tabPageSettings.Controls.Add(restoreSettingsButton);
             tabPageSettings.Controls.Add(button2);
             tabPageSettings.Controls.Add(shortcutToPersonalButton);
-            tabPageSettings.Controls.Add(radioButton3);
-            tabPageSettings.Controls.Add(radioButton2);
-            tabPageSettings.Controls.Add(radioButton1);
+            tabPageSettings.Controls.Add(multiplePaper2);
+            tabPageSettings.Controls.Add(multiplePaper1);
             tabPageSettings.Controls.Add(label15);
             tabPageSettings.Controls.Add(defaultWallpaperCheck);
             tabPageSettings.Controls.Add(defaultWallpaperButton);
@@ -147,14 +158,15 @@ namespace WindowsDesktopIconManagerForm
             tabPageSettings.TabIndex = 6;
             tabPageSettings.Text = "Settings";
             // 
-            // arrowFolderClear
+            // restoreSettingsButton
             // 
-            arrowFolderClear.Location = new Point(13, 249);
-            arrowFolderClear.Name = "arrowFolderClear";
-            arrowFolderClear.Size = new Size(173, 29);
-            arrowFolderClear.TabIndex = 20;
-            arrowFolderClear.Text = "Clear previous arrows";
-            arrowFolderClear.UseVisualStyleBackColor = true;
+            restoreSettingsButton.Location = new Point(572, 249);
+            restoreSettingsButton.Name = "restoreSettingsButton";
+            restoreSettingsButton.Size = new Size(173, 29);
+            restoreSettingsButton.TabIndex = 28;
+            restoreSettingsButton.Text = "Restore Defaults";
+            restoreSettingsButton.UseVisualStyleBackColor = true;
+            restoreSettingsButton.Click += restoreSettingsButton_Click;
             // 
             // button2
             // 
@@ -174,38 +186,29 @@ namespace WindowsDesktopIconManagerForm
             shortcutToPersonalButton.Text = "Move all shortcuts to personal desktop";
             shortcutToPersonalButton.UseVisualStyleBackColor = true;
             // 
-            // radioButton3
+            // multiplePaper2
             // 
-            radioButton3.AutoSize = true;
-            radioButton3.Location = new Point(570, 117);
-            radioButton3.Name = "radioButton3";
-            radioButton3.Size = new Size(139, 24);
-            radioButton3.TabIndex = 25;
-            radioButton3.TabStop = true;
-            radioButton3.Text = "Use in slideshow";
-            radioButton3.UseVisualStyleBackColor = true;
+            multiplePaper2.AutoSize = true;
+            multiplePaper2.Location = new Point(398, 117);
+            multiplePaper2.Name = "multiplePaper2";
+            multiplePaper2.Size = new Size(166, 24);
+            multiplePaper2.TabIndex = 24;
+            multiplePaper2.Text = "Select one randomly";
+            multiplePaper2.UseVisualStyleBackColor = true;
+            multiplePaper2.CheckedChanged += multiplePaper2_CheckedChanged;
             // 
-            // radioButton2
+            // multiplePaper1
             // 
-            radioButton2.AutoSize = true;
-            radioButton2.Location = new Point(398, 117);
-            radioButton2.Name = "radioButton2";
-            radioButton2.Size = new Size(166, 24);
-            radioButton2.TabIndex = 24;
-            radioButton2.TabStop = true;
-            radioButton2.Text = "Select one randomly";
-            radioButton2.UseVisualStyleBackColor = true;
-            // 
-            // radioButton1
-            // 
-            radioButton1.AutoSize = true;
-            radioButton1.Location = new Point(255, 117);
-            radioButton1.Name = "radioButton1";
-            radioButton1.Size = new Size(137, 24);
-            radioButton1.TabIndex = 3;
-            radioButton1.TabStop = true;
-            radioButton1.Text = "Use the first one";
-            radioButton1.UseVisualStyleBackColor = true;
+            multiplePaper1.AutoSize = true;
+            multiplePaper1.Checked = true;
+            multiplePaper1.Location = new Point(255, 117);
+            multiplePaper1.Name = "multiplePaper1";
+            multiplePaper1.Size = new Size(137, 24);
+            multiplePaper1.TabIndex = 3;
+            multiplePaper1.TabStop = true;
+            multiplePaper1.Text = "Use the first one";
+            multiplePaper1.UseVisualStyleBackColor = true;
+            multiplePaper1.CheckedChanged += multiplePaper1_CheckedChanged;
             // 
             // label15
             // 
@@ -236,6 +239,7 @@ namespace WindowsDesktopIconManagerForm
             defaultWallpaperButton.TabIndex = 2;
             defaultWallpaperButton.Text = "Select Default Wallpaper...";
             defaultWallpaperButton.UseVisualStyleBackColor = true;
+            defaultWallpaperButton.Click += defaultWallpaperButton_Click;
             // 
             // wallpaperPathLabel
             // 
@@ -760,12 +764,6 @@ namespace WindowsDesktopIconManagerForm
             listView1.UseCompatibleStateImageBehavior = false;
             listView1.View = View.Tile;
             // 
-            // imageList1
-            // 
-            imageList1.ColorDepth = ColorDepth.Depth32Bit;
-            imageList1.ImageSize = new Size(75, 75);
-            imageList1.TransparentColor = Color.Transparent;
-            // 
             // detailsBox
             // 
             detailsBox.BackColor = SystemColors.Info;
@@ -941,7 +939,6 @@ namespace WindowsDesktopIconManagerForm
             tabControl1.Controls.Add(tabPageLabels);
             tabControl1.Controls.Add(tabPageArrows);
             tabControl1.Controls.Add(tabPageSettings);
-            tabControl1.Controls.Add(tabPageExperimental);
             tabControl1.Controls.Add(tabPageHelp);
             tabControl1.Location = new Point(12, 12);
             tabControl1.Name = "tabControl1";
@@ -949,37 +946,6 @@ namespace WindowsDesktopIconManagerForm
             tabControl1.Size = new Size(778, 329);
             tabControl1.TabIndex = 14;
             tabControl1.SelectedIndexChanged += TabControl1_SelectedIndexChanged;
-            // 
-            // tabPageExperimental
-            // 
-            tabPageExperimental.BackColor = Color.WhiteSmoke;
-            tabPageExperimental.Controls.Add(lightDarkCheck);
-            tabPageExperimental.Location = new Point(4, 29);
-            tabPageExperimental.Name = "tabPageExperimental";
-            tabPageExperimental.Padding = new Padding(3);
-            tabPageExperimental.Size = new Size(770, 296);
-            tabPageExperimental.TabIndex = 7;
-            tabPageExperimental.Text = "Experimental";
-            // 
-            // lightDarkCheck
-            // 
-            lightDarkCheck.AutoSize = true;
-            lightDarkCheck.Location = new Point(18, 25);
-            lightDarkCheck.Name = "lightDarkCheck";
-            lightDarkCheck.Size = new Size(217, 24);
-            lightDarkCheck.TabIndex = 22;
-            lightDarkCheck.Text = "Enable light/dark mode sets";
-            lightDarkCheck.UseVisualStyleBackColor = true;
-            // 
-            // tabPageHelp
-            // 
-            tabPageHelp.BackColor = Color.WhiteSmoke;
-            tabPageHelp.Location = new Point(4, 29);
-            tabPageHelp.Name = "tabPageHelp";
-            tabPageHelp.Padding = new Padding(3);
-            tabPageHelp.Size = new Size(770, 296);
-            tabPageHelp.TabIndex = 8;
-            tabPageHelp.Text = "About/Help";
             // 
             // MainMenu
             // 
@@ -1010,19 +976,17 @@ namespace WindowsDesktopIconManagerForm
             tabPageManage.ResumeLayout(false);
             tabPageManage.PerformLayout();
             tabControl1.ResumeLayout(false);
-            tabPageExperimental.ResumeLayout(false);
-            tabPageExperimental.PerformLayout();
             ResumeLayout(false);
         }
 
         #endregion
-
+        private ImageList imageList1;
+        private TabPage tabPageHelp;
         private TabPage tabPageSettings;
         private Button button2;
         private Button shortcutToPersonalButton;
-        private RadioButton radioButton3;
-        private RadioButton radioButton2;
-        private RadioButton radioButton1;
+        private RadioButton multiplePaper2;
+        private RadioButton multiplePaper1;
         private Label label15;
         private CheckBox defaultWallpaperCheck;
         private Button defaultWallpaperButton;
@@ -1031,19 +995,22 @@ namespace WindowsDesktopIconManagerForm
         private CheckBox arrowCheck;
         private CheckBox wallpaperCheck;
         private TabPage tabPageArrows;
+        private Button restoreArrowButton;
         private Button resetColorButton;
+        private Button arrowSaveButton;
+        private Label label8;
+        private Label label5;
+        private Label label7;
+        private Button arrowApplyButton;
+        private Button ArrowApplyMainMenuButton;
         private TextBox lightBox;
         private TextBox satBox;
         private TextBox hueBox;
         private Label label9;
         private ComboBox comboBox1;
         private TrackBar lightSlide;
-        private Label label8;
         private TrackBar satSlide;
-        private Label label5;
         private TrackBar hueSlide;
-        private Button arrowSaveButton;
-        private Label label7;
         private PictureBox arrowShowBox;
         private TabPage tabPageLabels;
         private Button labelRestoreButton;
@@ -1066,33 +1033,26 @@ namespace WindowsDesktopIconManagerForm
         private RadioButton cursiveLightRadio;
         private RadioButton cursiveBoldRadio;
         private TabPage tabPageIcons;
+        private PictureBox arrowDisplay;
+        private Button button1;
+        private ListView listView1;
+        private RichTextBox detailsBox;
+        private PictureBox wallpaperDisplay;
+        private ListBox iconSetListBox;
+        private Button button4;
+        private Button button3;
         private Button button5;
         private TabPage tabPageManage;
+        private Button refreshButton;
         private Label label4;
         private Button backupButton;
         private Label label3;
-        private Button validateButton;
-        private Label label1;
-        private TabControl tabControl1;
-        private Button button4;
-        private Button button3;
-        private Button pathButton;
-        private Label label2;
-        private ListBox iconSetListBox;
-        private TabPage tabPageExperimental;
-        private Button refreshButton;
-        private CheckBox lightDarkCheck;
-        private TabPage tabPageHelp;
-        private PictureBox wallpaperDisplay;
-        private RichTextBox detailsBox;
-        private ListView listView1;
-        private ImageList imageList1;
-        private Button button1;
-        private PictureBox arrowDisplay;
-        private Button ArrowApplyMainMenuButton;
-        private Button arrowFolderClear;
         private Button explorerButton;
-        private Button arrowApplyButton;
-        private Button restoreArrowButton;
+        private Button validateButton;
+        private Button pathButton;
+        private Label label1;
+        private Label label2;
+        private TabControl tabControl1;
+        private Button restoreSettingsButton;
     }
 }

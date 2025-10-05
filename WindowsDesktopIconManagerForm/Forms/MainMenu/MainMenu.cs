@@ -1,28 +1,22 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Forms;
-using System.Windows.Media.Media3D;
-using System.Windows.Shapes;
-using WindowsDesktopIconManagerForm.Properties;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
-using Path = System.IO.Path;
-using Size = System.Drawing.Size;
+﻿// Things I need to implement before I can actually ship this out
 
-// To do:
-// TODO: Improve icon saving? At least recommend Photopea as the default icon editor
-// TODO: Method to restore a selected backup through the app GUI
-// TODO: Figure out the workflow for a user to actually set up icon sets
-// TODO: Saving and loading icon sets
-// TODO: Implement wallpaper workflow
-// Can just have a menu to copy icons from a set to current icons, or from current icons to a set
-// May need a workflow for people to upload specific icons for apps so they can be renamed accordingly
-// A way to blank out shortcut names?
+// Page 1
+    // TODO: Custom names for things if they're the same?
+    // TODO: "Help" icon that redirects to About page
+    // FIXME: Method to restore a selected backup through the app GUI
+// Page 2
+    // FIXME: Add GUI for creating icon sets
+        // Make sure it also works for editing icon sets
+        // May need a workflow for people to upload specific icons for apps so they can be renamed accordingly
+    // FIXME: Add flow for importing icon sets (warn if no .ico files found)
+    // FIXME: Rework applying the icon set to handle arrows, wallpaper, and different icon schemes
+// Page 3
+    // FIXME: Write label changes to settings
+    // FIXME: Allow label restore from the labels stored in settings
+// Page 4
+    // TODO: Maybe ask user if they want to save the arrow to a set if it's peeled directly from editor
+// Page 6
+    // FIXME: Add information there; may have to do it once Github site is up
 
 namespace WindowsDesktopIconManagerForm
 {
@@ -35,14 +29,6 @@ namespace WindowsDesktopIconManagerForm
             hueBox.Text = hueSlide.Value.ToString();
             satBox.Text = satSlide.Value.ToString();
             lightBox.Text = lightSlide.Value.ToString();
-
-            arrowCheck.Checked = Properties.Settings.Default.autoApplyArrows;
-            explorerCheck.Checked = Properties.Settings.Default.autoRestartExplorer;
-            lightDarkCheck.Checked = Properties.Settings.Default.enableLightDark;
-            wallpaperCheck.Checked = Properties.Settings.Default.autoApplyWallpaper;
-            defaultWallpaperCheck.Checked = Properties.Settings.Default.applyDefaultWallpaper;
-            defaultWallpaperButton.Enabled = Properties.Settings.Default.applyDefaultWallpaper;
-            wallpaperPathLabel.Enabled = Properties.Settings.Default.applyDefaultWallpaper;
 
             // Allows the arrow to have proper transparency
             wallpaperDisplay.Controls.Add(arrowDisplay);
@@ -61,6 +47,26 @@ namespace WindowsDesktopIconManagerForm
             medievalTextRadio.CheckedChanged += fontRadio_CheckedChanged;
             circleTextRadio.CheckedChanged += fontRadio_CheckedChanged;
             defaultFontRadio.CheckedChanged += fontRadio_CheckedChanged;
+
+            // Loads from settings
+            wallpaperCheck.Checked = Properties.Settings.Default.autoApplyWallpaper;
+            defaultWallpaperCheck.Checked = Properties.Settings.Default.applyDefaultWallpaper;
+            defaultWallpaperButton.Enabled = Properties.Settings.Default.applyDefaultWallpaper;
+            wallpaperPathLabel.Text = Properties.Settings.Default.defaultWallpaper;
+            wallpaperPathLabel.Enabled = Properties.Settings.Default.applyDefaultWallpaper;
+            multiplePaper1.Checked = Properties.Settings.Default.useFirstPaper;
+            multiplePaper2.Checked = Properties.Settings.Default.useRandomPaper;
+            arrowCheck.Checked = Properties.Settings.Default.autoApplyArrows;
+            explorerCheck.Checked = Properties.Settings.Default.autoRestartExplorer;
+
+            // Defines event when the form closes
+            this.FormClosing += MainMenu_FormClosing;
+        }
+
+        // Save settings on close
+        private void MainMenu_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Properties.Settings.Default.Save();
         }
     }
 }

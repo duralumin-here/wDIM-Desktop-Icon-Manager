@@ -1,11 +1,8 @@
 ﻿using IWshRuntimeLibrary;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using MS.WindowsAPICodePack.Internal;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Xml.Linq;
 
 namespace WindowsDesktopIconManagerForm
 {

@@ -49,7 +49,7 @@ namespace WindowsDesktopIconManagerForm.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("No path set")]
         public string defaultWallpaper {
             get {
                 return ((string)(this["defaultWallpaper"]));
@@ -85,30 +85,6 @@ namespace WindowsDesktopIconManagerForm.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool enableLightDark {
-            get {
-                return ((bool)(this["enableLightDark"]));
-            }
-            set {
-                this["enableLightDark"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool defaultToDark {
-            get {
-                return ((bool)(this["defaultToDark"]));
-            }
-            set {
-                this["defaultToDark"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string currentSet {
             get {
@@ -116,6 +92,42 @@ namespace WindowsDesktopIconManagerForm.Properties {
             }
             set {
                 this["currentSet"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string labelMap {
+            get {
+                return ((string)(this["labelMap"]));
+            }
+            set {
+                this["labelMap"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool useFirstPaper {
+            get {
+                return ((bool)(this["useFirstPaper"]));
+            }
+            set {
+                this["useFirstPaper"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool useRandomPaper {
+            get {
+                return ((bool)(this["useRandomPaper"]));
+            }
+            set {
+                this["useRandomPaper"] = value;
             }
         }
     }
