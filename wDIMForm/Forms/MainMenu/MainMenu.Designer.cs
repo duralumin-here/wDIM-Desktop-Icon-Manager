@@ -34,7 +34,9 @@ namespace wDIMForm
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenu));
             imageList1 = new ImageList(components);
             tabPageHelp = new TabPage();
+            appDetails = new RichTextBox();
             tabPageSettings = new TabPage();
+            button3 = new Button();
             restoreSettingsButton = new Button();
             button2 = new Button();
             shortcutToPersonalButton = new Button();
@@ -66,6 +68,7 @@ namespace wDIMForm
             hueSlide = new TrackBar();
             arrowShowBox = new PictureBox();
             tabPageLabels = new TabPage();
+            label6 = new Label();
             labelRestoreButton = new Button();
             alphabetLabel = new Label();
             label11 = new Label();
@@ -86,15 +89,16 @@ namespace wDIMForm
             cursiveLightRadio = new RadioButton();
             cursiveBoldRadio = new RadioButton();
             tabPageIcons = new TabPage();
+            copyIconSetButton = new Button();
             arrowDisplay = new PictureBox();
-            button1 = new Button();
+            importIconSetButton = new Button();
             listView1 = new ListView();
             detailsBox = new RichTextBox();
             wallpaperDisplay = new PictureBox();
             iconSetListBox = new ListBox();
-            button4 = new Button();
-            button3 = new Button();
-            button5 = new Button();
+            editIconSetButton = new Button();
+            createIconSetButton = new Button();
+            applyIconSetButton = new Button();
             tabPageManage = new TabPage();
             refreshButton = new Button();
             label4 = new Label();
@@ -106,6 +110,7 @@ namespace wDIMForm
             label1 = new Label();
             label2 = new Label();
             tabControl1 = new TabControl();
+            tabPageHelp.SuspendLayout();
             tabPageSettings.SuspendLayout();
             tabPageArrows.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)lightSlide).BeginInit();
@@ -129,6 +134,7 @@ namespace wDIMForm
             // tabPageHelp
             // 
             tabPageHelp.BackColor = Color.WhiteSmoke;
+            tabPageHelp.Controls.Add(appDetails);
             tabPageHelp.Location = new Point(4, 29);
             tabPageHelp.Name = "tabPageHelp";
             tabPageHelp.Padding = new Padding(3);
@@ -136,9 +142,18 @@ namespace wDIMForm
             tabPageHelp.TabIndex = 8;
             tabPageHelp.Text = "About/Help";
             // 
+            // appDetails
+            // 
+            appDetails.Location = new Point(326, 6);
+            appDetails.Name = "appDetails";
+            appDetails.Size = new Size(438, 284);
+            appDetails.TabIndex = 0;
+            appDetails.Text = "Link to Github, wherever I get the default sets from";
+            // 
             // tabPageSettings
             // 
             tabPageSettings.BackColor = Color.WhiteSmoke;
+            tabPageSettings.Controls.Add(button3);
             tabPageSettings.Controls.Add(restoreSettingsButton);
             tabPageSettings.Controls.Add(button2);
             tabPageSettings.Controls.Add(shortcutToPersonalButton);
@@ -158,9 +173,18 @@ namespace wDIMForm
             tabPageSettings.TabIndex = 6;
             tabPageSettings.Text = "Settings";
             // 
+            // button3
+            // 
+            button3.Location = new Point(16, 250);
+            button3.Name = "button3";
+            button3.Size = new Size(173, 29);
+            button3.TabIndex = 29;
+            button3.Text = "View App Folder";
+            button3.UseVisualStyleBackColor = true;
+            // 
             // restoreSettingsButton
             // 
-            restoreSettingsButton.Location = new Point(572, 249);
+            restoreSettingsButton.Location = new Point(581, 250);
             restoreSettingsButton.Name = "restoreSettingsButton";
             restoreSettingsButton.Size = new Size(173, 29);
             restoreSettingsButton.TabIndex = 28;
@@ -491,6 +515,7 @@ namespace wDIMForm
             // tabPageLabels
             // 
             tabPageLabels.BackColor = Color.WhiteSmoke;
+            tabPageLabels.Controls.Add(label6);
             tabPageLabels.Controls.Add(labelRestoreButton);
             tabPageLabels.Controls.Add(alphabetLabel);
             tabPageLabels.Controls.Add(label11);
@@ -517,6 +542,15 @@ namespace wDIMForm
             tabPageLabels.TabIndex = 4;
             tabPageLabels.Text = "Customize Labels";
             // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(13, 197);
+            label6.Name = "label6";
+            label6.Size = new Size(747, 20);
+            label6.TabIndex = 21;
+            label6.Text = "Modified shortcuts will move over to the side of the screen, all mixed up, so you'll likely have to rearrange them.";
+            // 
             // labelRestoreButton
             // 
             labelRestoreButton.Location = new Point(590, 251);
@@ -525,6 +559,7 @@ namespace wDIMForm
             labelRestoreButton.TabIndex = 20;
             labelRestoreButton.Text = "Restore Labels";
             labelRestoreButton.UseVisualStyleBackColor = true;
+            labelRestoreButton.Click += labelRestoreButton_Click;
             // 
             // alphabetLabel
             // 
@@ -547,7 +582,7 @@ namespace wDIMForm
             // 
             // labelButton
             // 
-            labelButton.Location = new Point(590, 216);
+            labelButton.Location = new Point(590, 220);
             labelButton.Name = "labelButton";
             labelButton.Size = new Size(163, 29);
             labelButton.TabIndex = 19;
@@ -710,21 +745,31 @@ namespace wDIMForm
             // tabPageIcons
             // 
             tabPageIcons.BackColor = Color.WhiteSmoke;
+            tabPageIcons.Controls.Add(copyIconSetButton);
             tabPageIcons.Controls.Add(arrowDisplay);
-            tabPageIcons.Controls.Add(button1);
+            tabPageIcons.Controls.Add(importIconSetButton);
             tabPageIcons.Controls.Add(listView1);
             tabPageIcons.Controls.Add(detailsBox);
             tabPageIcons.Controls.Add(wallpaperDisplay);
             tabPageIcons.Controls.Add(iconSetListBox);
-            tabPageIcons.Controls.Add(button4);
-            tabPageIcons.Controls.Add(button3);
-            tabPageIcons.Controls.Add(button5);
+            tabPageIcons.Controls.Add(editIconSetButton);
+            tabPageIcons.Controls.Add(createIconSetButton);
+            tabPageIcons.Controls.Add(applyIconSetButton);
             tabPageIcons.Location = new Point(4, 29);
             tabPageIcons.Name = "tabPageIcons";
             tabPageIcons.Padding = new Padding(3);
             tabPageIcons.Size = new Size(770, 296);
             tabPageIcons.TabIndex = 2;
             tabPageIcons.Text = "Icon Sets";
+            // 
+            // copyIconSetButton
+            // 
+            copyIconSetButton.Location = new Point(631, 89);
+            copyIconSetButton.Name = "copyIconSetButton";
+            copyIconSetButton.Size = new Size(128, 29);
+            copyIconSetButton.TabIndex = 7;
+            copyIconSetButton.Text = "Copy icon set";
+            copyIconSetButton.UseVisualStyleBackColor = true;
             // 
             // arrowDisplay
             // 
@@ -738,14 +783,14 @@ namespace wDIMForm
             arrowDisplay.MouseEnter += ArrowDisplay_MouseEnter;
             arrowDisplay.MouseLeave += ArrowDisplay_MouseLeave;
             // 
-            // button1
+            // importIconSetButton
             // 
-            button1.Location = new Point(16, 249);
-            button1.Name = "button1";
-            button1.Size = new Size(191, 29);
-            button1.TabIndex = 2;
-            button1.Text = "Import icon set";
-            button1.UseVisualStyleBackColor = true;
+            importIconSetButton.Location = new Point(16, 249);
+            importIconSetButton.Name = "importIconSetButton";
+            importIconSetButton.Size = new Size(191, 29);
+            importIconSetButton.TabIndex = 2;
+            importIconSetButton.Text = "Import icon set";
+            importIconSetButton.UseVisualStyleBackColor = true;
             // 
             // listView1
             // 
@@ -797,32 +842,32 @@ namespace wDIMForm
             iconSetListBox.TabIndex = 0;
             iconSetListBox.SelectedIndexChanged += iconSetListBox_SelectedIndexChanged;
             // 
-            // button4
+            // editIconSetButton
             // 
-            button4.Location = new Point(631, 54);
-            button4.Name = "button4";
-            button4.Size = new Size(128, 29);
-            button4.TabIndex = 6;
-            button4.Text = "Edit icon set";
-            button4.UseVisualStyleBackColor = true;
+            editIconSetButton.Location = new Point(631, 54);
+            editIconSetButton.Name = "editIconSetButton";
+            editIconSetButton.Size = new Size(128, 29);
+            editIconSetButton.TabIndex = 6;
+            editIconSetButton.Text = "Edit icon set";
+            editIconSetButton.UseVisualStyleBackColor = true;
             // 
-            // button3
+            // createIconSetButton
             // 
-            button3.Location = new Point(16, 214);
-            button3.Name = "button3";
-            button3.Size = new Size(191, 29);
-            button3.TabIndex = 1;
-            button3.Text = "Create new icon set";
-            button3.UseVisualStyleBackColor = true;
+            createIconSetButton.Location = new Point(16, 214);
+            createIconSetButton.Name = "createIconSetButton";
+            createIconSetButton.Size = new Size(191, 29);
+            createIconSetButton.TabIndex = 1;
+            createIconSetButton.Text = "Create new icon set";
+            createIconSetButton.UseVisualStyleBackColor = true;
             // 
-            // button5
+            // applyIconSetButton
             // 
-            button5.Location = new Point(631, 19);
-            button5.Name = "button5";
-            button5.Size = new Size(128, 29);
-            button5.TabIndex = 5;
-            button5.Text = "Apply icon set";
-            button5.UseVisualStyleBackColor = true;
+            applyIconSetButton.Location = new Point(631, 19);
+            applyIconSetButton.Name = "applyIconSetButton";
+            applyIconSetButton.Size = new Size(128, 29);
+            applyIconSetButton.TabIndex = 5;
+            applyIconSetButton.Text = "Apply icon set";
+            applyIconSetButton.UseVisualStyleBackColor = true;
             // 
             // tabPageManage
             // 
@@ -960,6 +1005,7 @@ namespace wDIMForm
             Name = "MainMenu";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "wDIM";
+            tabPageHelp.ResumeLayout(false);
             tabPageSettings.ResumeLayout(false);
             tabPageSettings.PerformLayout();
             tabPageArrows.ResumeLayout(false);
@@ -1034,14 +1080,14 @@ namespace wDIMForm
         private RadioButton cursiveBoldRadio;
         private TabPage tabPageIcons;
         private PictureBox arrowDisplay;
-        private Button button1;
+        private Button importIconSetButton;
         private ListView listView1;
         private RichTextBox detailsBox;
         private PictureBox wallpaperDisplay;
         private ListBox iconSetListBox;
-        private Button button4;
-        private Button button3;
-        private Button button5;
+        private Button editIconSetButton;
+        private Button createIconSetButton;
+        private Button applyIconSetButton;
         private TabPage tabPageManage;
         private Button refreshButton;
         private Label label4;
@@ -1054,5 +1100,9 @@ namespace wDIMForm
         private Label label2;
         private TabControl tabControl1;
         private Button restoreSettingsButton;
+        private Button copyIconSetButton;
+        private RichTextBox appDetails;
+        private Button button3;
+        private Label label6;
     }
 }

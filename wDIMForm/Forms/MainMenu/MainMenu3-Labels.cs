@@ -5,7 +5,7 @@
         // Sets selected alphabet based on chosen radio button
         private void fontRadio_CheckedChanged(object sender, EventArgs e)
         {
-            RadioButton selectedRadioButton = sender as RadioButton;
+            RadioButton? selectedRadioButton = sender as RadioButton;
 
             if (selectedRadioButton != null && selectedRadioButton.Enabled)
             {
@@ -79,13 +79,19 @@
         private void labelButton_Click(object sender, EventArgs e)
         {
             // Start/end strings empty by default
-            string startString = null;
+            string? startString = null;
             if (charStartCheck.Checked) startString = startCharTextBox.Text;
 
-            string endString = null;
+            string? endString = null;
             if (charEndCheck.Checked) endString = endCharTextBox.Text;
 
-            Labels.ChangeDesktopLabels(alphabetLabel.Tag.ToString(), startString, endString);
+            Labels.ChangeLabels(Utilities.CreateLinkArray(), alphabetLabel.Tag.ToString(), startString, endString);
+        }
+
+        // "Restore Labels" button
+        private void labelRestoreButton_Click(object sender, EventArgs e)
+        {
+            Labels.ResetLabels(Utilities.CreateLinkArray());
         }
     }
 }

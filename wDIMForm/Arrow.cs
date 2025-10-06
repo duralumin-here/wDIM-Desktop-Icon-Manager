@@ -310,10 +310,12 @@ namespace wDIMForm
                         path = dialog.FileName;
                         loopFolder = false;
                     }
-                    catch (InvalidOperationException e) { // If the dialog is closed, cancel operation
+                    catch (InvalidOperationException)
+                    { // If the dialog is closed, cancel operation
                         return null;
                     } 
-                    catch (Exception e) { // Prompt for retry on other errors
+                    catch (Exception e)
+                    { // Prompt for retry on other errors
                         if (!WillTryAgain(e))
                         {
                             return null;

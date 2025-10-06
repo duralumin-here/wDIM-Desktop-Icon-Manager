@@ -86,18 +86,6 @@ namespace wDIMForm.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string currentSet {
-            get {
-                return ((string)(this["currentSet"]));
-            }
-            set {
-                this["currentSet"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string labelMap {
             get {
                 return ((string)(this["labelMap"]));
@@ -128,6 +116,54 @@ namespace wDIMForm.Properties {
             }
             set {
                 this["useRandomPaper"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool areLabelsApplied {
+            get {
+                return ((bool)(this["areLabelsApplied"]));
+            }
+            set {
+                this["areLabelsApplied"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("default")]
+        public string labelFont {
+            get {
+                return ((string)(this["labelFont"]));
+            }
+            set {
+                this["labelFont"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string prependedText {
+            get {
+                return ((string)(this["prependedText"]));
+            }
+            set {
+                this["prependedText"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string appendedText {
+            get {
+                return ((string)(this["appendedText"]));
+            }
+            set {
+                this["appendedText"] = value;
             }
         }
     }

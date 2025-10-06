@@ -1,92 +1,109 @@
-﻿using System.IO;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Text;
 using File = System.IO.File;
 
 namespace wDIMForm
 {
-    // What if every set gets a CSV file created once the labels are made that lists the original file, delineator, new name
-    // Repeat delineator/new name as needed
-    // To recover old name, find the row with the new name on it and apply the first thing on that line
     public class Labels
     {
-
-        // Changes labels of lnk files on the desktop
-        // Will not modify other files; ideally these have been handled with helper
-        public static void ChangeDesktopLabels(string font, string startString, string endString)
+        public static void ChangeLabels(List<string> desktopEntries, string font, string startString, string endString)
         {
-            if (!ConfirmContinue()) return;
-            List<string> allEntries = Utilities.CreateLinkArray(); // get list of all .lnk files on the desktop
+            StringBuilder myList = new StringBuilder();
+            if (Properties.Settings.Default.areLabelsApplied)
+            {
+                ResetLabels(desktopEntries);
+                ChangeLabels(Utilities.CreateLinkArray(), font, startString, endString);
+                return;
+            }
+
+            string[] oldAlphabet = GetFontArray(Properties.Settings.Default.labelFont);
             string[] newAlphabet = GetFontArray(font);
 
-            bool hasDetails;
-            string detailsFilePath = Path.Combine(Utilities.GetCurrentIconsFolder(), "details.txt");
-            if (!File.Exists(detailsFilePath)) hasDetails = false; // if this is the first time it's being run
-            else hasDetails = true;
+            foreach (string entry in desktopEntries)
+            {
+                // Get just the file name
+                string original = entry.Substring((entry.LastIndexOf("\\") + 1));
+                string oldNoExtension = original.Substring(0, original.LastIndexOf('.')); // List only has lnk so we can trim it
 
-            ChangeLabels(detailsFilePath, allEntries, newAlphabet, startString, endString, hasDetails);
+                // Convert file name to new font
+                string newNoExtension = ApplyFontToEntry(oldNoExtension, oldAlphabet, newAlphabet);
+
+                try
+                {
+                    CopyShortcutWithLabel(entry.Contains("C:\\Users\\Public"), oldNoExtension, newNoExtension, startString, endString);
+                    UpdateLabelLog(myList, oldNoExtension, startString + newNoExtension + endString);
+                }
+                catch (Exception e)
+                {
+                    DialogResult result = MessageBox.Show("An error occurred processing " + entry + ":\n\n" + e.Message + "\n\nThis item will be skipped. Press OK to continue or press Cancel to end.", "Error", MessageBoxButtons.OKCancel);
+                    if (result == DialogResult.Cancel)
+                    {
+                        UpdateLabelSettings(myList, font, startString, endString);
+                        return;
+                    }
+                }
+            }
+            UpdateLabelSettings(myList, font, startString, endString);
             Utilities.RefreshDesktop();
         }
 
-        public static void ChangeLabels(string detailsFilePath, List<string> desktopEntries, string[] newAlphabet, string startString, string endString, bool hasDetails)
+        public static void ResetLabels(List<string> desktopEntries)
         {
-            string[] oldAlphabet = GetFontArray("default");
-            if (hasDetails)
+            // TODO: error handling for if something is missed?
+            if (Properties.Settings.Default.areLabelsApplied)
             {
-                /* For each entry in desktopEntries
-                 * - Get the noExtension name for it
-                 * - Search the details file for it
-                 * - If it's found, change 
-                 * 
-                 
-                 
-                 */
-                // Get the noExtension name of ea through "desktopEntries" and search the details 
-            }
-                
-            using (StreamWriter infoWriter = new StreamWriter(detailsFilePath)) // Overwrite file if it already exists; don't append
-            {
-                string separator = "|"; // this character is not allowed in Windows file names, so I know it'll work to separate them
                 foreach (string entry in desktopEntries)
                 {
-                    // Check for which desktop it's on
-                    bool isPublic;
-                    if (entry.Contains("C:\\Users\\Public")) isPublic = true;
-                    else isPublic = false;
+                    string original = entry.Substring((entry.LastIndexOf("\\") + 1));
+                    string oldNoExtension = original.Substring(0, original.LastIndexOf('.'));
 
-                    // Get file name
-                    string oldName = entry.Substring((entry.LastIndexOf("\\") + 1));
-                    // Get it without .lnk (remember the list only got the .lnk files)
-                    string oldNameNoExtension = oldName.Substring(0, oldName.LastIndexOf('.'));
-                    // Convert file name to new font
-                    string newNameNoExtension = ApplyFontToEntry(oldNameNoExtension, oldAlphabet, newAlphabet);
-                    // Record pairing
-                    infoWriter.WriteLine(oldNameNoExtension + separator + newNameNoExtension);
-
+                    int startIndex = Properties.Settings.Default.labelMap.IndexOf(oldNoExtension);
+                    int endIndex = startIndex - 2;
+                    int lineStartIndex = Properties.Settings.Default.labelMap.LastIndexOf('\n', endIndex) + 1;
                     try
                     {
-                        CopyShortcutWithLabel(isPublic, oldNameNoExtension, newNameNoExtension, startString, endString);
+                        string newNoExtension = Properties.Settings.Default.labelMap.Substring(lineStartIndex, endIndex - lineStartIndex + 1).Trim();
+                        CopyShortcutWithLabel(entry.Contains("C:\\Users\\Public"), oldNoExtension, newNoExtension, "", "");
                     }
-                    catch (Exception e)
+                    catch
                     {
-                        DialogResult result = MessageBox.Show("An error occurred processing " + entry + ":\n\n" + e.Message + "\n\nThis item will be skipped. Press OK to continue making shortcuts or press Cancel to end.", "Error", MessageBoxButtons.OKCancel);
-                        if (result == DialogResult.Cancel)
-                        {
-                            infoWriter.Flush();
-                            infoWriter.Close();
-                            return;
-                        }
+                        break;
                     }
-                    // MessageBox.Show("FIXME: This box is a test");
                 }
-                Utilities.RefreshDesktop();
             }
+
+            Utilities.RefreshDesktop();
+
+            Properties.Settings.Default.labelMap = null;
+            Properties.Settings.Default.labelFont = "default";
+            Properties.Settings.Default.areLabelsApplied = false;
+            Properties.Settings.Default.prependedText = null;
+            Properties.Settings.Default.appendedText = null;
+            Properties.Settings.Default.Save();
+        }
+
+        private static void UpdateLabelLog(StringBuilder myList, string oldName, string newName)
+        {
+            myList.Append(oldName + "|" + newName).Append('\n');
+        }
+
+        private static void UpdateLabelSettings(StringBuilder myList, string font, string startString, string endString)
+        {
+            Properties.Settings.Default.labelMap = myList.ToString().TrimEnd('\n');
+            Properties.Settings.Default.areLabelsApplied = true;
+            Properties.Settings.Default.labelFont = font;
+            Properties.Settings.Default.prependedText = startString;
+            Properties.Settings.Default.appendedText = endString;
+            Properties.Settings.Default.Save();
+            Utilities.RefreshDesktop();
         }
 
         public static void CopyShortcutWithLabel(bool isPublic, string oldNameNoExtension, string newNameNoExtension, string startString, string endString)
         {
-            /* Shortcuts used to always be made/moved to private desktop when using the label feature.
-             * This has since been fixed. TODO: Could potentially bring it back as a feature for single-user computers
-             * who'd rather move it all to the private desktop so they don't have to run as admin.
-             */
+            // TODO: Add option in settings to move all shortcuts to private desktop (with lots of warnings)? Might be helpful
 
             // Select proper desktop
             string desktop;
@@ -96,18 +113,18 @@ namespace wDIMForm
             string oldLnk = Path.Combine(desktop, oldNameNoExtension + ".lnk");
             string newLnk = Path.Combine(desktop, startString + newNameNoExtension + endString + ".lnk");
 
-            // Unfortunately, it seems like the icons getting mixed up is a operating system limitation unless
-            // I can figure out how to manually store the shortcut locations.
+            // Icons getting mixed up is a system limitation unless I can figure out how to manually store the shortcut locations
             File.Move(oldLnk, newLnk);
         }
 
         public static string ApplyFontToEntry(string entry, string[] oldAlphabet, string[] newAlphabet)
         {
+            // TODO: get it to work to convert between fonts
             string[] entryArr = StringToArray(entry);
 
-            for (int i = 0; i < entryArr.Length; ++i)
+            for (int i = 0; i < entryArr.Length; ++i) // iterate through letters of entry
             {
-                for (int j = 0; j < oldAlphabet.Length; ++j)
+                for (int j = 0; j < oldAlphabet.Length; ++j) // try to match them with a font letter
                 {
                     if (entryArr[i] == oldAlphabet[j])
                     {
@@ -116,6 +133,7 @@ namespace wDIMForm
                     }
                 }
             }
+
             return ArrayToString(entryArr);
         }
 
@@ -205,17 +223,6 @@ namespace wDIMForm
                         "0","1","2","3","4","5","6","7","8","9"};
                     return defaultLetters;
             }
-        }
-
-        // Returns whether user wants to go through with label change.
-        public static bool ConfirmContinue()
-        {
-            var result = System.Windows.Forms.MessageBox.Show("This will replace your desktop shortcuts with ones having the modified labels. However, they will all pop up on the left of the screen, all mixed up, so you'll likely have to rearrange them.", "Label Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-            if (result == DialogResult.Cancel)
-            {
-                return false;
-            }
-            return true;
         }
     }
 }

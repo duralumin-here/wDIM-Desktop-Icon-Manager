@@ -1,6 +1,7 @@
 ﻿// Things I need to implement before I can actually ship this out
 
 // Page 1
+    // TODO: Maybe add a public desktop warning to the tool if I add a utility to move stuff over to the private desktop
     // TODO: Custom names for things if they're the same?
     // TODO: "Help" icon that redirects to About page
     // FIXME: Method to restore a selected backup through the app GUI
@@ -10,9 +11,6 @@
         // May need a workflow for people to upload specific icons for apps so they can be renamed accordingly
     // FIXME: Add flow for importing icon sets (warn if no .ico files found)
     // FIXME: Rework applying the icon set to handle arrows, wallpaper, and different icon schemes
-// Page 3
-    // FIXME: Write label changes to settings
-    // FIXME: Allow label restore from the labels stored in settings
 // Page 4
     // TODO: Maybe ask user if they want to save the arrow to a set if it's peeled directly from editor
 // Page 6
@@ -20,6 +18,7 @@
 
 namespace wDIMForm
 {
+
     public partial class MainMenu : Form
     {
         public MainMenu()
@@ -67,6 +66,11 @@ namespace wDIMForm
         private void MainMenu_FormClosing(object sender, FormClosingEventArgs e)
         {
             Properties.Settings.Default.Save();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(Properties.Settings.Default.labelMap);
         }
     }
 }

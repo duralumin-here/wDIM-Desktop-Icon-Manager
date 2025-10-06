@@ -1,20 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Forms;
-using System.Windows.Media.Media3D;
-using System.Windows.Shapes;
-using wDIMForm.Properties;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
-using Path = System.IO.Path;
-using Size = System.Drawing.Size;
-
-namespace wDIMForm
+﻿namespace wDIMForm
 {
     public partial class MainMenu : Form
     {
