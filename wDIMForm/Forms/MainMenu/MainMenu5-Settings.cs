@@ -90,7 +90,7 @@ namespace wDIMForm
         }
 
         // Radio buttons
-        private void multiplePaper1_CheckedChanged(object sender, EventArgs e)
+        /*private void multiplePaper1_CheckedChanged(object sender, EventArgs e)
         {
             if (multiplePaper1.Checked) Properties.Settings.Default.useFirstPaper = true;
             else Properties.Settings.Default.useFirstPaper = false;
@@ -99,7 +99,7 @@ namespace wDIMForm
         {
             if (multiplePaper2.Checked) Properties.Settings.Default.useRandomPaper = true;
             else Properties.Settings.Default.useRandomPaper = false;
-        }
+        }*/
 
         // Restores settings to default
         private void restoreSettingsButton_Click(object sender, EventArgs e)
@@ -113,8 +113,8 @@ namespace wDIMForm
             defaultWallpaperButton.Enabled  = Properties.Settings.Default.applyDefaultWallpaper = false;
             wallpaperPathLabel.Text         = Properties.Settings.Default.defaultWallpaper = "No path set";
             wallpaperPathLabel.Enabled      = Properties.Settings.Default.applyDefaultWallpaper = false;
-            multiplePaper1.Checked          = Properties.Settings.Default.useFirstPaper = true;
-            multiplePaper2.Checked          = Properties.Settings.Default.useRandomPaper = false;
+            /*multiplePaper1.Checked          = */Properties.Settings.Default.useFirstPaper = true;
+            /*multiplePaper2.Checked          = */Properties.Settings.Default.useRandomPaper = false;
             arrowCheck.Checked              = Properties.Settings.Default.autoApplyArrows = false;
             explorerCheck.Checked           = Properties.Settings.Default.autoRestartExplorer = false;
         }

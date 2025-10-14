@@ -38,9 +38,6 @@ namespace wDIMForm
             restoreSettingsButton = new Button();
             button2 = new Button();
             shortcutToPersonalButton = new Button();
-            multiplePaper2 = new RadioButton();
-            multiplePaper1 = new RadioButton();
-            label15 = new Label();
             defaultWallpaperCheck = new CheckBox();
             defaultWallpaperButton = new Button();
             wallpaperPathLabel = new Label();
@@ -98,6 +95,7 @@ namespace wDIMForm
             createIconSetButton = new Button();
             applyIconSetButton = new Button();
             tabPageManage = new TabPage();
+            label10 = new Label();
             linkLabel1 = new LinkLabel();
             refreshButton = new Button();
             label4 = new Label();
@@ -136,9 +134,6 @@ namespace wDIMForm
             tabPageSettings.Controls.Add(restoreSettingsButton);
             tabPageSettings.Controls.Add(button2);
             tabPageSettings.Controls.Add(shortcutToPersonalButton);
-            tabPageSettings.Controls.Add(multiplePaper2);
-            tabPageSettings.Controls.Add(multiplePaper1);
-            tabPageSettings.Controls.Add(label15);
             tabPageSettings.Controls.Add(defaultWallpaperCheck);
             tabPageSettings.Controls.Add(defaultWallpaperButton);
             tabPageSettings.Controls.Add(wallpaperPathLabel);
@@ -154,7 +149,7 @@ namespace wDIMForm
             // 
             // button3
             // 
-            button3.Location = new Point(16, 250);
+            button3.Location = new Point(581, 215);
             button3.Name = "button3";
             button3.Size = new Size(173, 29);
             button3.TabIndex = 29;
@@ -190,43 +185,10 @@ namespace wDIMForm
             shortcutToPersonalButton.Text = "Move all shortcuts to personal desktop";
             shortcutToPersonalButton.UseVisualStyleBackColor = true;
             // 
-            // multiplePaper2
-            // 
-            multiplePaper2.AutoSize = true;
-            multiplePaper2.Location = new Point(398, 117);
-            multiplePaper2.Name = "multiplePaper2";
-            multiplePaper2.Size = new Size(166, 24);
-            multiplePaper2.TabIndex = 24;
-            multiplePaper2.Text = "Select one randomly";
-            multiplePaper2.UseVisualStyleBackColor = true;
-            multiplePaper2.CheckedChanged += multiplePaper2_CheckedChanged;
-            // 
-            // multiplePaper1
-            // 
-            multiplePaper1.AutoSize = true;
-            multiplePaper1.Checked = true;
-            multiplePaper1.Location = new Point(255, 117);
-            multiplePaper1.Name = "multiplePaper1";
-            multiplePaper1.Size = new Size(137, 24);
-            multiplePaper1.TabIndex = 3;
-            multiplePaper1.TabStop = true;
-            multiplePaper1.Text = "Use the first one";
-            multiplePaper1.UseVisualStyleBackColor = true;
-            multiplePaper1.CheckedChanged += multiplePaper1_CheckedChanged;
-            // 
-            // label15
-            // 
-            label15.AutoSize = true;
-            label15.Location = new Point(13, 118);
-            label15.Name = "label15";
-            label15.Size = new Size(236, 20);
-            label15.TabIndex = 22;
-            label15.Text = "Icon sets with multiple wallpapers:";
-            // 
             // defaultWallpaperCheck
             // 
             defaultWallpaperCheck.AutoSize = true;
-            defaultWallpaperCheck.Location = new Point(37, 53);
+            defaultWallpaperCheck.Location = new Point(37, 57);
             defaultWallpaperCheck.Name = "defaultWallpaperCheck";
             defaultWallpaperCheck.Size = new Size(438, 24);
             defaultWallpaperCheck.TabIndex = 1;
@@ -237,7 +199,7 @@ namespace wDIMForm
             // defaultWallpaperButton
             // 
             defaultWallpaperButton.Enabled = false;
-            defaultWallpaperButton.Location = new Point(37, 83);
+            defaultWallpaperButton.Location = new Point(37, 87);
             defaultWallpaperButton.Name = "defaultWallpaperButton";
             defaultWallpaperButton.Size = new Size(201, 29);
             defaultWallpaperButton.TabIndex = 2;
@@ -249,7 +211,7 @@ namespace wDIMForm
             // 
             wallpaperPathLabel.AutoSize = true;
             wallpaperPathLabel.Enabled = false;
-            wallpaperPathLabel.Location = new Point(245, 87);
+            wallpaperPathLabel.Location = new Point(245, 91);
             wallpaperPathLabel.Name = "wallpaperPathLabel";
             wallpaperPathLabel.Size = new Size(86, 20);
             wallpaperPathLabel.TabIndex = 18;
@@ -258,7 +220,7 @@ namespace wDIMForm
             // explorerCheck
             // 
             explorerCheck.AutoSize = true;
-            explorerCheck.Location = new Point(37, 174);
+            explorerCheck.Location = new Point(37, 154);
             explorerCheck.Name = "explorerCheck";
             explorerCheck.Size = new Size(731, 24);
             explorerCheck.TabIndex = 5;
@@ -269,7 +231,7 @@ namespace wDIMForm
             // arrowCheck
             // 
             arrowCheck.AutoSize = true;
-            arrowCheck.Location = new Point(16, 144);
+            arrowCheck.Location = new Point(16, 124);
             arrowCheck.Name = "arrowCheck";
             arrowCheck.Size = new Size(604, 24);
             arrowCheck.TabIndex = 4;
@@ -282,7 +244,7 @@ namespace wDIMForm
             wallpaperCheck.AutoSize = true;
             wallpaperCheck.Checked = true;
             wallpaperCheck.CheckState = CheckState.Checked;
-            wallpaperCheck.Location = new Point(16, 23);
+            wallpaperCheck.Location = new Point(16, 27);
             wallpaperCheck.Name = "wallpaperCheck";
             wallpaperCheck.Size = new Size(378, 24);
             wallpaperCheck.TabIndex = 0;
@@ -323,7 +285,7 @@ namespace wDIMForm
             restoreArrowButton.Name = "restoreArrowButton";
             restoreArrowButton.Size = new Size(175, 30);
             restoreArrowButton.TabIndex = 11;
-            restoreArrowButton.Text = "Restore Default Arrows";
+            restoreArrowButton.Text = "Restore default arrows";
             restoreArrowButton.UseVisualStyleBackColor = true;
             restoreArrowButton.Click += restoreArrowButton_Click;
             // 
@@ -333,7 +295,7 @@ namespace wDIMForm
             resetColorButton.Name = "resetColorButton";
             resetColorButton.Size = new Size(126, 29);
             resetColorButton.TabIndex = 7;
-            resetColorButton.Text = "Reset Editor";
+            resetColorButton.Text = "Reset editor";
             resetColorButton.UseVisualStyleBackColor = true;
             resetColorButton.Click += resetColorButton_Click;
             // 
@@ -344,7 +306,7 @@ namespace wDIMForm
             arrowSaveButton.Name = "arrowSaveButton";
             arrowSaveButton.Size = new Size(126, 29);
             arrowSaveButton.TabIndex = 8;
-            arrowSaveButton.Text = "Save Arrow";
+            arrowSaveButton.Text = "Save arrow";
             arrowSaveButton.UseVisualStyleBackColor = true;
             arrowSaveButton.Click += arrowSaveButton_Click;
             // 
@@ -381,7 +343,7 @@ namespace wDIMForm
             arrowApplyButton.Name = "arrowApplyButton";
             arrowApplyButton.Size = new Size(175, 30);
             arrowApplyButton.TabIndex = 10;
-            arrowApplyButton.Text = "Apply Other Arrow";
+            arrowApplyButton.Text = "Apply other arrow...";
             arrowApplyButton.UseVisualStyleBackColor = true;
             arrowApplyButton.Click += arrowApplyButton_Click;
             // 
@@ -392,7 +354,7 @@ namespace wDIMForm
             ArrowApplyMainMenuButton.Name = "ArrowApplyMainMenuButton";
             ArrowApplyMainMenuButton.Size = new Size(175, 30);
             ArrowApplyMainMenuButton.TabIndex = 9;
-            ArrowApplyMainMenuButton.Text = "Apply This Arrow";
+            ArrowApplyMainMenuButton.Text = "Apply this arrow";
             ArrowApplyMainMenuButton.UseVisualStyleBackColor = true;
             ArrowApplyMainMenuButton.Click += ArrowApplyMainMenuButton_Click;
             // 
@@ -525,7 +487,7 @@ namespace wDIMForm
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(13, 197);
+            label6.Location = new Point(13, 196);
             label6.Name = "label6";
             label6.Size = new Size(735, 20);
             label6.TabIndex = 21;
@@ -533,11 +495,11 @@ namespace wDIMForm
             // 
             // labelRestoreButton
             // 
-            labelRestoreButton.Location = new Point(590, 251);
+            labelRestoreButton.Location = new Point(550, 254);
             labelRestoreButton.Name = "labelRestoreButton";
-            labelRestoreButton.Size = new Size(163, 29);
+            labelRestoreButton.Size = new Size(203, 29);
             labelRestoreButton.TabIndex = 20;
-            labelRestoreButton.Text = "Restore Labels";
+            labelRestoreButton.Text = "Restore original labels";
             labelRestoreButton.UseVisualStyleBackColor = true;
             labelRestoreButton.Click += labelRestoreButton_Click;
             // 
@@ -554,7 +516,7 @@ namespace wDIMForm
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(13, 177);
+            label11.Location = new Point(13, 176);
             label11.Name = "label11";
             label11.Size = new Size(736, 20);
             label11.TabIndex = 18;
@@ -562,11 +524,11 @@ namespace wDIMForm
             // 
             // labelButton
             // 
-            labelButton.Location = new Point(590, 220);
+            labelButton.Location = new Point(550, 223);
             labelButton.Name = "labelButton";
-            labelButton.Size = new Size(163, 29);
+            labelButton.Size = new Size(203, 29);
             labelButton.TabIndex = 19;
-            labelButton.Text = "Convert Labels";
+            labelButton.Text = "Apply new labels";
             labelButton.UseVisualStyleBackColor = true;
             labelButton.Click += labelButton_Click;
             // 
@@ -852,6 +814,7 @@ namespace wDIMForm
             // tabPageManage
             // 
             tabPageManage.BackColor = Color.WhiteSmoke;
+            tabPageManage.Controls.Add(label10);
             tabPageManage.Controls.Add(linkLabel1);
             tabPageManage.Controls.Add(refreshButton);
             tabPageManage.Controls.Add(label4);
@@ -869,25 +832,36 @@ namespace wDIMForm
             tabPageManage.TabIndex = 1;
             tabPageManage.Text = "Desktop Management";
             // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Font = new Font("Segoe UI", 10.2F, FontStyle.Italic, GraphicsUnit.Point, 0);
+            label10.Location = new Point(226, 21);
+            label10.Name = "label10";
+            label10.Size = new Size(277, 23);
+            label10.TabIndex = 21;
+            label10.Text = "An icon manager by duralumin-here";
+            // 
             // linkLabel1
             // 
             linkLabel1.AutoSize = true;
-            linkLabel1.Location = new Point(468, 23);
+            linkLabel1.Location = new Point(466, 251);
             linkLabel1.Name = "linkLabel1";
-            linkLabel1.Size = new Size(286, 20);
+            linkLabel1.Size = new Size(288, 20);
             linkLabel1.TabIndex = 19;
             linkLabel1.TabStop = true;
-            linkLabel1.Text = "Need help? Documentation coming soon!";
+            linkLabel1.Text = "Need help? Check out the documentation!";
+            linkLabel1.TextAlign = ContentAlignment.TopRight;
             linkLabel1.LinkClicked += linkLabel1_LinkClicked;
             // 
             // refreshButton
             // 
             refreshButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            refreshButton.Location = new Point(324, 249);
+            refreshButton.Location = new Point(542, 21);
             refreshButton.Name = "refreshButton";
             refreshButton.Size = new Size(212, 29);
             refreshButton.TabIndex = 18;
-            refreshButton.Text = "Refresh Desktop";
+            refreshButton.Text = "Refresh desktop";
             refreshButton.UseVisualStyleBackColor = true;
             refreshButton.Click += refreshButton_Click;
             // 
@@ -903,11 +877,11 @@ namespace wDIMForm
             // 
             // backupButton
             // 
-            backupButton.Location = new Point(17, 182);
+            backupButton.Location = new Point(17, 183);
             backupButton.Name = "backupButton";
             backupButton.Size = new Size(212, 29);
             backupButton.TabIndex = 15;
-            backupButton.Text = "Back Up Shortcuts";
+            backupButton.Text = "Back up shortcuts";
             backupButton.UseVisualStyleBackColor = true;
             backupButton.Click += backupButton_Click;
             // 
@@ -919,10 +893,11 @@ namespace wDIMForm
             label3.Size = new Size(512, 20);
             label3.TabIndex = 16;
             label3.Text = "Saves desktop shortcuts and current icon set. (Physical location is not saved.)";
+            label3.Click += label3_Click;
             // 
             // explorerButton
             // 
-            explorerButton.Location = new Point(542, 249);
+            explorerButton.Location = new Point(542, 56);
             explorerButton.Name = "explorerButton";
             explorerButton.Size = new Size(212, 29);
             explorerButton.TabIndex = 14;
@@ -932,28 +907,28 @@ namespace wDIMForm
             // 
             // validateButton
             // 
-            validateButton.Location = new Point(17, 56);
+            validateButton.Location = new Point(17, 63);
             validateButton.Name = "validateButton";
             validateButton.Size = new Size(212, 29);
             validateButton.TabIndex = 5;
-            validateButton.Text = "Validate Desktop";
+            validateButton.Text = "Validate desktop";
             validateButton.UseVisualStyleBackColor = true;
             validateButton.Click += validateButton_Click;
             // 
             // pathButton
             // 
-            pathButton.Location = new Point(17, 119);
+            pathButton.Location = new Point(17, 122);
             pathButton.Name = "pathButton";
             pathButton.Size = new Size(212, 29);
             pathButton.TabIndex = 6;
-            pathButton.Text = "Initialize Icon Paths";
+            pathButton.Text = "Initialize icon paths";
             pathButton.UseVisualStyleBackColor = true;
             pathButton.Click += pathButton_Click;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(17, 84);
+            label1.Location = new Point(17, 93);
             label1.Name = "label1";
             label1.Size = new Size(459, 20);
             label1.TabIndex = 7;
@@ -962,7 +937,7 @@ namespace wDIMForm
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(17, 148);
+            label2.Location = new Point(17, 152);
             label2.Name = "label2";
             label2.Size = new Size(737, 20);
             label2.TabIndex = 8;
@@ -1022,9 +997,6 @@ namespace wDIMForm
         private Button restoreSettingsButton;
         private Button button2;
         private Button shortcutToPersonalButton;
-        private RadioButton multiplePaper2;
-        private RadioButton multiplePaper1;
-        private Label label15;
         private CheckBox defaultWallpaperCheck;
         private Button defaultWallpaperButton;
         private Label wallpaperPathLabel;
@@ -1093,5 +1065,6 @@ namespace wDIMForm
         private Label label2;
         private TabControl tabControl1;
         private LinkLabel linkLabel1;
+        private Label label10;
     }
 }

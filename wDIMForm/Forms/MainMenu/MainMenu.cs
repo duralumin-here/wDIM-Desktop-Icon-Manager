@@ -1,8 +1,5 @@
 ﻿// Things I need to implement before I can actually ship this out
 
-// Page 1
-    // TODO: Custom names for things if they're the same?
-    // FIXME: Method to restore a selected backup through the app GUI
 // Page 2
     // FIXME: Add GUI for creating icon sets
         // Make sure it also works for editing icon sets
@@ -49,8 +46,8 @@ namespace wDIMForm
             defaultWallpaperButton.Enabled = Properties.Settings.Default.applyDefaultWallpaper;
             wallpaperPathLabel.Text = Properties.Settings.Default.defaultWallpaper;
             wallpaperPathLabel.Enabled = Properties.Settings.Default.applyDefaultWallpaper;
-            multiplePaper1.Checked = Properties.Settings.Default.useFirstPaper;
-            multiplePaper2.Checked = Properties.Settings.Default.useRandomPaper;
+            /*multiplePaper1.Checked = Properties.Settings.Default.useFirstPaper;
+            multiplePaper2.Checked = Properties.Settings.Default.useRandomPaper;*/
             arrowCheck.Checked = Properties.Settings.Default.autoApplyArrows;
             explorerCheck.Checked = Properties.Settings.Default.autoRestartExplorer;
 
@@ -67,6 +64,11 @@ namespace wDIMForm
         private void button1_Click(object sender, EventArgs e)
         {
             MessageBox.Show(Properties.Settings.Default.labelMap);
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
