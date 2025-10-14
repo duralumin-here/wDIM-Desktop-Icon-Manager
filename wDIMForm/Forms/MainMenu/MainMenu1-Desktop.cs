@@ -1,4 +1,6 @@
-﻿namespace wDIMForm
+﻿using System.Diagnostics;
+
+namespace wDIMForm
 {
     public partial class MainMenu : Form
     {
@@ -40,6 +42,12 @@
         private void explorerButton_Click(object sender, EventArgs e)
         {
             Utilities.RestartExplorer();
+        }
+
+        // Link to documentation
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(Utilities.GetHelpURL()) { UseShellExecute = true });
         }
     }
 }

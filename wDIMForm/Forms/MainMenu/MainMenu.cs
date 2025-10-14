@@ -1,20 +1,16 @@
 ﻿// Things I need to implement before I can actually ship this out
 
 // Page 1
-    // TODO: Maybe add a public desktop warning to the tool if I add a utility to move stuff over to the private desktop
     // TODO: Custom names for things if they're the same?
-    // TODO: "Help" icon that redirects to About page
     // FIXME: Method to restore a selected backup through the app GUI
 // Page 2
     // FIXME: Add GUI for creating icon sets
-        // Make sure it also works for editing icon sets
-        // May need a workflow for people to upload specific icons for apps so they can be renamed accordingly
+    // Make sure it also works for editing icon sets
+    // May need a workflow for people to upload specific icons for apps so they can be renamed accordingly
     // FIXME: Add flow for importing icon sets (warn if no .ico files found)
     // FIXME: Rework applying the icon set to handle arrows, wallpaper, and different icon schemes
-// Page 4
-    // TODO: Maybe ask user if they want to save the arrow to a set if it's peeled directly from editor
-// Page 6
-    // FIXME: Add information there; may have to do it once Github site is up
+
+using System.Diagnostics;
 
 namespace wDIMForm
 {

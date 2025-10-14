@@ -28,14 +28,16 @@ namespace wDIMForm
             if (MoveShortcutFiles(nonShortcuts, allAtOnce)) HelperCompleteMessage(); // If it works
             else WarningMessage();
 
+            PublicToPrivate(); // Check for public shortcuts on desktop
             return;
         }
 
         private static bool ShouldHelperContinue(List<string> nonShortcuts)
         {
-            if (nonShortcuts.Count() == 0) // If all files are valid
+            if (nonShortcuts.Count() == 0) // If all files are shortcuts
             {
                 ValidatedMessage();
+                PublicToPrivate();
                 return false;
             }
             if (!NonShortcutsContinue(nonShortcuts)) // If user doesn't want to run the helper
@@ -242,6 +244,35 @@ namespace wDIMForm
                 }
             }
             return true; // If it makes it to the end, it worked
+        }
+
+        public static void PublicToPrivate()
+        {
+            List<string> shortcuts = [];
+            shortcuts.AddRange(Directory.GetFiles(@"C:\Users\Public\Desktop", "*.lnk"));
+            if (shortcuts.Count == 0) return;
+
+            string message1 = "Some shortcuts are located on the public desktop. You may need administrator access to modify these files.";
+            string message2 = "Would you like to move them to your private desktop? (This will hide those shortcuts from other users. This option is not recommended if multiple people use your computer.)";
+            DialogResult result = System.Windows.Forms.MessageBox.Show(message1 + " " + message2, "wDIM", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (result == DialogResult.Yes)
+            {
+                try
+                {
+                    string privateDesktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                    foreach (string shortcut in shortcuts) {
+                        string ogName = shortcut.Substring((shortcut.LastIndexOf("\\") + 1));
+                        if (ogName == "desktop.ini") return;
+                        File.Move(shortcut, Path.Combine(privateDesktop, ogName));
+                    }
+                    Utilities.RefreshDesktop();
+                    System.Windows.Forms.MessageBox.Show("Public shortcuts have been moved to private desktop.", "wDIM");
+                }
+                catch (Exception e)
+                {
+                    System.Windows.Forms.MessageBox.Show("An error occurred: " + e.Message + "\n\nYou may need to rerun the program in admin mode.", "wDIM", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

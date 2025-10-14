@@ -1,4 +1,5 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using System.Diagnostics;
 using System.IO;
 
 namespace wDIMForm
@@ -116,6 +117,19 @@ namespace wDIMForm
             multiplePaper2.Checked          = Properties.Settings.Default.useRandomPaper = false;
             arrowCheck.Checked              = Properties.Settings.Default.autoApplyArrows = false;
             explorerCheck.Checked           = Properties.Settings.Default.autoRestartExplorer = false;
+        }
+
+        // View app folder button
+        private void button3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Process.Start("explorer.exe", Utilities.GetAppFolder());
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show("An error occurred: " + ex.Message);
+            }
         }
     }
 }

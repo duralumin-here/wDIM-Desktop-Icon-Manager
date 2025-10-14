@@ -33,8 +33,6 @@ namespace wDIMForm
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenu));
             imageList1 = new ImageList(components);
-            tabPageHelp = new TabPage();
-            appDetails = new RichTextBox();
             tabPageSettings = new TabPage();
             button3 = new Button();
             restoreSettingsButton = new Button();
@@ -100,6 +98,7 @@ namespace wDIMForm
             createIconSetButton = new Button();
             applyIconSetButton = new Button();
             tabPageManage = new TabPage();
+            linkLabel1 = new LinkLabel();
             refreshButton = new Button();
             label4 = new Label();
             backupButton = new Button();
@@ -110,7 +109,6 @@ namespace wDIMForm
             label1 = new Label();
             label2 = new Label();
             tabControl1 = new TabControl();
-            tabPageHelp.SuspendLayout();
             tabPageSettings.SuspendLayout();
             tabPageArrows.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)lightSlide).BeginInit();
@@ -130,25 +128,6 @@ namespace wDIMForm
             imageList1.ColorDepth = ColorDepth.Depth32Bit;
             imageList1.ImageSize = new Size(75, 75);
             imageList1.TransparentColor = Color.Transparent;
-            // 
-            // tabPageHelp
-            // 
-            tabPageHelp.BackColor = Color.WhiteSmoke;
-            tabPageHelp.Controls.Add(appDetails);
-            tabPageHelp.Location = new Point(4, 29);
-            tabPageHelp.Name = "tabPageHelp";
-            tabPageHelp.Padding = new Padding(3);
-            tabPageHelp.Size = new Size(770, 296);
-            tabPageHelp.TabIndex = 8;
-            tabPageHelp.Text = "About/Help";
-            // 
-            // appDetails
-            // 
-            appDetails.Location = new Point(326, 6);
-            appDetails.Name = "appDetails";
-            appDetails.Size = new Size(438, 284);
-            appDetails.TabIndex = 0;
-            appDetails.Text = "Link to Github, wherever I get the default sets from";
             // 
             // tabPageSettings
             // 
@@ -181,6 +160,7 @@ namespace wDIMForm
             button3.TabIndex = 29;
             button3.Text = "View App Folder";
             button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
             // 
             // restoreSettingsButton
             // 
@@ -547,9 +527,9 @@ namespace wDIMForm
             label6.AutoSize = true;
             label6.Location = new Point(13, 197);
             label6.Name = "label6";
-            label6.Size = new Size(747, 20);
+            label6.Size = new Size(735, 20);
             label6.TabIndex = 21;
-            label6.Text = "Modified shortcuts will move over to the side of the screen, all mixed up, so you'll likely have to rearrange them.";
+            label6.Text = "Modified shortcuts will move over to the side of the screen, alphabetized, so you may have to rearrange them.";
             // 
             // labelRestoreButton
             // 
@@ -872,6 +852,7 @@ namespace wDIMForm
             // tabPageManage
             // 
             tabPageManage.BackColor = Color.WhiteSmoke;
+            tabPageManage.Controls.Add(linkLabel1);
             tabPageManage.Controls.Add(refreshButton);
             tabPageManage.Controls.Add(label4);
             tabPageManage.Controls.Add(backupButton);
@@ -888,12 +869,23 @@ namespace wDIMForm
             tabPageManage.TabIndex = 1;
             tabPageManage.Text = "Desktop Management";
             // 
+            // linkLabel1
+            // 
+            linkLabel1.AutoSize = true;
+            linkLabel1.Location = new Point(468, 23);
+            linkLabel1.Name = "linkLabel1";
+            linkLabel1.Size = new Size(286, 20);
+            linkLabel1.TabIndex = 19;
+            linkLabel1.TabStop = true;
+            linkLabel1.Text = "Need help? Documentation coming soon!";
+            linkLabel1.LinkClicked += linkLabel1_LinkClicked;
+            // 
             // refreshButton
             // 
             refreshButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            refreshButton.Location = new Point(406, 247);
+            refreshButton.Location = new Point(324, 249);
             refreshButton.Name = "refreshButton";
-            refreshButton.Size = new Size(171, 29);
+            refreshButton.Size = new Size(212, 29);
             refreshButton.TabIndex = 18;
             refreshButton.Text = "Refresh Desktop";
             refreshButton.UseVisualStyleBackColor = true;
@@ -922,7 +914,7 @@ namespace wDIMForm
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(17, 214);
+            label3.Location = new Point(17, 212);
             label3.Name = "label3";
             label3.Size = new Size(512, 20);
             label3.TabIndex = 16;
@@ -930,9 +922,9 @@ namespace wDIMForm
             // 
             // explorerButton
             // 
-            explorerButton.Location = new Point(583, 247);
+            explorerButton.Location = new Point(542, 249);
             explorerButton.Name = "explorerButton";
-            explorerButton.Size = new Size(171, 29);
+            explorerButton.Size = new Size(212, 29);
             explorerButton.TabIndex = 14;
             explorerButton.Text = "Restart Explorer";
             explorerButton.UseVisualStyleBackColor = true;
@@ -961,7 +953,7 @@ namespace wDIMForm
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(17, 86);
+            label1.Location = new Point(17, 84);
             label1.Name = "label1";
             label1.Size = new Size(459, 20);
             label1.TabIndex = 7;
@@ -970,7 +962,7 @@ namespace wDIMForm
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(17, 150);
+            label2.Location = new Point(17, 148);
             label2.Name = "label2";
             label2.Size = new Size(737, 20);
             label2.TabIndex = 8;
@@ -984,7 +976,6 @@ namespace wDIMForm
             tabControl1.Controls.Add(tabPageLabels);
             tabControl1.Controls.Add(tabPageArrows);
             tabControl1.Controls.Add(tabPageSettings);
-            tabControl1.Controls.Add(tabPageHelp);
             tabControl1.Location = new Point(12, 12);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
@@ -1005,7 +996,6 @@ namespace wDIMForm
             Name = "MainMenu";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "wDIM";
-            tabPageHelp.ResumeLayout(false);
             tabPageSettings.ResumeLayout(false);
             tabPageSettings.PerformLayout();
             tabPageArrows.ResumeLayout(false);
@@ -1027,8 +1017,9 @@ namespace wDIMForm
 
         #endregion
         private ImageList imageList1;
-        private TabPage tabPageHelp;
         private TabPage tabPageSettings;
+        private Button button3;
+        private Button restoreSettingsButton;
         private Button button2;
         private Button shortcutToPersonalButton;
         private RadioButton multiplePaper2;
@@ -1059,6 +1050,7 @@ namespace wDIMForm
         private TrackBar hueSlide;
         private PictureBox arrowShowBox;
         private TabPage tabPageLabels;
+        private Label label6;
         private Button labelRestoreButton;
         private Label alphabetLabel;
         private Label label11;
@@ -1079,6 +1071,7 @@ namespace wDIMForm
         private RadioButton cursiveLightRadio;
         private RadioButton cursiveBoldRadio;
         private TabPage tabPageIcons;
+        private Button copyIconSetButton;
         private PictureBox arrowDisplay;
         private Button importIconSetButton;
         private ListView listView1;
@@ -1099,10 +1092,6 @@ namespace wDIMForm
         private Label label1;
         private Label label2;
         private TabControl tabControl1;
-        private Button restoreSettingsButton;
-        private Button copyIconSetButton;
-        private RichTextBox appDetails;
-        private Button button3;
-        private Label label6;
+        private LinkLabel linkLabel1;
     }
 }

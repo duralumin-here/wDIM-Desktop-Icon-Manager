@@ -300,7 +300,7 @@ namespace wDIMForm
                 {
                     CommonOpenFileDialog dialog = new()
                     {
-                        InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                        InitialDirectory = Utilities.GetIconSetsFolder(),
                         IsFolderPicker = true,
                         Title = "Select a location to save the shortcut arrow."
                     };

@@ -3,6 +3,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace wDIMForm
 {
@@ -15,6 +16,11 @@ namespace wDIMForm
             allEntries.AddRange(GetPublicDesktopEntries());
             allEntries.AddRange(GetPrivateDesktopEntries());
             return allEntries;
+        }
+
+        public static string GetHelpURL()
+        {
+            return "https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager";
         }
 
         // Gets the folder the app is located in
@@ -64,8 +70,8 @@ namespace wDIMForm
         public static List<string> CreateLinkArray()
         {
             List<string> allEntries = [];
-            allEntries.AddRange(Directory.GetFiles(@"C:\Users\Public\Desktop", "*.lnk")); // private shortcuts
-            allEntries.AddRange(Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "*.lnk")); // public shortcuts
+            allEntries.AddRange(Directory.GetFiles(@"C:\Users\Public\Desktop", "*.lnk")); // public shortcuts
+            allEntries.AddRange(Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "*.lnk")); // private shortcuts
             return allEntries;
         }
 
@@ -73,6 +79,7 @@ namespace wDIMForm
         {
             string publicDesk = @"C:\Users\Public\Desktop";
             List<string> publicEntries = new(Directory.GetFiles(publicDesk));
+            publicEntries.Remove(@"C:\Users\Public\Desktop\desktop.ini");
             return publicEntries;
         }
 
