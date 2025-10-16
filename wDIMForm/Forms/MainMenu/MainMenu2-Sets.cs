@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using System.IO;
 
 namespace wDIMForm
 {
@@ -93,6 +94,37 @@ namespace wDIMForm
         private void ArrowDisplay_MouseLeave(object sender, EventArgs e)
         {
             arrowDisplay.BackColor = Color.Transparent;
+        }
+
+        private void importIconSetButton_Click(object sender, EventArgs e)
+        {
+            string folder = PickFolder();
+            if (folder == null) return;
+
+        }
+
+        private static string PickFolder()
+        {
+            CommonOpenFileDialog dialog = new()
+            {
+                InitialDirectory = "C:\\Users",
+                IsFolderPicker = true,
+                Title = "Select an icon set to import."
+            };
+            dialog.ShowDialog();
+            try
+            {
+                return dialog.FileName;
+            }
+            catch (InvalidOperationException)
+            {
+                return null;
+            }
+            catch (Exception e)
+            {
+                System.Windows.Forms.MessageBox.Show("An error occurred: " + e.Message + "\n\nPlease try again.", "wDIM", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
+            }
         }
     }
 }

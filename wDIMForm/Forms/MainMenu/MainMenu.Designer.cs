@@ -733,6 +733,7 @@ namespace wDIMForm
             importIconSetButton.TabIndex = 2;
             importIconSetButton.Text = "Import icon set";
             importIconSetButton.UseVisualStyleBackColor = true;
+            importIconSetButton.Click += importIconSetButton_Click;
             // 
             // listView1
             // 
@@ -857,9 +858,9 @@ namespace wDIMForm
             // refreshButton
             // 
             refreshButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            refreshButton.Location = new Point(542, 21);
+            refreshButton.Location = new Point(581, 21);
             refreshButton.Name = "refreshButton";
-            refreshButton.Size = new Size(212, 29);
+            refreshButton.Size = new Size(173, 29);
             refreshButton.TabIndex = 18;
             refreshButton.Text = "Refresh desktop";
             refreshButton.UseVisualStyleBackColor = true;
@@ -897,9 +898,9 @@ namespace wDIMForm
             // 
             // explorerButton
             // 
-            explorerButton.Location = new Point(542, 56);
+            explorerButton.Location = new Point(581, 56);
             explorerButton.Name = "explorerButton";
-            explorerButton.Size = new Size(212, 29);
+            explorerButton.Size = new Size(173, 29);
             explorerButton.TabIndex = 14;
             explorerButton.Text = "Restart Explorer";
             explorerButton.UseVisualStyleBackColor = true;
