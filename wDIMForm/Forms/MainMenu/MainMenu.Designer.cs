@@ -894,7 +894,6 @@ namespace wDIMForm
             label3.Size = new Size(512, 20);
             label3.TabIndex = 16;
             label3.Text = "Saves desktop shortcuts and current icon set. (Physical location is not saved.)";
-            label3.Click += label3_Click;
             // 
             // explorerButton
             // 

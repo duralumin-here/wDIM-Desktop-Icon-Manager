@@ -166,5 +166,17 @@ namespace wDIMForm.Properties {
                 this["appendedText"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string currentSet {
+            get {
+                return ((string)(this["currentSet"]));
+            }
+            set {
+                this["currentSet"] = value;
+            }
+        }
     }
 }

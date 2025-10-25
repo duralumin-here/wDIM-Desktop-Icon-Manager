@@ -175,7 +175,7 @@ namespace wDIMForm
             }
             catch (Exception e)
             {
-                System.Windows.Forms.MessageBox.Show("An error occurred:" + e.Message + "\n\nTry re-running the application in Admin mode and see if that fixes the issue.", "Error");
+                System.Windows.Forms.MessageBox.Show("An error occurred trying to set the shortcut arrow:" + e.Message + "\n\nTry re-running the application in Admin mode and see if that fixes the issue.", "Error");
                 return false;
             }
             return true;
@@ -201,7 +201,7 @@ namespace wDIMForm
             }
             catch (Exception e)
             {
-                System.Windows.Forms.MessageBox.Show("An error occurred: " + e.Message + "\n\nTry re-running the application in Admin mode and see if that fixes the issue.", "Error");
+                System.Windows.Forms.MessageBox.Show("An error occurred trying to restore the shortcut arrow: " + e.Message + "\n\nTry re-running the application in Admin mode and see if that fixes the issue.", "Error");
                 return false;
             }
             return true;

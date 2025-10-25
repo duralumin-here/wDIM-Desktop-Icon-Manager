@@ -1,13 +1,4 @@
-﻿// Things I need to implement before I can actually ship this out
-
-// Page 2
-    // FIXME: Add GUI for creating icon sets
-        // Make sure it also works for editing icon sets
-        // May need a workflow for people to upload specific icons for apps so they can be renamed accordingly
-    // FIXME: Add flow for importing icon sets (warn if no .ico files found)
-    // FIXME: Rework applying the icon set to handle arrows and wallpaper
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace wDIMForm
 {
@@ -59,16 +50,6 @@ namespace wDIMForm
         private void MainMenu_FormClosing(object sender, FormClosingEventArgs e)
         {
             Properties.Settings.Default.Save();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show(Properties.Settings.Default.labelMap);
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

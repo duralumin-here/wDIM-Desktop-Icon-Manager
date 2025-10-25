@@ -1,36 +1,128 @@
-﻿using System;
+﻿using IWshRuntimeLibrary;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Shapes;
 
 namespace wDIMForm
 {
     internal class IconSets
     {
-        public static void ApplySet(string iconSetPath, bool applyWallpaper, bool applyArrows, bool restartExplorer)
+        // TODO: Add GUI for creating/editing icon sets (may need to allow identical apps to be renamed)
+        // FIXME: Add flow for importing icon sets (warn if no .ico files found)
+        // FIXME: Rework applying the icon set to handle arrows and wallpaper
+
+        public static void ApplySet(string iconSetPath)
         {
-            if (applyWallpaper)
+            if (AreDifferent(iconSetPath))
             {
-                // string wallpaperPath = Utilities.GetCurrentIconsFolder();
-                // Utilities.ChangeWallpaper();
+                WhichToKeep();
+            }
+            else
+            {
+                // Clear current icon folder and copy icon set to it
             }
 
-            /* Copy icons into the current set
-             *  Every set should include a name and whether or not it has custom labels in the details.txt
-             *     , the shortcuts aren't part of the set. Where should the details file go? I guess still the current icons
-             *      since that is separate from anything else
-             *  If current set has a name, check the folder for a folder with that name
-             *      If it exists and there are conflicts, ask to overwrite set "nameVariable" with CurrentIcons or don't apply changes
-             *          If it's just an arrow or a wallpaper apply it too
-             *      If it doesn't exist, create a folder nameVariable and save it to it
-             *  Then clear the current icons and copy the icon set to it
-             *  Can set in settings whether wallpapers should apply automatically, and whether arrows should
-             *      By default, apply wallpapers but not arrows
-             *      I do really wish we could update arrows without resetting explorer
-            */
 
+            /* Apply icons
+                * I think this will make the most sense if it starts by checking all files for matching ones
+                * Then, for any ones that don't have a matching icon, apply a random other icon in the file
+                */
+
+            Properties.Settings.Default.currentSet = iconSetPath;
+
+            WallpaperHandle(); // Run by default
+            ArrowHandle(); // Skipped by default
+            ExplorerHandle(); // SKipped by default
+        }
+
+        private static void WallpaperHandle()
+        {
+            if (Properties.Settings.Default.autoApplyWallpaper)
+            {
+                try
+                {
+                    Utilities.ChangeWallpaper(Utilities.GetWallpaperPath(Utilities.GetCurrentIconsFolder()));
+                }
+                catch
+                {
+                    // May log later
+                }
+            }
+        }
+
+        private static void ArrowHandle()
+        {
+            if (Properties.Settings.Default.autoApplyArrows)
+            {
+                try
+                {
+                    Arrow.SetArrowPath(Utilities.GetCurrentArrowPath());
+                }
+                catch
+                {
+                    // May log later
+                }
+            }
+        }
+
+        private static void ExplorerHandle()
+        {
+            if (Properties.Settings.Default.autoRestartExplorer)
+            {
+                try
+                {
+                    Utilities.RestartExplorer();
+                }
+                catch
+                {
+                    // May log later
+                }
+            }
+        }
+
+        private static bool AreDifferent(string iconSetPath)
+        {
+            // Check if original folder even exists
+            if (!Directory.Exists(Properties.Settings.Default.currentSet))
+            {
+                Directory.CreateDirectory(Properties.Settings.Default.currentSet);
+                return false;
+            }
+
+            FileInfo[] currentFolder = new DirectoryInfo(Utilities.GetCurrentIconsFolder()).GetFiles();
+            FileInfo[] copiedFrom = new DirectoryInfo(Properties.Settings.Default.currentSet).GetFiles();
+
+            // If different numbers of files
+            if (currentFolder.Length != copiedFrom.Length)
+            {
+                return true;
+            }
+            
+            // If one more recently modified than the other
+            if (GetMostRecentModified(currentFolder) != GetMostRecentModified(copiedFrom))
+            {
+                return true;
+            }
+
+            // Return false if it passes all checks (could compare the actual files but that seems a little intensive/slow for this)
+            return false;            
+        }
+
+        private static long GetMostRecentModified(FileInfo[] folder)
+        {
+            long count = 0;
+            foreach (FileInfo file in folder)
+            {
+                if (file.LastWriteTime.Ticks > count)
+                {
+                    count = file.LastWriteTime.Ticks;
+                }
+            }
+            return count;
         }
     }
 }
