@@ -65,6 +65,7 @@ namespace wDIMForm
         // Apply icon set button
         private void applyIconSetButton_Click(object sender, EventArgs e)
         {
+            // Button isn't activated until something is selected so this function won't run with a null parameter
             IconSets.ApplySet(Path.Combine(Utilities.GetIconSetsFolder(), iconSetListBox.SelectedItem.ToString()));
         }
 
@@ -78,23 +79,14 @@ namespace wDIMForm
         // Adds text at the given path to the given RichTextBox if the text file exists
         private void AddElement(string path, RichTextBox display)
         {
-            if (File.Exists(path))
-            {
-                display.Text = File.ReadAllText(path);
-            }
-            else
-            {
-                display.Text = "No details found for this set.";
-            }
+            if (File.Exists(path)) display.Text = File.ReadAllText(path);
+            else display.Text = "No details found for this set.";
         }
 
         // Turns arrow background grey on hover (for visibility)
         private void ArrowDisplay_MouseEnter(object sender, EventArgs e)
         {
-            if (arrowDisplay.BackgroundImage != null)
-            {
-                arrowDisplay.BackColor = Color.Gray;
-            }
+            if (arrowDisplay.BackgroundImage != null) arrowDisplay.BackColor = Color.Gray;
         }
 
         // Reverts arrow background to transparent when no longer hovered
@@ -103,58 +95,11 @@ namespace wDIMForm
             arrowDisplay.BackColor = Color.Transparent;
         }
 
+        // Imports a set and refreshes the list
         private void importIconSetButton_Click(object sender, EventArgs e)
         {
-            string folder = PickFolder();
-            if (folder == null) return;
-            MessageBox.Show("The selected folder is " + folder);
-
-            string sets = Utilities.GetIconSetsFolder();
-
-            string folderName = folder.Substring((folder.LastIndexOf("\\") + 1));
-
-            MessageBox.Show("The folder's name is " + folderName);
-
-            int count = 0;
-            while (Directory.Exists(Path.Combine(sets, folderName)) && count < 5)
-            {
-                folderName = folderName + " - Copy";
-                ++count;
-            }
-            if (count >= 5)
-            {
-                MessageBox.Show("An error occurred. Try renaming the folder, and then try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            MessageBox.Show("The folder's new name is " + folderName);
-            string newFolder = Path.Combine(sets, folderName);
-            MessageBox.Show("Copying from " + folder + " to " + newFolder);
-            Utilities.CopyDirectory(folder, newFolder);
-        }
-
-        private static string PickFolder()
-        {
-            CommonOpenFileDialog dialog = new()
-            {
-                InitialDirectory = "C:\\Users",
-                IsFolderPicker = true,
-                Title = "Select an icon set to import."
-            };
-            dialog.ShowDialog();
-            try
-            {
-                return dialog.FileName;
-            }
-            catch (InvalidOperationException)
-            {
-                return null;
-            }
-            catch (Exception e)
-            {
-                System.Windows.Forms.MessageBox.Show("An error occurred: " + e.Message + "\n\nPlease try again.", "wDIM", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return null;
-            }
+            IconSets.ImportSet();
+            TabControl1_SelectedIndexChanged(sender, e);
         }
     }
 }

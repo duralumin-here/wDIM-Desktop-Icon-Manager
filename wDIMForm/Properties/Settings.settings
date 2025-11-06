@@ -17,12 +17,6 @@
     <Setting Name="labelMap" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="useFirstPaper" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
-    <Setting Name="useRandomPaper" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
     <Setting Name="areLabelsApplied" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>

@@ -85,30 +85,6 @@ namespace wDIMForm.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool useFirstPaper {
-            get {
-                return ((bool)(this["useFirstPaper"]));
-            }
-            set {
-                this["useFirstPaper"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool useRandomPaper {
-            get {
-                return ((bool)(this["useRandomPaper"]));
-            }
-            set {
-                this["useRandomPaper"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool areLabelsApplied {
             get {

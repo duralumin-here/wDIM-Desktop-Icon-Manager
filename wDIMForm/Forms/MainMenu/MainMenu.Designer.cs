@@ -267,7 +267,7 @@ namespace wDIMForm
             // 
             // arrowPathButton
             // 
-            arrowPathButton.Location = new Point(568, 44);
+            arrowPathButton.Location = new Point(568, 205);
             arrowPathButton.Name = "arrowPathButton";
             arrowPathButton.Size = new Size(175, 29);
             arrowPathButton.TabIndex = 42;
@@ -335,7 +335,7 @@ namespace wDIMForm
             // 
             // arrowApplyButton
             // 
-            arrowApplyButton.Location = new Point(568, 114);
+            arrowApplyButton.Location = new Point(568, 86);
             arrowApplyButton.Name = "arrowApplyButton";
             arrowApplyButton.Size = new Size(175, 30);
             arrowApplyButton.TabIndex = 10;
@@ -346,7 +346,7 @@ namespace wDIMForm
             // ArrowApplyMainMenuButton
             // 
             ArrowApplyMainMenuButton.Enabled = false;
-            ArrowApplyMainMenuButton.Location = new Point(568, 79);
+            ArrowApplyMainMenuButton.Location = new Point(568, 51);
             ArrowApplyMainMenuButton.Name = "ArrowApplyMainMenuButton";
             ArrowApplyMainMenuButton.Size = new Size(175, 30);
             ArrowApplyMainMenuButton.TabIndex = 9;
@@ -391,7 +391,7 @@ namespace wDIMForm
             // 
             comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBox1.FormattingEnabled = true;
-            comboBox1.Items.AddRange(new object[] { "Blank/No Arrow", "Curved (Transparent)", "Curved (Black)", "Curved (White)", "Straight (Transparent)", "Straight (Black)", "Straight (White)" });
+            comboBox1.Items.AddRange(new object[] { "Blank/No Arrow", "Curved (Transparent)", "Curved (Black)", "Curved (White)", "Straight (Transparent)", "Straight (Black)", "Straight (White)", "Heart", "Star" });
             comboBox1.Location = new Point(27, 242);
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(152, 28);
@@ -747,7 +747,6 @@ namespace wDIMForm
             detailsBox.Size = new Size(348, 127);
             detailsBox.TabIndex = 4;
             detailsBox.Text = "If the icon set has details, they'll show up here.\n\nNote: Custom arrows won't show until you initialize the custom arrow path with the button on the next page. Try hovering the arrow in the preview!";
-            detailsBox.TextChanged += detailsBox_TextChanged;
             // 
             // wallpaperDisplay
             // 

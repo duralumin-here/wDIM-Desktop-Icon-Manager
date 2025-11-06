@@ -1,11 +1,11 @@
 ﻿using IWshRuntimeLibrary;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using MS.WindowsAPICodePack.Internal;
 using System.IO;
 using File = System.IO.File;
 
 namespace wDIMForm
 {
+    // IMPORTANT NOTE: This was some of the earliest code I wrote, and it shows. I plan to improve it.
+
     public class ForNonShortcuts
     {
         // Calls the method to check for non-shortcuts and asks the user what to do about them

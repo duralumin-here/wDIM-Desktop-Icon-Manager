@@ -6,6 +6,7 @@ namespace wDIMForm
 {
     public class Labels
     {
+        // Changes labels of desktop shortcuts to a new font
         public static void ChangeLabels(List<string> desktopEntries, string font, string startString, string endString)
         {
             StringBuilder myList = new StringBuilder();
@@ -47,23 +48,24 @@ namespace wDIMForm
             Utilities.RefreshDesktop();
         }
 
+        // Converts labels back to their original state
         public static void ResetLabels(List<string> desktopEntries)
         {
-            // TODO: error handling for if something is missed?
             if (Properties.Settings.Default.areLabelsApplied)
             {
                 foreach (string entry in desktopEntries)
                 {
-                    string original = entry.Substring((entry.LastIndexOf("\\") + 1));
-                    string oldNoExtension = original.Substring(0, original.LastIndexOf('.'));
+                    string converted = entry.Substring((entry.LastIndexOf("\\") + 1));
+                    string convertedNoExtension = converted.Substring(0, converted.LastIndexOf('.'));
 
-                    int startIndex = Properties.Settings.Default.labelMap.IndexOf(oldNoExtension);
+                    // Locate the converted label in the saved string and pull its associated original label
+                    int startIndex = Properties.Settings.Default.labelMap.IndexOf(convertedNoExtension);
                     int endIndex = startIndex - 2;
                     int lineStartIndex = Properties.Settings.Default.labelMap.LastIndexOf('\n', endIndex) + 1;
                     try
                     {
-                        string newNoExtension = Properties.Settings.Default.labelMap.Substring(lineStartIndex, endIndex - lineStartIndex + 1).Trim();
-                        CopyShortcutWithLabel(entry.Contains("C:\\Users\\Public"), oldNoExtension, newNoExtension, "", "");
+                        string originalNoExtension = Properties.Settings.Default.labelMap.Substring(lineStartIndex, endIndex - lineStartIndex + 1).Trim();
+                        CopyShortcutWithLabel(entry.Contains("C:\\Users\\Public"), convertedNoExtension, originalNoExtension, "", "");
                     }
                     catch
                     {
@@ -73,7 +75,13 @@ namespace wDIMForm
             }
 
             Utilities.RefreshDesktop();
+            ResetLabelSettings();
+        }
 
+        // Reverts label settings to default
+        private static void ResetLabelSettings()
+        {
+            // TODO: error handling for if a label was unable to be changed?
             Properties.Settings.Default.labelMap = null;
             Properties.Settings.Default.labelFont = "default";
             Properties.Settings.Default.areLabelsApplied = false;
@@ -82,26 +90,31 @@ namespace wDIMForm
             Properties.Settings.Default.Save();
         }
 
+        // Adds an entry to the label log
         private static void UpdateLabelLog(StringBuilder myList, string oldName, string newName)
         {
             myList.Append(oldName + "|" + newName).Append('\n');
         }
 
+        // Updates saved label settings based on changes
         private static void UpdateLabelSettings(StringBuilder myList, string font, string startString, string endString)
         {
+            // Save string of labels with their conversions
             Properties.Settings.Default.labelMap = myList.ToString().TrimEnd('\n');
+            // Update label status and font
             Properties.Settings.Default.areLabelsApplied = true;
             Properties.Settings.Default.labelFont = font;
+            // Save text added on
             Properties.Settings.Default.prependedText = startString;
             Properties.Settings.Default.appendedText = endString;
+            // Save and refresh
             Properties.Settings.Default.Save();
             Utilities.RefreshDesktop();
         }
 
+        // Renames a shortcut (doing it this way allows for usage of special characters)
         public static void CopyShortcutWithLabel(bool isPublic, string oldNameNoExtension, string newNameNoExtension, string startString, string endString)
         {
-            // TODO: Add option in settings to move all shortcuts to private desktop (with lots of warnings)? Might be helpful
-
             // Select proper desktop
             string desktop;
             if (isPublic) desktop = @"C:\Users\Public\Desktop";
@@ -114,14 +127,14 @@ namespace wDIMForm
             File.Move(oldLnk, newLnk);
         }
 
+        // Returns an entry written in oldAlphabet into the same entry written in newAlphabet
         public static string ApplyFontToEntry(string entry, string[] oldAlphabet, string[] newAlphabet)
         {
-            // TODO: get it to work to convert between fonts
             string[] entryArr = StringToArray(entry);
 
-            for (int i = 0; i < entryArr.Length; ++i) // iterate through letters of entry
+            for (int i = 0; i < entryArr.Length; ++i) // iterate through entry
             {
-                for (int j = 0; j < oldAlphabet.Length; ++j) // try to match them with a font letter
+                for (int j = 0; j < oldAlphabet.Length; ++j) // swap new letters into it whenever found
                 {
                     if (entryArr[i] == oldAlphabet[j])
                     {
@@ -130,10 +143,11 @@ namespace wDIMForm
                     }
                 }
             }
-
+            // Return converted entry
             return ArrayToString(entryArr);
         }
 
+        // Converts an array to a string
         public static string ArrayToString(string[] entryArr)
         {
             string newText = "";
@@ -144,6 +158,7 @@ namespace wDIMForm
             return newText;
         }
 
+        // Converts a string to an array
         public static string[] StringToArray(string entry)
         {
             string[] entryArr = new string[entry.Length];

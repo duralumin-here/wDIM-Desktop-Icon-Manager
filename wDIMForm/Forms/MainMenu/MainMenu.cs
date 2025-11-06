@@ -37,9 +37,6 @@ namespace wDIMForm
             defaultWallpaperButton.Enabled = Properties.Settings.Default.applyDefaultWallpaper;
             wallpaperPathLabel.Text = Properties.Settings.Default.defaultWallpaper;
             wallpaperPathLabel.Enabled = Properties.Settings.Default.applyDefaultWallpaper;
-            /*multiplePaper1.Checked = Properties.Settings.Default.useFirstPaper;
-            multiplePaper2.Checked = Properties.Settings.Default.useRandomPaper;
-            arrowCheck.Checked = Properties.Settings.Default.autoApplyArrows;*/
             explorerCheck.Checked = Properties.Settings.Default.autoRestartExplorer;
 
             // Defines event when the form closes
@@ -50,11 +47,6 @@ namespace wDIMForm
         private void MainMenu_FormClosing(object sender, FormClosingEventArgs e)
         {
             Properties.Settings.Default.Save();
-        }
-
-        private void detailsBox_TextChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }
