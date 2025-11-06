@@ -9,10 +9,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="defaultWallpaper" Type="System.String" Scope="User">
-      <Value Profile="(Default)">No path set</Value>
-    </Setting>
-    <Setting Name="autoApplyArrows" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">?</Value>
     </Setting>
     <Setting Name="autoRestartExplorer" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -39,7 +36,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="currentSet" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">?</Value>
     </Setting>
   </Settings>
 </SettingsFile>

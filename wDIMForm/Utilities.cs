@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using static System.Windows.Forms.DataFormats;
 
 namespace wDIMForm
 {
@@ -66,7 +67,7 @@ namespace wDIMForm
             return Path.Combine(GetCurrentIconsFolder(), wallpaperName);
         }
 
-        // Creates and returns list on lnk files on the desktop
+        // Creates and returns list of lnk files on the desktop
         public static List<string> CreateLinkArray()
         {
             List<string> allEntries = [];
@@ -118,6 +119,11 @@ namespace wDIMForm
             Directory.CreateDirectory(Path.Combine(appPath, "Used-Arrows"));
         }
 
+        public static string GetRecentIconsFolder()
+        {
+            return Path.Combine(Utilities.GetAppFolder(), "Most-Recent-Icons-Backup");
+        }
+
         // Restarts Windows Explorer using batch script (has to be a better way)
 
         public static void RestartExplorer()
@@ -155,9 +161,26 @@ namespace wDIMForm
                     string targetFilePath = Path.Combine(destinationLocation, file.Name);
                     file.CopyTo(targetFilePath);
                 }
-                catch
+                catch // (Exception e)
                 {
-                    // TODO: add dialog
+                    // MessageBox.Show(e.Message);
+                }
+            }
+        }
+
+        // Deletes everything in a folder
+        public static void EmptyFolder(string folderPath)
+        {
+            if (Directory.Exists(folderPath))
+            {
+                foreach (var file in Directory.GetFiles(folderPath))
+                {
+                    System.IO.File.Delete(file);
+                }
+
+                foreach (var directory in Directory.GetDirectories(folderPath))
+                {
+                    Directory.Delete(directory, true);
                 }
             }
         }

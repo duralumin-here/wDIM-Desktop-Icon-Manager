@@ -42,7 +42,6 @@ namespace wDIMForm
             defaultWallpaperButton = new Button();
             wallpaperPathLabel = new Label();
             explorerCheck = new CheckBox();
-            arrowCheck = new CheckBox();
             wallpaperCheck = new CheckBox();
             tabPageArrows = new TabPage();
             restoreArrowButton = new Button();
@@ -84,15 +83,12 @@ namespace wDIMForm
             cursiveLightRadio = new RadioButton();
             cursiveBoldRadio = new RadioButton();
             tabPageIcons = new TabPage();
-            copyIconSetButton = new Button();
             arrowDisplay = new PictureBox();
             importIconSetButton = new Button();
             listView1 = new ListView();
             detailsBox = new RichTextBox();
             wallpaperDisplay = new PictureBox();
             iconSetListBox = new ListBox();
-            editIconSetButton = new Button();
-            createIconSetButton = new Button();
             applyIconSetButton = new Button();
             tabPageManage = new TabPage();
             label10 = new Label();
@@ -138,7 +134,6 @@ namespace wDIMForm
             tabPageSettings.Controls.Add(defaultWallpaperButton);
             tabPageSettings.Controls.Add(wallpaperPathLabel);
             tabPageSettings.Controls.Add(explorerCheck);
-            tabPageSettings.Controls.Add(arrowCheck);
             tabPageSettings.Controls.Add(wallpaperCheck);
             tabPageSettings.Location = new Point(4, 29);
             tabPageSettings.Name = "tabPageSettings";
@@ -220,24 +215,13 @@ namespace wDIMForm
             // explorerCheck
             // 
             explorerCheck.AutoSize = true;
-            explorerCheck.Location = new Point(37, 154);
+            explorerCheck.Location = new Point(16, 122);
             explorerCheck.Name = "explorerCheck";
-            explorerCheck.Size = new Size(731, 24);
+            explorerCheck.Size = new Size(729, 24);
             explorerCheck.TabIndex = 5;
-            explorerCheck.Text = "Restart Windows Explorer when applying icon set (may be disruptive; required for arrow changes to show)";
+            explorerCheck.Text = "Restart Windows Explorer when applying icon set (may be disruptive; may fix arrow changes not showing)";
             explorerCheck.UseVisualStyleBackColor = true;
             explorerCheck.CheckedChanged += explorerCheck_CheckedChanged;
-            // 
-            // arrowCheck
-            // 
-            arrowCheck.AutoSize = true;
-            arrowCheck.Location = new Point(16, 124);
-            arrowCheck.Name = "arrowCheck";
-            arrowCheck.Size = new Size(604, 24);
-            arrowCheck.TabIndex = 4;
-            arrowCheck.Text = "Automatically apply shortcut arrows included in icon sets (requires Admin permissions)";
-            arrowCheck.UseVisualStyleBackColor = true;
-            arrowCheck.CheckedChanged += arrowCheck_CheckedChanged;
             // 
             // wallpaperCheck
             // 
@@ -687,15 +671,12 @@ namespace wDIMForm
             // tabPageIcons
             // 
             tabPageIcons.BackColor = Color.WhiteSmoke;
-            tabPageIcons.Controls.Add(copyIconSetButton);
             tabPageIcons.Controls.Add(arrowDisplay);
             tabPageIcons.Controls.Add(importIconSetButton);
             tabPageIcons.Controls.Add(listView1);
             tabPageIcons.Controls.Add(detailsBox);
             tabPageIcons.Controls.Add(wallpaperDisplay);
             tabPageIcons.Controls.Add(iconSetListBox);
-            tabPageIcons.Controls.Add(editIconSetButton);
-            tabPageIcons.Controls.Add(createIconSetButton);
             tabPageIcons.Controls.Add(applyIconSetButton);
             tabPageIcons.Location = new Point(4, 29);
             tabPageIcons.Name = "tabPageIcons";
@@ -703,15 +684,6 @@ namespace wDIMForm
             tabPageIcons.Size = new Size(770, 296);
             tabPageIcons.TabIndex = 2;
             tabPageIcons.Text = "Icon Sets";
-            // 
-            // copyIconSetButton
-            // 
-            copyIconSetButton.Location = new Point(631, 89);
-            copyIconSetButton.Name = "copyIconSetButton";
-            copyIconSetButton.Size = new Size(128, 29);
-            copyIconSetButton.TabIndex = 7;
-            copyIconSetButton.Text = "Copy icon set";
-            copyIconSetButton.UseVisualStyleBackColor = true;
             // 
             // arrowDisplay
             // 
@@ -760,7 +732,7 @@ namespace wDIMForm
             detailsBox.Name = "detailsBox";
             detailsBox.ReadOnly = true;
             detailsBox.ScrollBars = RichTextBoxScrollBars.Vertical;
-            detailsBox.Size = new Size(212, 127);
+            detailsBox.Size = new Size(348, 127);
             detailsBox.TabIndex = 4;
             detailsBox.Text = "If the icon set has details, they'll show up here.\n\nTip: Can't see the arrow clearly in the preview? Try moving your mouse over it!";
             // 
@@ -781,36 +753,21 @@ namespace wDIMForm
             iconSetListBox.FormattingEnabled = true;
             iconSetListBox.Location = new Point(16, 19);
             iconSetListBox.Name = "iconSetListBox";
-            iconSetListBox.Size = new Size(191, 184);
+            iconSetListBox.Size = new Size(191, 224);
+            iconSetListBox.Sorted = true;
             iconSetListBox.TabIndex = 0;
             iconSetListBox.SelectedIndexChanged += iconSetListBox_SelectedIndexChanged;
             // 
-            // editIconSetButton
-            // 
-            editIconSetButton.Location = new Point(631, 54);
-            editIconSetButton.Name = "editIconSetButton";
-            editIconSetButton.Size = new Size(128, 29);
-            editIconSetButton.TabIndex = 6;
-            editIconSetButton.Text = "Edit icon set";
-            editIconSetButton.UseVisualStyleBackColor = true;
-            // 
-            // createIconSetButton
-            // 
-            createIconSetButton.Location = new Point(16, 214);
-            createIconSetButton.Name = "createIconSetButton";
-            createIconSetButton.Size = new Size(191, 29);
-            createIconSetButton.TabIndex = 1;
-            createIconSetButton.Text = "Create new icon set";
-            createIconSetButton.UseVisualStyleBackColor = true;
-            // 
             // applyIconSetButton
             // 
+            applyIconSetButton.Enabled = false;
             applyIconSetButton.Location = new Point(631, 19);
             applyIconSetButton.Name = "applyIconSetButton";
             applyIconSetButton.Size = new Size(128, 29);
             applyIconSetButton.TabIndex = 5;
             applyIconSetButton.Text = "Apply icon set";
             applyIconSetButton.UseVisualStyleBackColor = true;
+            applyIconSetButton.Click += applyIconSetButton_Click;
             // 
             // tabPageManage
             // 
@@ -1001,7 +958,6 @@ namespace wDIMForm
         private Button defaultWallpaperButton;
         private Label wallpaperPathLabel;
         private CheckBox explorerCheck;
-        private CheckBox arrowCheck;
         private CheckBox wallpaperCheck;
         private TabPage tabPageArrows;
         private Button restoreArrowButton;
@@ -1043,15 +999,12 @@ namespace wDIMForm
         private RadioButton cursiveLightRadio;
         private RadioButton cursiveBoldRadio;
         private TabPage tabPageIcons;
-        private Button copyIconSetButton;
         private PictureBox arrowDisplay;
         private Button importIconSetButton;
         private ListView listView1;
         private RichTextBox detailsBox;
         private PictureBox wallpaperDisplay;
         private ListBox iconSetListBox;
-        private Button editIconSetButton;
-        private Button createIconSetButton;
         private Button applyIconSetButton;
         private TabPage tabPageManage;
         private Button refreshButton;

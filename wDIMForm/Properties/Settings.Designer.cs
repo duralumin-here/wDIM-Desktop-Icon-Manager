@@ -49,25 +49,13 @@ namespace wDIMForm.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("No path set")]
+        [global::System.Configuration.DefaultSettingValueAttribute("?")]
         public string defaultWallpaper {
             get {
                 return ((string)(this["defaultWallpaper"]));
             }
             set {
                 this["defaultWallpaper"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool autoApplyArrows {
-            get {
-                return ((bool)(this["autoApplyArrows"]));
-            }
-            set {
-                this["autoApplyArrows"] = value;
             }
         }
         
@@ -169,7 +157,7 @@ namespace wDIMForm.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("?")]
         public string currentSet {
             get {
                 return ((string)(this["currentSet"]));

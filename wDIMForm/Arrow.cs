@@ -65,6 +65,9 @@ namespace wDIMForm
 
             // TODO: Maybe ask user if they want to save the arrow to the current set if it wasn't already taken from it
 
+            // **NOTE** When I started this project, refreshing the desktop didn't seem to refresh arrows even if the icon
+            // was changed. It seems like this isn't the case anymore, so some of these workarounds may be redundant.
+
             // Attempt to save bitmap to new path (path update avoids arrow caching)
             string newPath = Path.Combine(Utilities.GetAppFolder(), "Used-Arrows", DateTime.Now.ToString("yyyyMMddhhmmss") + ".ico");
             using (Bitmap bitmap = myIcon.ToBitmap())

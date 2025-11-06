@@ -10,6 +10,18 @@ namespace wDIMForm
         private void wallpaperCheck_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.autoApplyWallpaper = wallpaperCheck.Checked;
+            if (wallpaperCheck.Checked == false)
+            {
+                defaultWallpaperCheck.Enabled = false;
+                defaultWallpaperButton.Enabled = false;
+                wallpaperPathLabel.Enabled = false;
+            }
+            else
+            {
+                defaultWallpaperCheck.Enabled = true;
+                defaultWallpaperButton.Enabled = true;
+                wallpaperPathLabel.Enabled = true;
+            }
         }
 
         // Checkbox for whether a default wallpaper is set
@@ -77,12 +89,6 @@ namespace wDIMForm
             }
         }
 
-        // Checkbox to automatically apply set arrows when sets are applied
-        private void arrowCheck_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.autoApplyArrows = arrowCheck.Checked;
-        }
-
         // Checkbox to reset explorer when sets are applied
         private void explorerCheck_CheckedChanged(object sender, EventArgs e)
         {
@@ -111,11 +117,11 @@ namespace wDIMForm
             wallpaperCheck.Checked          = Properties.Settings.Default.autoApplyWallpaper = true;
             defaultWallpaperCheck.Checked   = Properties.Settings.Default.applyDefaultWallpaper = false;
             defaultWallpaperButton.Enabled  = Properties.Settings.Default.applyDefaultWallpaper = false;
-            wallpaperPathLabel.Text         = Properties.Settings.Default.defaultWallpaper = "No path set";
+            wallpaperPathLabel.Text         = Properties.Settings.Default.defaultWallpaper = "?";
             wallpaperPathLabel.Enabled      = Properties.Settings.Default.applyDefaultWallpaper = false;
             /*multiplePaper1.Checked          = */Properties.Settings.Default.useFirstPaper = true;
             /*multiplePaper2.Checked          = */Properties.Settings.Default.useRandomPaper = false;
-            arrowCheck.Checked              = Properties.Settings.Default.autoApplyArrows = false;
+            /*arrowCheck.Checked              = Properties.Settings.Default.autoApplyArrows = false;*/
             explorerCheck.Checked           = Properties.Settings.Default.autoRestartExplorer = false;
         }
 

@@ -6,7 +6,6 @@ namespace wDIMForm
     public class DesktopPrep
     {
         // Changes the shortcut icon paths to point to a new custom file based on the executable/file name being pointed to
-        // References https://bytescout.com/blog/create-shortcuts-in-c-and-vbnet.html
         public static void SetIconPaths()
         {
             if (AreThereInvalidFiles())
@@ -44,18 +43,15 @@ namespace wDIMForm
             IWshShortcut shortcut2 = (IWshShortcut)shell.CreateShortcut(shortcut);
             // Can use .Description and .Hotkey
             // TODO: Support for different icons even if target is the same (ie: chrome web apps)
-            shortcut2.IconLocation = GetIconLocation();
+            shortcut2.IconLocation = GetIconLocation(startFolder, targetName);
             shortcut2.TargetPath = targetPath;
             shortcut2.Save();
         }
 
-        public static string GetIconLocation(/*TODO: string startFolder, string targetName*/)
+        public static string GetIconLocation(string startFolder, string targetName)
         {
             string iconLocation;
-            string startFolder = Utilities.GetCurrentIconsFolder();
-            // Get target name
-            // iconLocation = Path.Combine(startFolder, targetName) + ".ico"; // Named after target path so names can be later changed if desired
-            iconLocation = Path.Combine(startFolder, "Off") + ".ico";
+            iconLocation = Path.Combine(startFolder, targetName) + ".ico"; // Named after target path so names can be later changed if desired
             return iconLocation;
         }
 

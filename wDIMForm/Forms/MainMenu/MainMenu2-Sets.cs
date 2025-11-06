@@ -31,6 +31,7 @@ namespace wDIMForm
         // Display selected icon set
         private void iconSetListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            applyIconSetButton.Enabled = true;
             string selectedSet = Path.Combine(Utilities.GetIconSetsFolder(), iconSetListBox.SelectedItem.ToString());
             string arrowPath = Path.Combine(selectedSet, "arrow.ico");
             string detailsPath = Path.Combine(selectedSet, "details.txt");
@@ -59,6 +60,12 @@ namespace wDIMForm
                     listView1.Items.Add(item);
                 }
             }
+        }
+
+        // Apply icon set button
+        private void applyIconSetButton_Click(object sender, EventArgs e)
+        {
+            IconSets.ApplySet(Path.Combine(Utilities.GetIconSetsFolder(), iconSetListBox.SelectedItem.ToString()));
         }
 
         // Adds image at the given path to the given PictureBox if the image exists
@@ -100,7 +107,30 @@ namespace wDIMForm
         {
             string folder = PickFolder();
             if (folder == null) return;
+            MessageBox.Show("The selected folder is " + folder);
 
+            string sets = Utilities.GetIconSetsFolder();
+
+            string folderName = folder.Substring((folder.LastIndexOf("\\") + 1));
+
+            MessageBox.Show("The folder's name is " + folderName);
+
+            int count = 0;
+            while (Directory.Exists(Path.Combine(sets, folderName)) && count < 5)
+            {
+                folderName = folderName + " - Copy";
+                ++count;
+            }
+            if (count >= 5)
+            {
+                MessageBox.Show("An error occurred. Try renaming the folder, and then try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            MessageBox.Show("The folder's new name is " + folderName);
+            string newFolder = Path.Combine(sets, folderName);
+            MessageBox.Show("Copying from " + folder + " to " + newFolder);
+            Utilities.CopyDirectory(folder, newFolder);
         }
 
         private static string PickFolder()
