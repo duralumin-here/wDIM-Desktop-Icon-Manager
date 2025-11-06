@@ -51,5 +51,10 @@ namespace wDIMForm
         {
             Properties.Settings.Default.Save();
         }
+
+        private void detailsBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

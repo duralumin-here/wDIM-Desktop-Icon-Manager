@@ -15,30 +15,22 @@ namespace wDIMForm
 
         public static void ChangeArrow()
         {
-            if (!ConfirmChange())
-            {
-                return;
-            }
+            if (!ConfirmChange()) return;
 
             string iconPath = "";
-            if (UseIncluded())
-            {
-                iconPath = Utilities.GetCurrentArrowPath();
-            }
+
+            if (UseIncluded()) iconPath = Utilities.GetCurrentArrowPath();
             else
             {
                 iconPath = ChooseArrow();
-                if (iconPath.Equals(""))
-                {
-                    return;
-                }
+                if (iconPath.Equals("")) return;
             }
-
 
             // TODO: Maybe ask user if they want to save the arrow to the current set if it wasn't already taken from it
             string newPath = Path.Combine(Utilities.GetAppFolder(), "Used-Arrows", DateTime.Now.ToString("yyyyMMddhhmmss") + ".ico");
 
             try {
+                File.Copy(iconPath, Utilities.GetCurrentArrowPath(), overwrite: true);
                 File.Copy(iconPath, newPath, overwrite: true);
             }
             catch
@@ -47,9 +39,32 @@ namespace wDIMForm
                 return;
             }
 
-            if (SetArrowPath(newPath))
+            if (!Properties.Settings.Default.arrowPathSet)
             {
-                SuccessMessage(); // If it fails, it'll send the failure message within the method
+                // Attempt to edit registry if needed
+                if (SetArrowPath(newPath))
+                {
+                    SuccessMessage(); // If it fails, it'll send the failure message within the method
+                }
+            }
+        }
+
+        public static void ArrowPathButton()
+        {
+            if (!ConfirmChange())
+            {
+                return;
+            }
+
+            if (SetArrowPath(Utilities.GetCurrentArrowPath()))
+            {
+                string msg1 = "The shortcut arrow path has been initialized. Custom arrows will show after resetting Windows or Windows Explorer.";
+                string msg2 = "Would you like to reset Explorer now?";
+                DialogResult result = MessageBox.Show(msg1 + "\n\n" + msg2, "Arrow path set", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    Utilities.RestartExplorer();
+                }
             }
         }
 
@@ -75,6 +90,7 @@ namespace wDIMForm
                 try
                 {
                     bitmap.Save(newPath, ImageFormat.Icon);
+                    File.Copy(newPath, Utilities.GetCurrentArrowPath(), overwrite: true);
                 }
                 catch
                 {
@@ -83,10 +99,13 @@ namespace wDIMForm
                 }
             }
 
-            // Attempt to edit registry
-            if (SetArrowPath(newPath))
+            if (!Properties.Settings.Default.arrowPathSet)
             {
-                SuccessMessage(); // If it fails, it'll send the failure message within the method
+                // Attempt to edit registry if needed
+                if (SetArrowPath(newPath))
+                {
+                    SuccessMessage(); // If it fails, it'll send the failure message within the method
+                }
             }
         }
 
@@ -178,9 +197,10 @@ namespace wDIMForm
             }
             catch (Exception e)
             {
-                System.Windows.Forms.MessageBox.Show("An error occurred trying to set the shortcut arrow:" + e.Message + "\n\nTry re-running the application in Admin mode and see if that fixes the issue.", "Error");
+                System.Windows.Forms.MessageBox.Show("An error occurred trying to set the shortcut arrow path:" + e.Message + "\n\nTry re-running the application in Admin mode and see if that fixes the issue.", "Error");
                 return false;
             }
+            Properties.Settings.Default.arrowPathSet = true;
             return true;
         }
 
@@ -207,6 +227,7 @@ namespace wDIMForm
                 System.Windows.Forms.MessageBox.Show("An error occurred trying to restore the shortcut arrow: " + e.Message + "\n\nTry re-running the application in Admin mode and see if that fixes the issue.", "Error");
                 return false;
             }
+            Properties.Settings.Default.arrowPathSet = false;
             return true;
         }
 

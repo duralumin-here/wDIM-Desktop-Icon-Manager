@@ -44,6 +44,7 @@ namespace wDIMForm
             explorerCheck = new CheckBox();
             wallpaperCheck = new CheckBox();
             tabPageArrows = new TabPage();
+            arrowPathButton = new Button();
             restoreArrowButton = new Button();
             resetColorButton = new Button();
             arrowSaveButton = new Button();
@@ -239,6 +240,7 @@ namespace wDIMForm
             // tabPageArrows
             // 
             tabPageArrows.BackColor = Color.WhiteSmoke;
+            tabPageArrows.Controls.Add(arrowPathButton);
             tabPageArrows.Controls.Add(restoreArrowButton);
             tabPageArrows.Controls.Add(resetColorButton);
             tabPageArrows.Controls.Add(arrowSaveButton);
@@ -263,9 +265,19 @@ namespace wDIMForm
             tabPageArrows.TabIndex = 5;
             tabPageArrows.Text = "Shortcut Arrows";
             // 
+            // arrowPathButton
+            // 
+            arrowPathButton.Location = new Point(568, 44);
+            arrowPathButton.Name = "arrowPathButton";
+            arrowPathButton.Size = new Size(175, 29);
+            arrowPathButton.TabIndex = 42;
+            arrowPathButton.Text = "Initialize arrow path";
+            arrowPathButton.UseVisualStyleBackColor = true;
+            arrowPathButton.Click += arrowPathButton_Click;
+            // 
             // restoreArrowButton
             // 
-            restoreArrowButton.Location = new Point(568, 160);
+            restoreArrowButton.Location = new Point(568, 240);
             restoreArrowButton.Name = "restoreArrowButton";
             restoreArrowButton.Size = new Size(175, 30);
             restoreArrowButton.TabIndex = 11;
@@ -323,7 +335,7 @@ namespace wDIMForm
             // 
             // arrowApplyButton
             // 
-            arrowApplyButton.Location = new Point(568, 125);
+            arrowApplyButton.Location = new Point(568, 114);
             arrowApplyButton.Name = "arrowApplyButton";
             arrowApplyButton.Size = new Size(175, 30);
             arrowApplyButton.TabIndex = 10;
@@ -334,7 +346,7 @@ namespace wDIMForm
             // ArrowApplyMainMenuButton
             // 
             ArrowApplyMainMenuButton.Enabled = false;
-            ArrowApplyMainMenuButton.Location = new Point(568, 90);
+            ArrowApplyMainMenuButton.Location = new Point(568, 79);
             ArrowApplyMainMenuButton.Name = "ArrowApplyMainMenuButton";
             ArrowApplyMainMenuButton.Size = new Size(175, 30);
             ArrowApplyMainMenuButton.TabIndex = 9;
@@ -734,7 +746,8 @@ namespace wDIMForm
             detailsBox.ScrollBars = RichTextBoxScrollBars.Vertical;
             detailsBox.Size = new Size(348, 127);
             detailsBox.TabIndex = 4;
-            detailsBox.Text = "If the icon set has details, they'll show up here.\n\nTip: Can't see the arrow clearly in the preview? Try moving your mouse over it!";
+            detailsBox.Text = "If the icon set has details, they'll show up here.\n\nNote: Custom arrows won't show until you initialize the custom arrow path with the button on the next page. Try hovering the arrow in the preview!";
+            detailsBox.TextChanged += detailsBox_TextChanged;
             // 
             // wallpaperDisplay
             // 
@@ -1019,5 +1032,6 @@ namespace wDIMForm
         private TabControl tabControl1;
         private LinkLabel linkLabel1;
         private Label label10;
+        private Button arrowPathButton;
     }
 }

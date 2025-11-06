@@ -118,5 +118,11 @@ namespace wDIMForm
         {
             Arrow.Restore();
         }
+
+        // Sets arrow paths
+        private void arrowPathButton_Click(object sender, EventArgs e)
+        {
+            Arrow.ArrowPathButton();
+        }
     }
 }
