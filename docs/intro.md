@@ -30,12 +30,3 @@ This is an open-source project made by a solo developer. I did my best to make t
 
 [^1]: I am not affiliated with Microsoft.
 [^2]: As of writing this, I like these services quite a lot. However, I'm not affiliated with them and take no responsibility for anything they have done, are doing, or will do. Use at your own discretion.
-
----
-Check out the rest of the documentation!
-- [Introduction](https://duralumin-here.github.io/wDIM-Desktop-Icon-Manager/intro)
-- [Preparing the Desktop](https://duralumin-here.github.io/wDIM-Desktop-Icon-Manager/desktop-prep)
-- [Managing Icon Sets](https://duralumin-here.github.io/wDIM-Desktop-Icon-Manager/icon-sets)
-- [Customizing Shortcut Labels](https://duralumin-here.github.io/wDIM-Desktop-Icon-Manager/labels)
-- [Setting a Custom Shortcut Arrow](https://duralumin-here.github.io/wDIM-Desktop-Icon-Manager/shortcut-arrows)
-- [Settings](https://duralumin-here.github.io/wDIM-Desktop-Icon-Manager/settings)
