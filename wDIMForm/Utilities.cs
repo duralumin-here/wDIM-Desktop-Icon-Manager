@@ -21,7 +21,7 @@ namespace wDIMForm
 
         public static string GetHelpURL()
         {
-            return "https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager";
+            return "https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/intro.md";
         }
 
         // Gets the folder the app is located in
