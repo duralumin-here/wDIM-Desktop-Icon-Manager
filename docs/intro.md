@@ -1,5 +1,5 @@
 # wDIM: A Simple Way to Manage Desktop Icons
-
+***<----- See the documentation pages for more information!***
 wDIM is an easy-to-use, yet powerful system for quickly setting up and swapping between different sets of icons to use on the Windows desktop. You don't need any advanced technical skills to use this tool, nor do you need to learn commandline commands: most of it should be intuitive and/or includes instructions to guide you through. It's made with Windows Forms (and C#), so it looks familiar and it's easy to navigate.
 
 ![A gif showing the interface of wDIM.](https://github.com/user-attachments/assets/abfd1263-6f51-433d-aa30-dcbf9c3cded3)
