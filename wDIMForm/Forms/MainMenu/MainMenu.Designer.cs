@@ -34,6 +34,8 @@ namespace wDIMForm
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenu));
             imageList1 = new ImageList(components);
             tabPageSettings = new TabPage();
+            publicPrivateLabel = new Label();
+            movePublicButton = new Button();
             button3 = new Button();
             restoreSettingsButton = new Button();
             button2 = new Button();
@@ -127,6 +129,8 @@ namespace wDIMForm
             // tabPageSettings
             // 
             tabPageSettings.BackColor = Color.WhiteSmoke;
+            tabPageSettings.Controls.Add(publicPrivateLabel);
+            tabPageSettings.Controls.Add(movePublicButton);
             tabPageSettings.Controls.Add(button3);
             tabPageSettings.Controls.Add(restoreSettingsButton);
             tabPageSettings.Controls.Add(button2);
@@ -142,6 +146,26 @@ namespace wDIMForm
             tabPageSettings.Size = new Size(770, 296);
             tabPageSettings.TabIndex = 6;
             tabPageSettings.Text = "Settings";
+            // 
+            // publicPrivateLabel
+            // 
+            publicPrivateLabel.AutoSize = true;
+            publicPrivateLabel.Location = new Point(16, 227);
+            publicPrivateLabel.Name = "publicPrivateLabel";
+            publicPrivateLabel.Size = new Size(451, 20);
+            publicPrivateLabel.TabIndex = 31;
+            publicPrivateLabel.Text = "? Could not count the number of private shortcuts. Please try again.";
+            // 
+            // movePublicButton
+            // 
+            movePublicButton.Enabled = false;
+            movePublicButton.Location = new Point(16, 250);
+            movePublicButton.Name = "movePublicButton";
+            movePublicButton.Size = new Size(173, 29);
+            movePublicButton.TabIndex = 30;
+            movePublicButton.Text = "Move public shortcuts";
+            movePublicButton.UseVisualStyleBackColor = true;
+            movePublicButton.Click += movePublicButton_Click;
             // 
             // button3
             // 
@@ -1032,5 +1056,7 @@ namespace wDIMForm
         private LinkLabel linkLabel1;
         private Label label10;
         private Button arrowPathButton;
+        private Button movePublicButton;
+        private Label publicPrivateLabel;
     }
 }

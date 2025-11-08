@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.IO;
+using System.Windows.Forms;
 
 namespace wDIMForm
 {
@@ -47,6 +49,48 @@ namespace wDIMForm
         private void MainMenu_FormClosing(object sender, FormClosingEventArgs e)
         {
             Properties.Settings.Default.Save();
+        }
+
+        // Handles tab changes (needs to be in one method)
+        private void TabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Sets public desktop status on settings page
+            if (tabControl1.SelectedTab == tabPageSettings)
+            {
+                List<string> shortcuts = [];
+                shortcuts.AddRange(Directory.GetFiles(@"C:\Users\Public\Desktop", "*.lnk"));
+                if (shortcuts.Count == 0)
+                {
+                    publicPrivateLabel.Text = "✔ All shortcuts are on the private desktop.";
+                }
+                else
+                {
+                    string pluralize, verb;
+                    if (shortcuts.Count == 1)
+                    {
+                        pluralize = "";
+                        verb = " is";
+                    }
+                    else
+                    {
+                        pluralize = "s";
+                        verb = " are";
+                    }
+                    publicPrivateLabel.Text = "⚠ " + shortcuts.Count + " shortcut" + pluralize + verb + " on the public desktop.";
+                    movePublicButton.Enabled = true;
+                }
+            }
+            // Populates icon set list on icon set page
+            else if (tabControl1.SelectedTab == tabPageIcons)
+            {
+                DirectoryInfo dinfo = new DirectoryInfo(Utilities.GetIconSetsFolder());
+                DirectoryInfo[] directories = dinfo.GetDirectories();
+                if (directories.Length == 0) return;
+                foreach (DirectoryInfo directory in directories)
+                {
+                    if (!iconSetListBox.Items.Contains(directory.Name)) iconSetListBox.Items.Add(directory.Name);
+                }
+            }
         }
     }
 }

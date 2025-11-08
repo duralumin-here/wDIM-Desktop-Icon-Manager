@@ -128,5 +128,16 @@ namespace wDIMForm
                 System.Windows.Forms.MessageBox.Show("An error occurred: " + ex.Message);
             }
         }
+
+        // Allows users to move public shortcuts to private desktop
+        private void movePublicButton_Click(object sender, EventArgs e)
+        {
+            List<string> shortcuts = [];
+            shortcuts.AddRange(Directory.GetFiles(@"C:\Users\Public\Desktop", "*.lnk"));
+            ForNonShortcuts.PublicToPrivate(shortcuts);
+            TabControl1_SelectedIndexChanged(sender, e);
+        }
+
+        // See TabControl1_SelectedIndexChanged() for setting the public desktop status
     }
 }

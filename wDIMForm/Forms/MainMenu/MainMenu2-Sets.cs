@@ -5,28 +5,7 @@ namespace wDIMForm
 {
     public partial class MainMenu : Form
     {
-        // Load icon set list whenever this tab is selected
-        private void TabControl1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            // Check if the selected tab is tabPageIcons
-            if (tabControl1.SelectedTab == tabPageIcons)
-            {
-                DirectoryInfo dinfo = new DirectoryInfo(Utilities.GetIconSetsFolder());
-                DirectoryInfo[] directories = dinfo.GetDirectories();
-                if (directories.Length == 0)
-                {
-                    return;
-                }
-
-                foreach (DirectoryInfo directory in directories)
-                {
-                    if (!iconSetListBox.Items.Contains(directory.Name))
-                    {
-                        iconSetListBox.Items.Add(directory.Name);
-                    }
-                }
-            }
-        }
+        // See TabControl1_SelectedIndexChanged() for populating set list
 
         // Display selected icon set
         private void iconSetListBox_SelectedIndexChanged(object sender, EventArgs e)

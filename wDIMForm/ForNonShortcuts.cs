@@ -28,7 +28,7 @@ namespace wDIMForm
             if (MoveShortcutFiles(nonShortcuts, allAtOnce)) HelperCompleteMessage(); // If it works
             else WarningMessage();
 
-            PublicToPrivate(); // Check for public shortcuts on desktop
+            PublicToPrivateCheck(); // Check for public shortcuts on desktop
             return;
         }
 
@@ -37,7 +37,7 @@ namespace wDIMForm
             if (nonShortcuts.Count() == 0) // If all files are shortcuts
             {
                 ValidatedMessage();
-                PublicToPrivate();
+                PublicToPrivateCheck();
                 return false;
             }
             if (!NonShortcutsContinue(nonShortcuts)) // If user doesn't want to run the helper
@@ -246,23 +246,28 @@ namespace wDIMForm
             return true; // If it makes it to the end, it worked
         }
 
-        public static void PublicToPrivate()
+        public static void PublicToPrivateCheck()
         {
             List<string> shortcuts = [];
             shortcuts.AddRange(Directory.GetFiles(@"C:\Users\Public\Desktop", "*.lnk"));
             if (shortcuts.Count == 0) return;
+            PublicToPrivate(shortcuts);
+        }
 
-            string message1 = "Some shortcuts are located on the public desktop. You may need administrator access to modify these files.";
-            string message2 = "Would you like to move them to your private desktop? (This will hide those shortcuts from other users. This option is not recommended if multiple people use your computer.)";
+        public static void PublicToPrivate(List<string> shortcuts)
+        {
+            string message1 = "Some shortcuts are on the public desktop. You may need administrator access every time you try to modify these files. Would you like to move them to your private desktop?";
+            string message2 = "(This will let you modify them without administrator access, but it will hide those shortcuts from other users. This option is not recommended if multiple people use your computer.)";
             DialogResult result = System.Windows.Forms.MessageBox.Show(message1 + " " + message2, "wDIM", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (result == DialogResult.Yes)
             {
                 try
                 {
                     string privateDesktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                    foreach (string shortcut in shortcuts) {
+                    foreach (string shortcut in shortcuts)
+                    {
                         string ogName = shortcut.Substring((shortcut.LastIndexOf("\\") + 1));
-                        if (ogName == "desktop.ini") return;
+                        if (ogName == "desktop.ini") continue;
                         File.Move(shortcut, Path.Combine(privateDesktop, ogName));
                     }
                     Utilities.RefreshDesktop();

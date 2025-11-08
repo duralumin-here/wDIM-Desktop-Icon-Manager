@@ -126,7 +126,7 @@ namespace wDIMForm
                     }
                     else if (Properties.Settings.Default.applyDefaultWallpaper)
                     {
-                        if (Properties.Settings.Default.defaultWallpaper != "?")
+                        if (Properties.Settings.Default.defaultWallpaper != "?" && File.Exists(Properties.Settings.Default.defaultWallpaper))
                         {
                             Utilities.ChangeWallpaper(Properties.Settings.Default.defaultWallpaper);
                         }

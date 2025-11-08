@@ -104,8 +104,12 @@ namespace wDIMForm
         public static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
         public static void ChangeWallpaper(string wallpaperPath)
         {
-            // Roughly (Change Wallpaper, [Required Variable], path, Persist Change | Refresh)
-            SystemParametersInfo(20, 0, wallpaperPath, 0x01 | 0x02);
+            try
+            {
+                // Roughly (Change Wallpaper, [Required Variable], path, Persist Change | Refresh)
+                SystemParametersInfo(20, 0, wallpaperPath, 0x01 | 0x02);
+            }
+            catch { /* May log later*/ }
         }
 
         // Creates the folders this app expects to see
