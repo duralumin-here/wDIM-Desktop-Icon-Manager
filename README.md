@@ -2,7 +2,7 @@
 
 wDIM is an easy-to-use, yet powerful system for quickly setting up and swapping between different sets of icons to use on the Windows desktop. You don't need any advanced technical skills to use this tool, nor do you need to learn commandline commands: most of it should be intuitive and/or includes instructions to guide you through. It's made with Windows Forms (and C#), so it looks familiar and it's easy to navigate.
 
-![A gif showing the interface of wDIM.](https://github.com/user-attachments/assets/abfd1263-6f51-433d-aa30-dcbf9c3cded3)
+![A gif showing the interface of wDIM.](https://github.com/user-attachments/assets/b4c44d4c-c340-4ba5-b16d-ee45dfa3853d)
 
 The basic workflow is pretty simple:
 1. Run the "Validate Desktop" tool to make sure all the items on your desktop are shortcuts. If they aren't, the application can walk you through moving the files off the desktop step-by-step (or you can remove them yourself and run the tool again to check your work).
@@ -13,12 +13,13 @@ This is an open-source project made by a solo developer. I did my best to make t
 
 ## Features
 - **Custom icon sets:** Create, import, copy, and edit your own sets, which can also include their own backgrounds and shortcut arrows.
+- **Smart icon application:** Icon sets can define specific icons for specific apps, as well a set of generic icons to apply to any apps that don't have an associated icon within the set.
 - **Shortcut arrows:** Customize your very own shortcut arrow and apply it systemwide, or save custom arrows to different icon sets.
 - **Desktop shortcut labels:** Change all desktop shortcut labels at once by applying "fonts" (custom alphabet characters) and adding custom characters (including emojis!) to the start and/or end, and easily revert the changes if you have a change of heart.
 - **Shortcut backups:** Easily save and load the shortcuts on your desktop.
 - **Desktop refreshing:** Happens automatically, allowing you to see most changes to the desktop instantly.
 - **Persistent settings:** The app remembers your preferences for applying icon sets, but you can easily change them back to their defaults.
-- **Smart icon application:** Icon sets can define specific icons for specific apps, as well as one or more generic icons to apply to any apps that don't have an associated icon within the set.
+- **Ease of use:** An intuitive UI and detailed documentation makes it easy for anyone to start using wDIM.
 
 ## FAQ
 - ***What does wDIM stand for?*** The "DIM" stands for "Desktop Icon Manager," and the "w" just stands for all the applicable words that start with "w", including "Windows"[^1], "workflow", "wonderful", "wacky"...
