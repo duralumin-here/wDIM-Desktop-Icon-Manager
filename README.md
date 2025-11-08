@@ -9,7 +9,7 @@ The basic workflow is pretty simple:
 2. Let the application change the icon paths of your desktop shortcuts to all point to the wDIM data folder, just with one push of a button.
 3. Load an icon set and watch your icons magically change!
 
-This is an open-source project made by a solo developer. I did my best to make this a safe and helpful tool, but I claim no liability for any harm caused to your or your device by using this program. Use at your own risk.
+This is an open-source project made by a solo developer. I did my best to make this a safe and helpful tool, but I claim no liability for any harm caused to you or your device by using this program. Use at your own risk.
 
 ## Features
 - **Custom icon sets:** Create, import, copy, and edit your own sets, which can also include their own backgrounds and shortcut arrows.
