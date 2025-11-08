@@ -1,4 +1,4 @@
-# Settings
+# ⚙️ Settings
 The *settings page* is rather simple—it just lets you set a few preferences for how applying icon sets works.
 
 <img width="916" height="509" alt="A screenshot of the settings page in wDIM." src="https://github.com/user-attachments/assets/cdfa5e91-e3f7-4001-b153-4d0417bb2527" />
