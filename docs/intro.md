@@ -1,5 +1,5 @@
 # wDIM: A Simple Way to Manage Desktop Icons
-Welcome to the ***wDIM documentation!*** This is where I explain how wDIM works. If you're unfamiliar with wDIM, [read about it here!](github.com/duralumin-here/wDIM-Desktop-Icon-Manager?tab=readme-ov-file#wdim-a-simple-way-to-manage-desktop-icons)
+Welcome to the ***wDIM documentation!*** This is where I explain how wDIM works. If you're unfamiliar with wDIM, [read about it here!](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/tree/master?tab=readme-ov-file#wdim-a-simple-way-to-manage-desktop-icons)
 
 *This documentation is a work in progress.*
 
