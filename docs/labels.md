@@ -1,4 +1,4 @@
-# Labels
+# ✒️ Labels
 Shortcuts on the desktop, like any other files, can be renamed. The label tool allows you to rename shortcuts all at once (for the most part; see my note about [the private and public desktop](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/preparing-desktop.md#the-public-and-private-desktops)).
 
 <img width="858" height="466" alt="A screenshot of the label menu in wDIM." src="https://github.com/user-attachments/assets/24600430-7a4d-4dba-bb88-7b15b4a5ccf8" />
