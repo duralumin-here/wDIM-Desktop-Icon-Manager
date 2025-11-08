@@ -1,4 +1,4 @@
-# Shortcut Arrows
+# ↗️ Shortcut Arrows
 You've probably noticed that shortcuts have a little arrow in their corner. The arrow is there to remind you that you aren't looking at the actual file: you're just looking at a shortcut that points to the file. We can use a registry edit to change these arrows to a different image.
 
 ## Using the Arrow Editor
