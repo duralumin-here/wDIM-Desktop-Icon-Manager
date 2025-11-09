@@ -11,3 +11,12 @@ You can also add extra text to the start or end of every shortcut: just check of
 
 ## Applying and Removing Labels
 Once you've made your selection, use the *apply new labels* button to apply the settings you've selected. Use the *restore original labels* button to revert them back to what they originally were. [(Either of these processes may be interrupted if shortcuts are on the public desktop and the application isn't running with administrator privileges.)](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/preparing-desktop.md#the-public-and-private-desktops)
+
+---
+## Documentation Pages
+- [Intro](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/intro.md)
+- [Preparing the Desktop](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/preparing-desktop.md)
+- [Icon Sets](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/icon-sets.md)
+- [Labels](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/labels.md)
+- [Shortcut Arrows](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/shortcut-arrows.md)
+- [Settings](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/settings.md)
