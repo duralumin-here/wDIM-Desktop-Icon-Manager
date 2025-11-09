@@ -21,6 +21,9 @@ This is an open-source project made by a solo developer. I did my best to make t
 - **Persistent settings:** The app remembers your preferences for applying icon sets, but you can easily change them back to their defaults.
 - **Ease of use:** An intuitive UI and detailed documentation makes it easy for anyone to start using wDIM.
 
+## Installation/Usage
+Install the most recent release from [the Releases page](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/releases), and check out [the documentation](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/intro.md) for instructions on how to use it.
+
 ## FAQ
 - ***What does wDIM stand for?*** The "DIM" stands for "Desktop Icon Manager," and the "w" just stands for all the applicable words that start with "w", including "Windows"[^1], "workflow", "wonderful", "wacky"...
 - ***I'm not very good with computers. Can I still use wDIM?*** Yes! wDIM is designed to be used by anyone! The application itself features plenty of descriptive explanations throughout (including warnings for things that could go wrong, and errors for things that do), and I'm working on writing out some documentation to explain it all in more detail. Keep an eye out!
