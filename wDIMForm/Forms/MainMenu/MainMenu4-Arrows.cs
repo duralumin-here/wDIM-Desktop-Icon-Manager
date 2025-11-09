@@ -49,7 +49,15 @@ namespace wDIMForm
             {
                 // Apply new arrow
                 string selectedItem = comboBox1.SelectedItem as string;
-                arrowShowBox.BackgroundImage = Arrow.GetBitmap(Arrow.GetArrowTemplatePath(selectedItem));
+                try
+                {
+                    arrowShowBox.BackgroundImage = Arrow.GetBitmap(Arrow.GetArrowTemplatePath(selectedItem));
+                }
+                catch
+                {
+                    MessageBox.Show("There was an error loading the selected arrow. Please try again.");
+                    return;
+                }                
                 // Enable buttons if not enabled
                 arrowSaveButton.Enabled = true;
                 ArrowApplyMainMenuButton.Enabled = true;

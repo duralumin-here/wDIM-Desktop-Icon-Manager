@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace wDIMForm
@@ -10,12 +11,16 @@ namespace wDIMForm
         public MainMenu()
         {
             InitializeComponent();
+            // Create app folders
             Utilities.CreateStartingDirectories();
+            // Load arrows if needed
+            Utilities.CreateArrows();
+            // Initializes sliders for arrows
             hueBox.Text = hueSlide.Value.ToString();
             satBox.Text = satSlide.Value.ToString();
             lightBox.Text = lightSlide.Value.ToString();
 
-            // Allows the arrow to have proper transparency
+            // Allows the icon set preview arrow to have proper transparency
             wallpaperDisplay.Controls.Add(arrowDisplay);
             arrowDisplay.Location = new System.Drawing.Point(0, (wallpaperDisplay.Height - arrowDisplay.Height));
             arrowDisplay.BackColor = Color.Transparent;

@@ -416,31 +416,31 @@ namespace wDIMForm
             switch (selectedItem)
             {
                 case "Blank/No Arrow":
-                    path = Path.Combine(path, "empty.ico");
+                    path = Path.Combine(path, "emptyArrow.ico");
                     break;
                 case "Curved (Transparent)":
-                    path = Path.Combine(path, "transparent-arrow-curved.ico");
+                    path = Path.Combine(path, "curvedTransparentArrow.ico");
                     break;
                 case "Straight (Transparent)":
-                    path = Path.Combine(path, "transparent-arrow.ico");
+                    path = Path.Combine(path, "straightTransparentArrow.ico");
                     break;
                 case "Curved (Black)":
-                    path = Path.Combine(path, "filled-arrow-black.ico");
+                    path = Path.Combine(path, "curvedBlackArrow.ico");
                     break;
                 case "Straight (Black)":
-                    path = Path.Combine(path, "filled-arrow-black-straight.ico");
+                    path = Path.Combine(path, "straightBlackArrow.ico");
                     break;
                 case "Curved (White)":
-                    path = Path.Combine(path, "filled-arrow-white.ico");
+                    path = Path.Combine(path, "curvedWhiteArrow.ico");
                     break;
                 case "Straight (White)":
-                    path = Path.Combine(path, "filled-arrow-white-straight.ico");
+                    path = Path.Combine(path, "straightWhiteArrow.ico");
                     break;
                 case "Heart":
-                    path = Path.Combine(path, "heart.ico");
+                    path = Path.Combine(path, "heartArrow.ico");
                     break;
                 case "Star":
-                    path = Path.Combine(path, "star.ico");
+                    path = Path.Combine(path, "starArrow.ico");
                     break;
                 case "Custom...":
                 // FEATURE add custom functionality
@@ -464,7 +464,6 @@ namespace wDIMForm
             }
             catch
             {
-                // TODO: Better error handling?
                 bm = null;
             }
             return bm;

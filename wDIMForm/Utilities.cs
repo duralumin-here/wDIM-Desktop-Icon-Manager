@@ -2,9 +2,11 @@
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Diagnostics;
 using System.IO;
+using System.Drawing;
+using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
-using static System.Windows.Forms.DataFormats;
+using File = System.IO.File;
+using Path = System.IO.Path;
 
 namespace wDIMForm
 {
@@ -54,11 +56,11 @@ namespace wDIMForm
         public static string GetWallpaperPath(string folder)
         {
             string wallpaperName = "";
-            string[] potentialNames = {"wallpaper.png", "wallpaper.jpeg", "wallpaper.jpg", "wallpaper.bmp", "wallpaper.gif"};
+            string[] potentialNames = { "wallpaper.png", "wallpaper.jpeg", "wallpaper.jpg", "wallpaper.bmp", "wallpaper.gif" };
             foreach (string format in potentialNames)
             {
                 string filePath = Path.Combine(folder, format);
-                if (System.IO.File.Exists(filePath))
+                if (File.Exists(filePath))
                 {
                     wallpaperName = filePath;
                     break;
@@ -179,7 +181,7 @@ namespace wDIMForm
             {
                 foreach (var file in Directory.GetFiles(folderPath))
                 {
-                    System.IO.File.Delete(file);
+                    File.Delete(file);
                 }
 
                 foreach (var directory in Directory.GetDirectories(folderPath))
@@ -226,7 +228,7 @@ namespace wDIMForm
                 {
                     string fileName = Path.GetFileName(file);
                     string destination = Path.Combine(newPublicPath, fileName);
-                    System.IO.File.Copy(file, destination);
+                    File.Copy(file, destination);
                 }
             }
             else Utilities.CopyDirectory(@"C:\Users\Public\Desktop", newPublicPath);
@@ -245,7 +247,7 @@ namespace wDIMForm
                 {
                     string fileName = Path.GetFileName(file);
                     string destination = Path.Combine(newPrivatePath, fileName);
-                    System.IO.File.Copy(file, destination);
+                    File.Copy(file, destination);
                 }
             }
             else Utilities.CopyDirectory(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), newPrivatePath);
@@ -373,6 +375,38 @@ namespace wDIMForm
                 catch { target = ""; }
             }
             return target;
+        }
+
+        public static void CreateArrows()
+        {
+            string path = Path.Combine(GetAppFolder(), "Shortcut-Arrows");
+            CreateArrow("emptyArrow.ico");
+            CreateArrow("curvedBlackArrow.ico");
+            CreateArrow("straightBlackArrow.ico");
+            CreateArrow("curvedWhiteArrow.ico");
+            CreateArrow("straightWhiteArrow.ico");
+            CreateArrow("heartArrow.ico");
+            CreateArrow("starArrow.ico");
+            CreateArrow("straightTransparentArrow.ico");
+            CreateArrow("curvedTransparentArrow.ico");
+        }
+
+        public static void CreateArrow(string name)
+        {
+            string path = Path.Combine(Utilities.GetAppFolder(), "Shortcut-Arrows", name);
+            if (!File.Exists(path))
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+                string resourceName = "wDIMForm.Properties.Resources." + name;
+                using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+                {
+                    Icon myIcon = new Icon(stream);
+                    using (var stream2 = new FileStream(path, FileMode.Create))
+                    {
+                        myIcon.Save(stream2);
+                    }
+                }
+            }
         }
     }
 }
