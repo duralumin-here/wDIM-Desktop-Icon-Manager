@@ -24,3 +24,12 @@ When a new icon set is applied, the Current-Icons folder (a folder in the app fo
 
 ## Reverting Icon Sets
 Before you initialize the icon set paths, a backup of your desktop shortcuts is automatically saved. If you decide you no longer want to use custom icons, the easiest way to go back is to simply delete the offending shortcuts from your desktop and replace them with older backups (which can be founded in the Saved-Backups folder of [the app folder](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/settings.md#viewing-the-app-folder)). I suggest you [manually make a backup of the desktop yourself](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/preparing-desktop.md#backing-up-shortcuts) before doing this, just in case.
+
+---
+## Documentation Pages
+- [Intro](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/intro.md)
+- [Preparing the Desktop](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/preparing-desktop.md)
+- [Icon Sets](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/icon-sets.md)
+- [Labels](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/labels.md)
+- [Shortcut Arrows](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/shortcut-arrows.md)
+- [Settings](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/settings.md)
