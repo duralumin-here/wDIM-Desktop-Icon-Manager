@@ -21,3 +21,12 @@ Once the path is set, you can apply the arrow that's currently in the editor usi
 
 ## Restoring Default Arrows
 If you no longer want to use a custom arrow, you can use the *restore default arrows* button to clear the custom path in the registry so Windows will go back to using the default one. Since this is a registry edit, it requires that the program be running with administrator privileges. Like setting a custom arrow path, Windows Explorer must be restarted before you'll be able to see the changes.
+
+---
+## Documentation Pages
+- [Intro](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/intro.md)
+- [Preparing the Desktop](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/preparing-desktop.md)
+- [Icon Sets](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/icon-sets.md)
+- [Labels](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/labels.md)
+- [Shortcut Arrows](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/shortcut-arrows.md)
+- [Settings](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/settings.md)
