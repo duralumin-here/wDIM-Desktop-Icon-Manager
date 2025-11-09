@@ -20,3 +20,12 @@ The *view app folder* button launches File Explorer opened up the folder that wD
 
 ## Moving Public Shortcuts to Private Desktop
 The *move public shortcuts* button (which only activates if public shortcuts are found) attempts to move all shortcuts on the public desktop to the private desktop. [See here for more information about why you may (or may not) want to do this.](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/preparing-desktop.md#the-public-and-private-desktops)
+
+---
+## Documentation Pages
+- [Intro](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/intro.md)
+- [Preparing the Desktop](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/preparing-desktop.md)
+- [Icon Sets](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/icon-sets.md)
+- [Labels](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/labels.md)
+- [Shortcut Arrows](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/shortcut-arrows.md)
+- [Settings](https://github.com/duralumin-here/wDIM-Desktop-Icon-Manager/blob/master/docs/settings.md)
